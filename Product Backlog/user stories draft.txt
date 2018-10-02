@@ -1,0 +1,15 @@
+USER STORIES
+
+As Alice (an Agency Representative), I would like to create my own account for the applications, so that I can upload my clients files.
+
+As Alice (an Agency Representative), I would like to upload a file to the system, and have the users information stored securly so that I can not worry about losing my local copy.
+
+As Bob (an Agency Supervisor), I would like to access all the uploaded data from my employees, so that I can generate trend reports on my own.
+
+As Chalie (an Agency Analyst), I would like to generate summary report for all fields in my agencies' uploaded documents.
+
+As Ellie (an Agency Analyst), I would like for the application to automatically merge postal codes if the only difference is their format, so that I don't need to worry which format the first uploaded document was in.
+
+As Ellie (an Agency Analyst), I would like for the application to automatically merge phone numbers if the only difference is their format, so that I don't need to worry which format the first uploaded doument was in.
+
+As Ellie (an Agency Analyst), I would like for the application to let me know when it was unable to merge a field, so that I can review and select the correct information, ensuring no bad data is stored.

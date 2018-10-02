@@ -1,0 +1,37 @@
+PERONAS
+
+- two types: agencies + 1 organization
+
+## Alice Apple
+- female, 35 years old
+- analyst at Reva agency, which provides language traning services
+- technically proficient, uses her smartphone to complete any work she doesn't finish in the office, 
+  such as emails, meetings, creating spreadsheets
+- wants to be able to upload iCare Excel single or multiple spreadsheet at a time
+
+## Bob Beroy
+- male, 58 years old
+- supervisor at proxo agency, which provides empyment services 
+- technically challenged, can use email with limit functionality 
+- increase employee productivity
+- check history uploads
+- can access all uploaded data his employees
+
+## Charlie Charles
+- male, 25 years old
+- analyst at symil agency, which provides multiple services (Check with client if this is use case)
+- technically advanced, uses excell to its fullest
+- wants to have the functionality to gennerate summary reports from central and agency data for differnt fields, returned as a PDF
+
+## David Doe
+- male, 41 years old
+- project manager at CCS
+- wants to generate basic reports to project new commer needs from central database
+- technically advanced, he works with reports and analyzes them to provide info
+
+## Ellie Eagle
+- female, 41 year old woman
+- english is her second language, speaks spanish at home
+- new hire at bogo agency, recieved very little training
+- constantly changes postal code / phone number format, as there is no set standards at Bogo
+- wants to have these changes auto resolved as frequently as possible
