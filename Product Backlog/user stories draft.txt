@@ -1,36 +1,39 @@
 USER STORIES
 
-As Alice (an Agency Representative), I would like to create my own account for the applications, so that I can upload my clients files.
+1. As Alice (an Agency Representative), I would like to create my own account for the applications, so that I can upload my clients files.
 
-As Alice (an Agency Representative), I would like to upload a file to the system, and have the users information stored securely so that I can not worry about losing my local copy.
+2. As Alice (an Agency Representative), I would like to upload an iCare file to the system, and have the users information stored securely so that I can not worry about losing my local copy.
+
+3. As Alice (an Agency Representative), I want all the data that I upload on behalf of my clients to be anonymized, as I do not want other agencies knowing and having access to confidential information about my specific clients and their needs.
+
+4. As Charlie (an Agency Analyst), I would like to upload data files for different service streams using different templates my agency provides, so that the data will enter the system correctly.
+
+5. As David (CCS organization manager), I would like to generate the summary reports for all newcomers quarterly, so that I can use the report to improve future newcomer service.
+
+
+6. As Charlie (an Agency Analyst), I would like to generate summary report for all fields in my agencies' uploaded documents.
+
+7. As Ellie (an Agency Analyst), I would like for the application to automatically merge postal codes and phone numbers if the only difference is their format, so that I don't need to worry which format the first uploaded document was in.
+
+8. As Ellie (an Agency Analyst), I would like for the application to let me know when it was unable to merge a field, so that I can review and select the correct information, ensuring no bad data is stored.
+
+
+
+
+
 
 As Bob (an Agency Supervisor), I would like to access all the uploaded data from my employees, so that I can generate trend reports on my own.
 
-As Charlie (an Agency Analyst), I would like to generate summary report for all fields in my agencies' uploaded documents.
-
-As Ellie (an Agency Analyst), I would like for the application to automatically merge postal codes if the only difference is their format, so that I don't need to worry which format the first uploaded document was in.
-
-As Ellie (an Agency Analyst), I would like for the application to automatically merge phone numbers if the only difference is their format, so that I don't need to worry which format the first uploaded document was in.
-
-As Ellie (an Agency Analyst), I would like for the application to let me know when it was unable to merge a field, so that I can review and select the correct information, ensuring no bad data is stored.
-
-As David (CCS organization manager), I would like to view the summary reports for all newcomers quarterly, so that I can use the report to improve future newcomer service.
-
-As Ellie (an Agency Analyst), I would like the application to tell me which cell in the file has formatting issue, so that I can spot the issue and resolve it.
-
-As Charlie (an Agency Analyst), I would like to upload data files for different service streams my agency provides, so that the data will enter the system correctly.
 
 As Bob (an Agency Supervisor), I would like to know a timestamp and the details of which employee made the changes, so if mistakes or issues arise, the appropriate individual can be contacted.
 
-As Alice (an Agency Representative), I would like to upload specifically iCare spreadsheets, as that is the template that I have access to, and the upload process should be seamless.
 
 As David (CCS organization manager), I would like to be able to produce trend reports, so that I can see the changes of newcomers' needs over a certain period of time, and adjust my services and funding accordingly.
 
-As Alice (an Agency Representative), I want all the data that I upload on behalf of my clients to be anonymized, as I do not want other agencies knowing and having access to confidential information about my specific clients and their needs.
 
 As Alice (an Agency Representative), I want to be able to remove a certain user from the application, as they may no longer require any newcomer services or their circumstances have changed.
 
-As Alice (an Agency Representative), I want to be able to update details regarding a certain user in the application, as clients are constantly moving around, and details such as their address and contact info are consistently changing.
+As Alice (an Agency Representative), I want to be able to update details regarding a certain user in the application, as clients are constantly moving around, and details such as their address and contact info are consistently changing.(*reword)
 
 As Alice (an Agency Representative), I want to be able to upload multiple Excel spreadsheets to the system at a time, so that I can save time when uploading information.
 
