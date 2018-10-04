@@ -31,3 +31,7 @@ As Alice (an Agency Representative), I want all the data that I upload on behalf
 As Alice (an Agency Representative), I want to be able to remove a certain user from the application, as they may no longer require any newcomer services or their circumstances have changed.
 
 As Alice (an Agency Representative), I want to be able to update details regarding a certain user in the application, as clients are constantly moving around, and details such as their address and contact info are consistently changing.
+
+As Alice (an Agency Representative), I want to be able to upload multiple Excel spreadsheets to the system at a time, so that I can save time when uploading information.
+
+As Charlie (an Agency Analyst), I would like to be able to export my summary reports as a PDF, so that I can save a clean copy.

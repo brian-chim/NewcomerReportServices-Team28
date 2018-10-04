@@ -12,10 +12,10 @@ PERONAS
 ## Bob Beroy
 - male, 58 years old
 - supervisor at Proxo agency, which provides employment services
-- technically challenged, can use email with limit functionality
-- increase employee productivity
-- check history uploads
-- can access all uploaded data his employees
+- technically challenged, can use email with limited functionality
+- wants to increase employee productivity
+- wants to check the history of uploads
+- can access all uploaded data from his employees
 
 ## Charlie Charles
 - male, 25 years old
@@ -26,7 +26,7 @@ PERONAS
 ## David Doe
 - male, 41 years old
 - project manager at CCS
-- wants to generate basic reports to project new comers needs from central database
+- wants to generate basic reports to project new comer needs from a central database
 - technically advanced, he works with reports and analyzes them to provide info
 
 ## Ellie Eagle
