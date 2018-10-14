@@ -1,1 +1,7 @@
 .DS_STORE
+bin/
+.metadata
+.recommenders
+.classpath
+.project
+.settings
