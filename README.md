@@ -1,9 +1,13 @@
-# Team28
+# Team JavaBean (28)
 
 Welcome to Team 28's CSCC01 Group project.
 
-Our first deliverable can be found under the Reports directory in the root of the repository.
+## Deliverables
 
-Our second deliverable along with our draft files can be found under the Product Backlog folder.
+### Reports
 
-Once we have production-ready code, we will be merging it to the master branch, and we will update the README with how to navigate our project and code.
+All deliverable reports can be found within the Reports folder at the root of the project.
+
+## Product Backlog
+
+The product backlog contains versioned copies of the projects personas and user stories. 

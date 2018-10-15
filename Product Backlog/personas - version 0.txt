@@ -1,0 +1,43 @@
+Alice Apple 
+ - Female, 35 years old  
+ - Relatively quiet and keeps to herself, but is dedicated to completing her tasks in a punctual manner 
+ - Analyst at Reva Agency, which provides an emphasis on language training services for newcomers 
+ - Technologically proficient while using her smartphone to complete any work that she has not finished in the office such as emails, scheduling meetings, and creating spreadsheets 
+ - Really comfortable with Microsoft Excel and iCare templates, as she has been working with these templates for over 3 years now 
+ - Wishes to be able to upload single or multiple iCare spreadsheets at a time when uploading client information 
+ - Extremely busy as she is constantly gathering new information and updates from clients, so she needs to be able to update these incremental changes in a timely manner 
+ - Comfortable with speaking, reading, and writing both English and French 
+ - Estimates that during peak seasons, she can get anywhere from 75-100 new clients at a time 
+ - Currently uses text files to view her own clients’ data, and is flustered by how it is not presented in a professional manner 
+
+Bob Beroy 
+ - Male, 58 years old and is fluent in only English 
+ - Supervisor at Proxo agency, which provides employment services for newcomers 
+ - Easy, outgoing, and is extremely calm and patient when consulting with newcomers 
+ - Technically challenged and incompetent, can only use technology to view and send emails, along with other simple tasks 
+ - Main goal is to increase employee productivity and track the progress of all the information uploaded by each employee 
+ - Wants to minimize the time between client sending new information and the application updating the info 
+ - Wants to track all the information updated by his employees, including what was updated, when it was updated, and by which employee 
+ - Has access to all the info uploaded by his employees, as he expects that some employees are much more careless with data entry which leads to more typos 
+ - Currently spends a lot of time answering questions from clients regarding when they will receive assistance, and is constantly receiving pressure to expedite the process 
+
+Charlie Charles 
+ - Male, 25 years old and is fluent in only English 
+ - Likes to follow a routine procedure, and does not like losing or misplacing things 
+ - Admin for the application, and is responsible for keeping the service up and running 
+ - Neutral party who has access to all the information in the application, and is allowed to query the data to answer legitimate requests from agencies and CCS 
+ - Responsible for performing manual merges after consulting the necessary parties involved when there are conflicts in client data changes 
+ - Technically proficient with Excel and SQL to perform database changes, and is constantly responding to requests and concerns through his smartphone 
+ - Creates accounts for all other users and restricts their privileges and permissions accordingly 
+ - Frustrated with how much storage is being wasted by the storage of duplicate information 
+ - New accounts are created once every few months and on special occasions, such as the on boarding of a new agency 
+
+David Doe 
+ - Male, 41 years old and is fluent in strictly English 
+ - Project manager at CCS (the organization responsible for generating reports) 
+ - Currently instructs his employees to manually use Excel to generate graphs based on the limited data available 
+ - Responsible for generating summary reports, trend reports, and other funding reports 2-4 times a year based on demand and needs 
+ - Extremely professional and emphasizes generating reports as soon as possible to ensure funding gets to the hands of those who need it immediately 
+ - Organizes all his tasks based on priority, and is strict when it comes to employees making typos and careless mistakes 
+ - Not familiar with technology and is limited to email and smartphone usage for videos and pictures, and currently has employees generate reports for him 
+ - He needs technology to be as simple as clicking a single button, and having it all done without his attention 
