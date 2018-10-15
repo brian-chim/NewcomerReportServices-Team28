@@ -16,6 +16,8 @@ For starters, you must add the database connector to the maven project dependenc
 
 This code is also assuming you are running MySQL locally on a windows machine with a database named world, containing a table named city, with columns: name, district, and population.
 
+To install MySQL on windos, go to: https://dev.mysql.com/downloads/workbench/
+
 However, the code will work with remote databases as-well, you just need to change the connection String from localhost to a valid server.
 
 ```
