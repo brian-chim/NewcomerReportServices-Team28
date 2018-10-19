@@ -8,7 +8,7 @@
     <artifactId>NewcomerReportServices</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <!-- JUnit taken from CSCC01 lab07 -->
+    <!-- JUnit taken from CSCC01 lab07 pom.xml created by Thierry Sans-->
     <properties>
       <junit.jupiter.version>5.2.0</junit.jupiter.version>
       <junit.platform.version>1.2.0</junit.platform.version>
@@ -22,7 +22,7 @@
             <version>3.25.2</version>
         </dependency>
 
-        <!-- JUnit taken from CSCC01 lab07-->
+        <!-- JUnit dependencies taken from CSCC01 lab07 pom.xml created by Thierry Sans-->
         <dependency>
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter-api</artifactId>
@@ -56,7 +56,7 @@
                     <mainClass>your.package.with.mainclass</mainClass>
                 </configuration>
             </plugin>
-            <!-- taken from CSCC01 lab07 for JUnit-->
+            <!-- For JUnit, taken from CSCC01 lab07 pom.xml created by Thierry Sans-->
             <plugin>
               <artifactId>maven-surefire-plugin</artifactId>
               <version>2.22.0</version>
