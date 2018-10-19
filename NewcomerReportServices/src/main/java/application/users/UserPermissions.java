@@ -1,4 +1,4 @@
-package users;
+package application.users;
 
 public enum UserPermissions {
 	UPLOADFILES,

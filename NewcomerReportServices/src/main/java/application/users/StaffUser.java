@@ -1,4 +1,4 @@
-package users;
+package application.users;
 
 public class StaffUser extends User {
 	

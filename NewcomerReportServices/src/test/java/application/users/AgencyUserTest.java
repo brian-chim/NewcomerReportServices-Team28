@@ -1,4 +1,4 @@
-package users;
+package application.users;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,9 +7,9 @@ import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class AdminUserTest {
+public class AgencyUserTest {
 
-	private final AdminUser testAdminUser = new AdminUser(1, "username", "password",
+	private final AgencyUser testAgencyUser = new AgencyUser(1, "username", "password",
 			1, "Employment Services");
 
 	@Test
@@ -19,10 +19,8 @@ public class AdminUserTest {
 		for(int i = 0; i < UserPermissions.values().length; i++) {
 			permissions.put(UserPermissions.values()[i], (Boolean) false);
 		}
-		permissions.replace(UserPermissions.GENERATESUMMARYREPORT, (Boolean) true);
-		permissions.replace(UserPermissions.GENERATETRENDREPORT, (Boolean) true);
-		permissions.replace(UserPermissions.SETACCESS, (Boolean) true);
-		assertEquals(testAdminUser.getPermissions(), permissions);
+		permissions.replace(UserPermissions.UPLOADFILES, (Boolean) true);
+		assertEquals(testAgencyUser.getPermissions(), permissions);
 	}
 
 }
