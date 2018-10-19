@@ -7,9 +7,9 @@ import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class AgencyUserTest {
+public class StaffUserTest {
 
-	private final AgencyUser testAgencyUser = new AgencyUser(1, "username", "password",
+	private final StaffUser testStaffUser = new StaffUser(1, "username", "password",
 			1, "Employment Services");
 
 	@Test
@@ -19,8 +19,10 @@ public class AgencyUserTest {
 		for(int i = 0; i < UserPermissions.values().length; i++) {
 			permissions.put(UserPermissions.values()[i], (Boolean) false);
 		}
-		permissions.replace(UserPermissions.UPLOADFILES, (Boolean) true);
-		assertEquals(testAgencyUser.getPermissions(), permissions);
+		permissions.replace(UserPermissions.GENERATESUMMARYREPORT, (Boolean) true);
+		permissions.replace(UserPermissions.GENERATETRENDREPORT, (Boolean) true);
+
+		assertEquals(testStaffUser.getPermissions(), permissions);
 	}
 
 }
