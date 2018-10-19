@@ -1,0 +1,8 @@
+package users;
+
+public enum UserPermissions {
+	UPLOADFILES,
+	GENERATESUMMARYREPORT,
+	GENERATETRENDREPORT,
+	SETACCESS;
+}
