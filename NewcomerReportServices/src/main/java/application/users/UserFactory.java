@@ -1,3 +1,5 @@
+package application.users;
+
 import java.util.HashMap;
 
 public class UserFactory {
