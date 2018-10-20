@@ -1,7 +1,14 @@
 package application.database;
 
 import java.util.HashMap;
-import application.users.*;
+import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class DatabaseUserHandler {
 
@@ -10,9 +17,9 @@ public class DatabaseUserHandler {
      * Connect to the test.db database
      * @return the Connection object
      */
-    private Connection connect() {
+    private static Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:C://sqlite/db/newcomerService.db";
+        String url = "jdbc:sqlite:sqlite/db/newcomerService.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -28,11 +35,11 @@ public class DatabaseUserHandler {
      * @param userDetails the details regarding the user to be inserted
      * @param streamList the list of streams that the user has access to
      */
-    public static void insertUser(Hashmap<String, String> userDetails, ArrayList<String> streamList) {
+    public static void insertUser(HashMap<String, String> userDetails, ArrayList<String> streamList) {
         String sql = "INSERT INTO Users(UserType, Username, Password, OrganizationID, Email, EmploymentServiceStream) VALUES(?,?,?,?,?,?)";
 
         // determine which streams the user belong to
-        String employmentServiceStream = streamList.contains("EmploymentServiceStream") ? "True" : "False";
+        String employmentServiceStream = streamList.contains("EmploymentServiceStream") ? "TRUE" : "FALSE";
 
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -41,7 +48,7 @@ public class DatabaseUserHandler {
             pstmt.setString(3, userDetails.get("Password"));
             pstmt.setString(4, userDetails.get("OrganizationID"));
             pstmt.setString(5, userDetails.get("Email"));
-            pstmt.setString(6, employmentServiceStream));
+            pstmt.setString(6, employmentServiceStream);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -49,16 +56,17 @@ public class DatabaseUserHandler {
     }
 
     /**
-     *
-     * @param username
+     * Retrieve a user from the database
+     * @param username the username of the user
      * @param password
-     * @return
+     * @return a User object based on the type of user that it is
+     * @throws UserNotFoundException when the user does not exist
      */
-    public static User getUser(String username, String password) {
+    public static User getUser(String username, String password) throws UserNotFoundException {
         String sql = "SELECT * " + "FROM Users WHERE username = ?";
         UserFactory userFactory = new UserFactory();
-        Hashmap<String, String> userDetails = new Hashmap<String, String>();
-        try (Connection conn = this.connect();
+        HashMap<String, String> userDetails = new HashMap<String, String>();
+        try (Connection conn = connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql)){
 
             // set the username in the SQL parameter
@@ -69,7 +77,7 @@ public class DatabaseUserHandler {
             rs.next();
             userDetails.put("Username", rs.getString("Username"));
             userDetails.put("Password", rs.getString("Password"));
-            userDetails.put("UserID", rs.getString("UserID"));
+            userDetails.put("ID", rs.getString("ID"));
             userDetails.put("UserType", rs.getString("UserType"));
             userDetails.put("Email", rs.getString("Email"));
             userDetails.put("OrganizationID", rs.getString("OrganizationID"));
@@ -79,7 +87,7 @@ public class DatabaseUserHandler {
         }
 
         if (authenticate(password, userDetails.get("Password"))) {
-            return userFactory.getUser(userDetails.get("OrganizationID"));
+            return userFactory.getUser(userDetails);
         } else {
             throw new UserNotFoundException();
         }
@@ -87,7 +95,7 @@ public class DatabaseUserHandler {
     }
 
 
-    public static void authenticate(String password, String checkPassword) {
+    public static boolean authenticate(String password, String checkPassword) {
         return password.equals(checkPassword);
     }
 }
