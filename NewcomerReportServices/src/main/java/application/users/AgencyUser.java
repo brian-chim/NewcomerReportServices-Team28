@@ -1,5 +1,7 @@
 package application.users;
 
+import java.util.HashMap;
+
 public class AgencyUser extends User {
 	
 	public AgencyUser(int userId, String username, String password, int orgId, String orgType) {
