@@ -36,7 +36,7 @@ public class DatabaseUserHandler {
      * @param userDetails the details regarding the user to be inserted
      * @param streamList the list of streams that the user has access to
      */
-    public static void insertUser(HashMap<String, String> userDetails, ArrayList<String> streamList) {
+    public static boolean insertUser(HashMap<String, String> userDetails, ArrayList<String> streamList) {
         String sql = "INSERT INTO Users(UserType, Username, Password, OrganizationID, Email, EmploymentServiceStream) VALUES(?,?,?,?,?,?)";
 
         // determine which streams the user belong to
@@ -53,7 +53,9 @@ public class DatabaseUserHandler {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return false;
         }
+        return true;
     }
 
     /**
