@@ -1,5 +1,6 @@
 package application.database;
 
+import application.users.*;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.sql.Connection;
