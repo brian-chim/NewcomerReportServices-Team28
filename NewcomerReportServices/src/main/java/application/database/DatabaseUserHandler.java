@@ -31,7 +31,7 @@ public class DatabaseUserHandler {
     }
 
     /**
-     * Insert a new row of data into the necessary tables
+     * Insert a new row of data into the necessary tables.
      *
      * @param userDetails the details regarding the user to be inserted
      * @param streamList the list of streams that the user has access to
@@ -57,7 +57,7 @@ public class DatabaseUserHandler {
     }
 
     /**
-     * Retrieve a user from the database
+     * Retrieve a user from the database.
      * @param username the username of the user
      * @param password
      * @return a User object based on the type of user that it is
@@ -95,7 +95,35 @@ public class DatabaseUserHandler {
 
     }
 
+    /**
+     * Gets all of the agencies that exist in the application.
+     * @return a list of agencies
+     */
+    public static ArrayList<String> getAgencies() {
+        String sql = "SELECT * " + "FROM Agency";
+        ArrayList<String> agencies = new ArrayList<>();
 
+        try (Connection conn = connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // get the results
+            ResultSet rs  = pstmt.executeQuery();
+            while (rs.next()) {
+                agencies.add(rs.getString("AgencyName"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return agencies;
+    }
+
+
+    /**
+     * Authenticates the password
+     * @param password actual password
+     * @param checkPassword password entered by user
+     * @return whether or not the passwords match
+     */
     public static boolean authenticate(String password, String checkPassword) {
         return password.equals(checkPassword);
     }
