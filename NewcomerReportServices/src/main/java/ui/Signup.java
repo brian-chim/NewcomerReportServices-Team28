@@ -77,9 +77,9 @@ public class Signup extends Application {
 		ComboBox<String> userType;
 		ArrayList<String> types = new ArrayList<String>(
 				Arrays.asList(
-						"Agency",
-						"TEQLIP Staff",
-						"Admin")
+						"AGENCY",
+						"TEQLIP STAFF",
+						"ADMIN")
 		);
 		ObservableList<String> typeOptions = FXCollections.observableArrayList(types);
 				
@@ -126,14 +126,14 @@ public class Signup extends Application {
 	    userType.valueProperty().addListener(new ChangeListener<String>() {
 	        @Override 
 	        public void changed(ObservableValue ov, String prev, String curr) {
-	        	if (curr == "Agency") {
+	        	if (curr == "AGENCY") {
 	        		orgLabel.setVisible(true);
 	        		orgField.setVisible(true);
 	        		serviceLabel.setVisible(true);
 	        		serviceStreamLayout.setVisible(true);
 	        		
 	        	} else {
-	        		if (curr == "Admin") {
+	        		if (curr == "ADMIN") {
 		        		orgLabel.setVisible(false);
 		        		orgField.setVisible(false);
 	        		} else {
@@ -165,11 +165,11 @@ public class Signup extends Application {
 	        	ArrayList<String> services = new ArrayList<String>();
 	        	String orgID = "";
 	        	
-	        	if(type != "Admin") {
+	        	if(type != "ADMIN") {
 		        	if (orgname != null) {
 		        		orgID = String.valueOf(agencies.indexOf(orgname));
 		        	}  
-		        	if (type == "Agency") {
+		        	if (type == "AGENCY") {
 			        	for (Node stream : serviceStreamLayout.getChildrenUnmodifiable()) {
 			        		if (((CheckBox)stream).isSelected()) {
 			        			services.add(((Labeled) stream).getText());
@@ -179,7 +179,7 @@ public class Signup extends Application {
 		        	
 	        	} 
 	        	
-				if (username != "" && password != "" && email != "" && ((type == "TEQLIP Staff" && orgID != "") || (type == "Agency" && orgID != "" && !services.isEmpty()))) {
+				if (username != "" && password != "" && email != "" && ((type == "TEQLIP STAFF" && orgID != "") || (type == "AGENCY" && orgID != "" && !services.isEmpty()))) {
 	        		HashMap<String, String> userDetails = new HashMap<>();
 	        		userDetails.put("UserType", type);
 	        		userDetails.put("Username", username);
