@@ -33,3 +33,7 @@
 .combo-box {
 	-fx-pref-width: 350;
 }
+
+.agency-only {
+	visibility: invisible;
+}
