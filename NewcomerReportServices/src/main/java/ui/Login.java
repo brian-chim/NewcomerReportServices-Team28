@@ -1,5 +1,8 @@
 package ui;
 	
+import application.database.DatabaseUserHandler;
+import application.database.UserNotFoundException;
+import application.users.User;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,9 +31,8 @@ import javafx.stage.Stage;
 
 public class Login extends Application {
 
- String user = "admin";
- String password = "12345";
- String checkUser, checkPw;
+	String checkUser;
+	String checkPw;
 
 	@Override
     public void start(final Stage primaryStage) {
@@ -108,18 +110,17 @@ public class Login extends Application {
         public void handle(ActionEvent event) {
         	checkUser = txtUserName.getText().toString();
         	checkPw = pf.getText().toString();
-        	// User user = getUser(checkUser);
-        	// if user.getPassword().equals(checkPw); {
-        	if(checkUser.equals(user) && checkPw.equals(password)){
+        	try {
+        		User user = DatabaseUserHandler.getUser(checkUser, checkPw);
         		Stage newStage = new Stage();
-        		new Home().start(newStage);
+        		new Home().start(newStage, user);
         		primaryStage.close();
-        	} else {
+        	} catch (UserNotFoundException e) {
         		lblMessage.setText("Wrong username or password!");
         		lblMessage.setTextFill(Color.RED);
-        	}
         		txtUserName.setText("");
         		pf.setText("");
+        	}
     	}});
 
         //Add HBox and GridPane layout to BorderPane Layout
@@ -128,7 +129,7 @@ public class Login extends Application {
         
         //Adding BorderPane to the scene and loading CSS
         Scene scene = new Scene(bp);
-        scene.getStylesheets().add(getClass().getResource("css\\login.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/login.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setTitle("Newcomer's Report Services");
         primaryStage.setResizable(false);
