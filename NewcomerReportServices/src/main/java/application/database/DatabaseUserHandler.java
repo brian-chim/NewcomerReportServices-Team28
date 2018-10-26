@@ -40,7 +40,7 @@ public class DatabaseUserHandler {
         String sql = "INSERT INTO Users(UserType, Username, Password, OrganizationID, Email, EmploymentServiceStream) VALUES(?,?,?,?,?,?)";
 
         // determine which streams the user belong to
-        String employmentServiceStream = streamList.contains("EmploymentServiceStream") ? "TRUE" : "FALSE";
+        String employmentServiceStream = streamList.contains("Employment Related Services") ? "TRUE" : "FALSE";
 
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
