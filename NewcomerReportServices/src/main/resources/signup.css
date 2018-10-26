@@ -1,0 +1,39 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+#mainGridPane {
+	-fx-background-color: aliceblue;
+	-fx-alignment: center;
+	-fx-padding: 20, 20, 40, 20;
+	-fx-hgap: 10;
+	-fx-vgap: 18;
+}
+
+#header {
+	-fx-text-alignment: center;
+	-fx-font-size: 30;
+	-fx-font-weight: bold;
+	
+}
+
+#submitButton {
+	-fx-alignment: center;
+	-fx-pref-height: 40;
+	-fx-pref-width: 100;
+}
+
+
+.label {
+ 	-fx-font-size: 18;
+ 	-fx-font-weight: bold;
+}
+
+.check-box {
+	-fx-font-size: 15;
+}
+
+.combo-box {
+	-fx-pref-width: 350;
+}
+
+.agency-only {
+	visibility: invisible;
+}
