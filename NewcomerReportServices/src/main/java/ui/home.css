@@ -1,0 +1,21 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+#tp {
+ -fx-font-size: 18;
+ -fx-pref-height:100.0%;
+ 
+ 
+}
+
+#uploadHbox{
+	-fx-spacing: 10;
+}
+
+.tab {
+ 	-fx-font-family: Arial;
+ 	-fx-pref-height:100;
+ 	-fx-padding: 20, 20, 20, 20;
+} 
+
+ .dialog-pane{
+  -fx-font-size:30;
+}
