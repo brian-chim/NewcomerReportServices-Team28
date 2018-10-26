@@ -1,5 +1,7 @@
 package ui;
 
+import javafx.application.Application;
+
 import application.database.DatabaseUserHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,11 +32,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Signup extends Application {
-
-	public static void main(String[] args) {
-		launch(args);
-
-	}
 
 	@Override
 	public void start(Stage primaryStage) {
