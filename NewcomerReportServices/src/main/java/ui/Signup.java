@@ -178,8 +178,18 @@ public class Signup extends Application {
 		        	}
 		        	
 	        	} 
+	        	boolean complete = false;
+	        	if (username != "" && password != "" && email != "") {
+	        		if (type == "ADMIN") {
+	        			complete = true;
+	        		} else if (type == "TEQLIP STAFF" && orgID != "") {
+	        			complete = true;
+	        		} else if (type == "AGENCY" && orgID != "" && !services.isEmpty()) {
+	        			complete = true;
+	        		}
+	        	}
 	        	
-				if (username != "" && password != "" && email != "" && ((type == "TEQLIP STAFF" && orgID != "") || (type == "AGENCY" && orgID != "" && !services.isEmpty()))) {
+				if (complete) {
 	        		HashMap<String, String> userDetails = new HashMap<>();
 	        		userDetails.put("UserType", type);
 	        		userDetails.put("Username", username);
