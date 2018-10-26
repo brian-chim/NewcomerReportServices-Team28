@@ -1,33 +1,22 @@
 package ui;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import java.util.logging.Logger;
-
 import application.users.User;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -44,7 +33,7 @@ public class Home extends Application {
 		tp.getTabs().add(this.getUploadTab(newStage));
 		
 		tp.setId("tp");
-		scene.getStylesheets().add(getClass().getResource("home.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/home.css").toExternalForm());
 		newStage.setScene(scene);
 		newStage.setTitle("Newcomer Home");
 		newStage.setResizable(true);

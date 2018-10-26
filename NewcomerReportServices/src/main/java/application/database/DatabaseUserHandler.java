@@ -29,6 +29,58 @@ public class DatabaseUserHandler {
         }
         return conn;
     }
+    
+    /**
+     * Insert a new row of data into the necessary tables.
+     *
+     * @param userDetails the details regarding the user to be inserted
+     * @param streamList the list of streams that the user has access to
+     */
+    public static boolean insert(String tableName, HashMap<String, String> values) {
+        String sql = "INSERT INTO " + tableName;
+        String valuesSQL = "(";
+        String placeholderSQL = "(";
+        
+        Integer numVals = values.size();
+        Integer index = 1;
+        
+        // generate sql query with the key, vals from the hasmap
+        
+        // Iterating over keys only
+    	for (String key : values.keySet()) {
+    		if(index != numVals) {
+        		valuesSQL += key + ", ";
+        		placeholderSQL += "?, ";
+        	}
+        	else {
+        		valuesSQL += key + ") VALUES (";
+        		placeholderSQL += "?)";
+        	}
+        	index++;
+    	}
+    	
+        // combine sql query
+        sql += valuesSQL + placeholderSQL;
+        System.out.println(sql);
+    	
+    	// connect to db and perfom the query
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        		
+        	// Iterating over keys and populate statement with values
+        	index = 1;
+        	for (String key : values.keySet()) {
+        	    pstmt.setString(index, values.get(key));
+        	    index++;
+        	}
+            pstmt.executeUpdate();
+        } 
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Insert a new row of data into the necessary tables.
