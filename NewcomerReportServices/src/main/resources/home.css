@@ -6,7 +6,11 @@
  
 }
 
-#uploadHbox{
+#uploadHbox {
+	-fx-spacing: 50;
+}
+
+#container {
 	-fx-spacing: 10;
 }
 

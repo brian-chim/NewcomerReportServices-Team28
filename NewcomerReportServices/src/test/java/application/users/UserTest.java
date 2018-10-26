@@ -7,7 +7,7 @@ import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import application.database.DatabaseUserHandler;
+import application.database.DatabaseHandler;
 import application.database.UserNotFoundException;
 
 public class UserTest {
@@ -122,6 +122,6 @@ public class UserTest {
 	}
 	
 	public static void main(String[] args) throws UserNotFoundException {
-		System.out.println(DatabaseUserHandler.getUser("admin@mail.com", "123").getServiceStreams());
+		System.out.println(DatabaseHandler.getUser("admin@mail.com", "123").getServiceStreams());
 	}
 }

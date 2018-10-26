@@ -1,6 +1,6 @@
 package ui;
 	
-import application.database.DatabaseUserHandler;
+import application.database.DatabaseHandler;
 import application.database.UserNotFoundException;
 import application.users.User;
 import javafx.application.Application;
@@ -111,7 +111,7 @@ public class Login extends Application {
         	checkUser = txtUserName.getText().toString();
         	checkPw = pf.getText().toString();
         	try {
-        		User user = DatabaseUserHandler.getUser(checkUser, checkPw);
+        		User user = DatabaseHandler.getUser(checkUser, checkPw);
         		Stage newStage = new Stage();
         		new Home().start(newStage, user);
         		primaryStage.close();

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import application.database.DatabaseUserHandler;
+import application.database.DatabaseHandler;
 import application.database.UserNotFoundException;
 
 public class UserFactoryTest {
