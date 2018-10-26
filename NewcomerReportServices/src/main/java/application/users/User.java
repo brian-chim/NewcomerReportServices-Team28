@@ -1,6 +1,9 @@
 package application.users;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class User implements UserInterface {
 
@@ -8,10 +11,13 @@ public class User implements UserInterface {
 	private String username;
 	private String password;
 	private int orgId;
+	// ADMIN, AGENCY, or STAFF
 	private String orgType;
+	// what the user has access to do
 	private HashMap<UserPermissions, Boolean> permissions = new HashMap<UserPermissions, Boolean>();
-
-	public User(int userId, String username, String password, int orgId, String orgType) {
+	private HashMap<ServiceStreams, Boolean> serviceStreams = new HashMap<ServiceStreams, Boolean>();
+	
+	public User(int userId, String username, String password, int orgId, String orgType, HashMap<ServiceStreams, Boolean> serviceStreams) {
 		this.userId = userId;
 		this.username = username;
 		this.password = password;
@@ -20,6 +26,17 @@ public class User implements UserInterface {
 		// init user permissions hashmap to no permissions at all
 		for(int i = 0; i < UserPermissions.values().length; i++) {
 			this.permissions.put(UserPermissions.values()[i], (Boolean)false);
+		}
+		// set up the service streams
+		for(int i = 0; i < ServiceStreams.values().length; i++) {
+			this.serviceStreams.put(ServiceStreams.values()[i], (Boolean)false);
+		}
+		// iterate through the a HashMap taken from https://stackoverflow.com/questions/1066589/iterate-through-a-hashmap
+		Iterator<Entry<ServiceStreams, Boolean>> it = serviceStreams.entrySet().iterator();
+		while(it.hasNext()) {
+			Map.Entry<ServiceStreams, Boolean> pair = (Map.Entry<ServiceStreams, Boolean>) it.next();
+			this.serviceStreams.replace(pair.getKey(), pair.getValue());
+			it.remove();
 		}
 	}
 
@@ -41,6 +58,10 @@ public class User implements UserInterface {
 
 	public void setOrgType(String orgType) {
 		this.orgType = orgType;
+	}
+
+	public void setServiceStream(ServiceStreams stream, Boolean available) {
+		this.serviceStreams.replace(stream, available);
 	}
 
 	public int getUserId() {
@@ -65,5 +86,20 @@ public class User implements UserInterface {
 
 	public HashMap<UserPermissions, Boolean> getPermissions() {
 		return this.permissions;
+	}
+
+	public HashMap<ServiceStreams, Boolean> getServiceStreams() {
+		return this.serviceStreams;
+	}
+	
+	public boolean equals(User user) {
+		boolean userIdEqual = (this.getUserId() == user.getUserId());
+		boolean usernameEqual = (this.getUsername().equals(user.getUsername()));
+		boolean passwordEqual = (this.getPassword().equals(user.getPassword()));
+		boolean orgIdEqual = (this.getOrgId() == user.getOrgId());
+		boolean orgTypeEqual = (this.getOrgType().equals(user.getOrgType()));
+		boolean permissionsEqual = this.getPermissions().equals(user.getPermissions());
+		boolean serviceStreamsEqual = this.getServiceStreams().equals(user.getServiceStreams());
+		return userIdEqual && usernameEqual && passwordEqual && orgIdEqual && orgTypeEqual && permissionsEqual && serviceStreamsEqual;
 	}
 }

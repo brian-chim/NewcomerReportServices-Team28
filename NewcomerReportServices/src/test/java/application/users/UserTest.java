@@ -7,10 +7,13 @@ import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class UserTest {
+import application.database.DatabaseUserHandler;
+import application.database.UserNotFoundException;
 
+public class UserTest {
+	private final HashMap<ServiceStreams, Boolean> serviceStreams = createTestHashMap();
 	private final User testUser = new User(1, "username", "password",
-			1, "Employment Services");
+			1, "ADMIN", serviceStreams);
 
 	@Test
 	@DisplayName("Test Get UserId")
@@ -39,7 +42,7 @@ public class UserTest {
 	@Test
 	@DisplayName("Test Get OrgType")
 	void testGetOrgType() {
-		assertEquals(testUser.getOrgType(), "Employment Services");
+		assertEquals(testUser.getOrgType(), "ADMIN");
 	}
 
 	@Test
@@ -50,6 +53,17 @@ public class UserTest {
 			permissions.put(UserPermissions.values()[i], (Boolean) false);
 		}
 		assertEquals(testUser.getPermissions(), permissions);
+	}
+	
+	@Test
+	@DisplayName("Test get ServiceStreams")
+	void testGetServiceStreams() {
+		HashMap<ServiceStreams, Boolean> serviceStreams = createTestHashMap();
+		serviceStreams.put(ServiceStreams.CLIENTPROFILEBULK, (Boolean) false);
+		serviceStreams.put(ServiceStreams.INFOANDORIENTATION, (Boolean) false);
+		serviceStreams.put(ServiceStreams.LANGUAGETRAINING, (Boolean) false);
+		serviceStreams.put(ServiceStreams.NEEDSASSESSMENTS, (Boolean) false);
+		assertEquals(testUser.getServiceStreams(), serviceStreams);
 	}
 	
 	@Test
@@ -87,4 +101,27 @@ public class UserTest {
 		assertEquals(testUser.getOrgType(), "test");
 	}
 
+	@Test
+	@DisplayName("Test Set Service Stream")
+	void testSetServiceStream() {
+		testUser.setServiceStream(ServiceStreams.INFOANDORIENTATION, (Boolean) true);
+		HashMap<ServiceStreams, Boolean> serviceStreams = createTestHashMap();
+		serviceStreams.put(ServiceStreams.CLIENTPROFILEBULK, (Boolean)false);
+		serviceStreams.put(ServiceStreams.INFOANDORIENTATION, (Boolean)false);
+		serviceStreams.put(ServiceStreams.LANGUAGETRAINING, (Boolean)false);
+		serviceStreams.put(ServiceStreams.NEEDSASSESSMENTS, (Boolean)false);
+		serviceStreams.replace(ServiceStreams.INFOANDORIENTATION, (Boolean) true);
+		assertEquals(testUser.getServiceStreams(), serviceStreams);
+	}
+
+	private static HashMap<ServiceStreams, Boolean> createTestHashMap() {
+		HashMap<ServiceStreams, Boolean> serviceStreams = new HashMap<ServiceStreams, Boolean>();
+		serviceStreams.put(ServiceStreams.EMPLOYMENTSERVICES, (Boolean)true);
+		serviceStreams.put(ServiceStreams.COMMUNITYCONNECTIONS, (Boolean)false);
+		return serviceStreams;
+	}
+	
+	public static void main(String[] args) throws UserNotFoundException {
+		System.out.println(DatabaseUserHandler.getUser("admin@mail.com", "123").getServiceStreams());
+	}
 }

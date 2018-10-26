@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 
 public class StaffUserTest {
 
+	private final HashMap<ServiceStreams, Boolean> serviceStreams = new HashMap<ServiceStreams, Boolean>();
+
 	private final StaffUser testStaffUser = new StaffUser(1, "username", "password",
-			1, "Employment Services");
+			1, "Employment Services", serviceStreams);
 
 	@Test
 	@DisplayName("Test Get Permissions")

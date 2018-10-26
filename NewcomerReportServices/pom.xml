@@ -45,20 +45,17 @@
           <scope>test</scope>
         </dependency>
 
+        <!-- needed for javafx on jdk11-->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>11</version>
+        </dependency>
+
     </dependencies>
 
-
-    <!-- to compile javafx, not sure if we need to change the mainclass inside configuration-->
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.zenjava</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>8.7.0</version>
-                <configuration>
-                    <mainClass>your.package.with.mainclass</mainClass>
-                </configuration>
-            </plugin>
             <!-- For JUnit, taken from CSCC01 lab07 pom.xml created by Thierry Sans-->
             <plugin>
               <artifactId>maven-surefire-plugin</artifactId>

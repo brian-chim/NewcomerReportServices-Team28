@@ -1,9 +1,13 @@
 package ui;
 
+import application.database.DatabaseUserHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -69,70 +73,167 @@ public class Signup extends Application {
 		return serviceStreamLayout;
 	}
 	
+	private ComboBox<String> userTypeSelect() {
+		ComboBox<String> userType;
+		ArrayList<String> types = new ArrayList<String>(
+				Arrays.asList(
+						"AGENCY",
+						"TEQLIP STAFF",
+						"ADMIN")
+		);
+		ObservableList<String> typeOptions = FXCollections.observableArrayList(types);
+				
+		userType = new ComboBox<String>(typeOptions);
+		return userType;
+				
+		
+	}
+	
 	private void addUIControls(GridPane gridPane, final Stage primaryStage) {
 	    // create nodes
-	    Label headerLabel = new Label("Participating Organization Registration");
+	    Label headerLabel = new Label("Service Account Registration");
 	    Label nameLabel = new Label("User Name : ");
 	    final TextField nameField = new TextField();
-	    Label orgLabel = new Label("Agency/Organization Name: ");
-	    // test data for selecting agency
-	    // real data comes from db handler
-	    ArrayList<String> agencies = new ArrayList<String>();
-	    agencies.add("default agency");	    
+	    Label emailLabel = new Label("Email : ");
+	    final TextField emailField = new TextField();
+	    Label passwordLabel = new Label("Password : ");
+	    final PasswordField passwordField = new PasswordField();
+	    Label typeLabel = new Label("User Type : ");
+	    final ComboBox<String> userType = userTypeSelect();
+	    
+	   
+	    final Label orgLabel = new Label("Agency/Organization Name: ");
+	    final ArrayList<String> agencies = DatabaseUserHandler.getAgencies();	    
 	    ObservableList<String> agencyOptions = FXCollections.observableArrayList(agencies);
 	    final ComboBox<String> orgField = new ComboBox<String>(agencyOptions);
 	    
-	    Label serviceLabel = new Label("Service Stream: ");	    
+	    final Label serviceLabel = new Label("Service Stream: ");	    
 	    final VBox serviceStreamLayout = initializeServiceStreamLayout();
 	    
-	    Label passwordLabel = new Label("Password : ");
-	    final PasswordField passwordField = new PasswordField();
 	    
     
 	    // set nodes to the gridPane
 	    gridPane.add(headerLabel, 0 ,0, 2, 1);
 	    gridPane.add(nameLabel, 0,1);
-	    gridPane.add(nameField, 1, 1);   
-	    gridPane.add(orgLabel, 0, 2);
-	    gridPane.add(orgField, 1, 2);
-	    gridPane.add(serviceLabel, 0, 3);
-	    gridPane.add(serviceStreamLayout, 1, 3);
-	    gridPane.add(passwordLabel, 0, 4);
-	    gridPane.add(passwordField, 1, 4);
+	    gridPane.add(nameField, 1, 1);
+	    gridPane.add(emailLabel, 0,2);
+	    gridPane.add(emailField, 1, 2);
+	    gridPane.add(passwordLabel, 0, 3);
+	    gridPane.add(passwordField, 1, 3);
+	    gridPane.add(typeLabel, 0,4);
+	    gridPane.add(userType, 1, 4);
+	    
+	    userType.valueProperty().addListener(new ChangeListener<String>() {
+	        @Override 
+	        public void changed(ObservableValue ov, String prev, String curr) {
+	        	if (curr == "AGENCY") {
+	        		orgLabel.setVisible(true);
+	        		orgField.setVisible(true);
+	        		serviceLabel.setVisible(true);
+	        		serviceStreamLayout.setVisible(true);
+	        		
+	        	} else {
+	        		if (curr == "ADMIN") {
+		        		orgLabel.setVisible(false);
+		        		orgField.setVisible(false);
+	        		} else {
+		        		orgLabel.setVisible(true);
+		        		orgField.setVisible(true);
+	        		}
+	        		serviceLabel.setVisible(false);
+	        		serviceStreamLayout.setVisible(false);
+	        	}
+	          }
+  
+	      });
+	    
+	    
+	    gridPane.add(orgLabel, 0, 5);
+	    gridPane.add(orgField, 1, 5);
+	    gridPane.add(serviceLabel, 0, 6);
+	    gridPane.add(serviceStreamLayout, 1, 6);
 
 	    // Add Submit Button
 	    Button submitButton = new Button("Submit");
 	    submitButton.setOnAction(new EventHandler<ActionEvent>(){
 	        public void handle(ActionEvent e) {
 	        	String username = nameField.getText();
+	        	String email = emailField.getText();
 	        	String orgname = orgField.getValue();
+	        	String password = passwordField.getText();
+	        	String type = userType.getValue();
 	        	ArrayList<String> services = new ArrayList<String>();
-	        	for (Node stream : serviceStreamLayout.getChildrenUnmodifiable()) {
-	        		if (((CheckBox)stream).isSelected()) {
-	        			services.add(((Labeled) stream).getText());
+	        	String orgID = "";
+	        	
+	        	if(type != "ADMIN") {
+		        	if (orgname != null) {
+		        		orgID = String.valueOf(agencies.indexOf(orgname));
+		        	}  
+		        	if (type == "AGENCY") {
+			        	for (Node stream : serviceStreamLayout.getChildrenUnmodifiable()) {
+			        		if (((CheckBox)stream).isSelected()) {
+			        			services.add(((Labeled) stream).getText());
+			        		}
+			        	}
+		        	}
+		        	
+	        	} 
+	        	boolean complete = false;
+	        	if (username != "" && password != "" && email != "") {
+	        		if (type == "ADMIN") {
+	        			complete = true;
+	        		} else if (type == "TEQLIP STAFF" && orgID != "") {
+	        			complete = true;
+	        		} else if (type == "AGENCY" && orgID != "" && !services.isEmpty()) {
+	        			complete = true;
 	        		}
 	        	}
-	        	String password = passwordField.getText();
-	        	if (username == "" || orgname == null || services.isEmpty() || password == "") {
-	        		Alert alert = new Alert(AlertType.ERROR);
-	        		 
+	        	
+				if (complete) {
+	        		HashMap<String, String> userDetails = new HashMap<>();
+	        		userDetails.put("UserType", type);
+	        		userDetails.put("Username", username);
+	        		userDetails.put("Password", password);
+	        		userDetails.put("OrganizationID", orgID);
+	        		userDetails.put("Email", email);
+	        		
+	        		boolean submitted = DatabaseUserHandler.insertUser(userDetails, services);
+	        		if(submitted) {
+	        	        Alert alert = new Alert(AlertType.INFORMATION);
+	        	        alert.setHeaderText("Successful Signup!");
+	        	        alert.setContentText("Registration form has been submitted!");
+	        	        alert.showAndWait();
+	        	        primaryStage.close();
+	        	        
+	        		} else {
+		        		Alert alert = new Alert(AlertType.ERROR);		        		 
+		        		alert.setTitle("Error alert");
+		        		alert.setHeaderText("Signup Failed..");
+		        		alert.setContentText("Errors occur during submission..");	        		 
+		        		alert.showAndWait();
+	        		}
+		        	
+	        	} else {
+
+	        		Alert alert = new Alert(AlertType.ERROR);	        		 
 	        		alert.setTitle("Error alert");
 	        		alert.setHeaderText("Mandatory Field(s) Missing");
 	        		alert.setContentText("Please fill in all the fields!");
 	        		 
 	        		alert.showAndWait();
-	        	} else {
-	        		primaryStage.close();
 	        	}
 	        }
 	    });
-	    gridPane.add(submitButton, 0, 5, 2, 1);
+	    gridPane.add(submitButton, 0, 7, 2, 1);
 	    GridPane.setHalignment(submitButton, HPos.CENTER);
+	    GridPane.setHalignment(headerLabel, HPos.CENTER);
 	    // javafx css has no margin setting, so set it in code
 	    GridPane.setMargin(submitButton, new Insets(20, 0,20,0));
 	    GridPane.setMargin(headerLabel, new Insets(20, 20,20,20));
 	    
 	    // define ID for nodes which require CSS formatting
+	    serviceLabel.getStyleClass().add("agency-only");
+	    serviceStreamLayout.getStyleClass().add("agency-only");
 	    gridPane.setId("mainGridPane");
 	    headerLabel.setId("header");
 	    submitButton.setId("submitButton");
