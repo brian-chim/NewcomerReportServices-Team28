@@ -1,7 +1,6 @@
 package ui;
 
 import java.util.HashMap;
-import java.util.Set;
 
 import application.users.User;
 import application.users.UserPermissions;
@@ -26,18 +25,22 @@ public class Home extends Application {
 			  		tab = new TabUpload(user);
 			  	case GENERATESUMMARYREPORT:
 			  		tab = new TabSummaryReport(user);
+			  		break;
 			  	case GENERATETRENDREPORT:
 			  		tab = new TabTrendReport(user);
+			  		break;
 			  	case SETACCESS:
 			  		tab = new TabSetAccess(user);
+			  		break;
 			  	default:
 			  		tab = new Tab();
 			  }
 			  pane.getTabs().add(tab);
-			  pane.setSide(Side.LEFT);
 		  }
+		  pane.setSide(Side.LEFT);
 	  }
-	  Scene reportServices = new Scene(pane);
+	  Scene reportServices = new Scene(pane, 1200, 700);
+	  primaryStage.setTitle("Newcomer's Report Services");
 	  // add tabs based on user permissions
   	  primaryStage.setScene(reportServices);
   	  primaryStage.show();
