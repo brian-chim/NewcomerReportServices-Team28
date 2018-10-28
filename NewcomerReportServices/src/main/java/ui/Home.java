@@ -16,7 +16,11 @@ public class Home extends Application {
 	public void start(Stage primaryStage, User user) {
 	  // create a tab pane to host whatever tabs the user will have available
 	  TabPane pane = new TabPane();
+	  // add a home tab that will be present for all kinds of users
+	  pane.getTabs().add(new TabHome(user));
+	  // get the permissions of the user
 	  HashMap<UserPermissions, Boolean> permissions = user.getPermissions();
+	  // add a tab for each permission
 	  for (UserPermissions userPermission : permissions.keySet()) {
 		  if (permissions.get(userPermission)) {
 			  Tab tab;
@@ -39,9 +43,10 @@ public class Home extends Application {
 		  }
 		  pane.setSide(Side.LEFT);
 	  }
+	  // create the scene
 	  Scene reportServices = new Scene(pane, 1200, 700);
+	  reportServices.getStylesheets().add(getClass().getResource("/home.css").toExternalForm());
 	  primaryStage.setTitle("Newcomer's Report Services");
-	  // add tabs based on user permissions
   	  primaryStage.setScene(reportServices);
   	  primaryStage.show();
 	}
