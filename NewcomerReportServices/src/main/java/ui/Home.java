@@ -27,6 +27,7 @@ public class Home extends Application {
 			  switch (userPermission) {
 			  	case UPLOADFILES: 
 			  		tab = new TabUpload(user);
+			  		break;
 			  	case GENERATESUMMARYREPORT:
 			  		tab = new TabSummaryReport(user);
 			  		break;
