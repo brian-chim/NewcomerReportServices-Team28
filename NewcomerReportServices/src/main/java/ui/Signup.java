@@ -150,7 +150,7 @@ public class Signup extends Application {
 	        	String password = passwordField.getText();
 	        	String type = userType.getValue();
 	        	ArrayList<String> services = new ArrayList<String>();
-	        	String orgID = "";
+	        	String orgID = "-1";
 	        	
 	        	if(type != "ADMIN") {
 		        	if (orgname != null) {
