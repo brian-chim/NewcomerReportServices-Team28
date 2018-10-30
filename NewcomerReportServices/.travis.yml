@@ -1,7 +1,0 @@
-language: java
-before_script: cd NewcomerReportServices
-# whitelist
-branches:
-  only:
-    - master
-    - travis-fix
