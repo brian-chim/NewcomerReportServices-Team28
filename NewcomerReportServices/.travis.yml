@@ -1,3 +1,0 @@
-language: java
-mvn compile
-mvn test
