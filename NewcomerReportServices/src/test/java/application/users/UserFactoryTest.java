@@ -40,7 +40,7 @@ public class UserFactoryTest {
 	@Test
 	@DisplayName("Create Staff user using UserFactory")
 	void testCreateStaffUser() {
-		userDetails.put("UserType", "STAFF");
+		userDetails.put("UserType", "TEQLIP STAFF");
 		userDetails.put("EmploymentServiceStream", "FALSE");
 		User factGen = userFactory.getUser(userDetails);
 		User userGen = new StaffUser(1, "username", "password", 1, "STAFF", serviceStreams);

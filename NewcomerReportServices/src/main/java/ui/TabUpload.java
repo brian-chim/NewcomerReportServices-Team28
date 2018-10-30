@@ -2,8 +2,10 @@ package ui;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import application.application.util.FileParser;
 import application.database.DatabaseHandler;
 import application.users.User;
 import javafx.collections.FXCollections;
@@ -18,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.POIXMLException;
 
 public class TabUpload extends Tab {
 	
@@ -60,7 +63,12 @@ public class TabUpload extends Tab {
                 public void handle(final ActionEvent e) {
                     File file = fileChooser.showOpenDialog(stage);
                     if (file != null) {
-                    	// TODO: HANDLE FILE SELECTED
+                        try {
+                            HashMap<String, String> data = FileParser.readSpreadsheet(file.getPath(), "Employment");
+                            DatabaseHandler.insert("EmploymentServiceStream", data);
+                        } catch (POIXMLException error) {
+                            error.printStackTrace();
+                        }
                     }
                 }
             });
@@ -73,7 +81,14 @@ public class TabUpload extends Tab {
                         fileChooser.showOpenMultipleDialog(stage);
                     if (list != null) {
                         for (File file : list) {
-                        	// TODO: HANDLE FILE SELECTED
+                            if (file != null) {
+                                try {
+                                    HashMap<String, String> data = FileParser.readSpreadsheet(file.getPath(), "Employment");
+                                    DatabaseHandler.insert("EmploymentServiceStream", data);
+                                } catch (POIXMLException error) {
+                                    error.printStackTrace();
+                                }
+                            }
                         }
                     }
                 }
