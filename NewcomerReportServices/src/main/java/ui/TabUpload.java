@@ -72,14 +72,6 @@ public class TabUpload extends Tab {
                 public void handle(final ActionEvent e) {
                     File file = fileChooser.showOpenDialog(stage);
                     if (file != null) {
-                        try {
-                            ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(file.getPath(), "Employment");
-                            for (HashMap<String, String> entry : data) {
-                                DatabaseHandler.insert("EmploymentServiceStream", entry);
-                            }
-                        } catch (POIXMLException error) {
-                            error.printStackTrace();
-                        }
                     	filePath.setText(file.getPath());
                     }
                 }
@@ -95,14 +87,6 @@ public class TabUpload extends Tab {
                     	String paths = "";
                         for (File file : list) {
                             if (file != null) {
-                                try {
-                                    ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(file.getPath(), "Employment");
-                                    for (HashMap<String, String> entry : data) {
-                                        DatabaseHandler.insert("EmploymentServiceStream", entry);
-                                    }
-                                } catch (POIXMLException error) {
-                                    error.printStackTrace();
-                                }
                             	paths += file.getPath() + ";";
                             }
                         }
@@ -118,7 +102,15 @@ public class TabUpload extends Tab {
                 public void handle(final ActionEvent e) {
         			String[] paths = filePath.getText().split(";");
         			for (String path : paths) {
-        			    //TODO: Implement
+                        try {
+                            ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(path, "Employment");
+                            for (HashMap<String, String> entry : data) {
+                            	System.out.println(entry);
+                                DatabaseHandler.insert("EmploymentServiceStream", entry);
+                            }
+                        } catch (POIXMLException error) {
+                            error.printStackTrace();
+                        }
         			}
         		}
         		
