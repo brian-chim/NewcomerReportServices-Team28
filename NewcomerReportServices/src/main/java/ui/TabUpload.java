@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -30,11 +31,12 @@ public class TabUpload extends Tab {
 		final FileChooser fileChooser = new FileChooser();
         final Button openButton = new Button("Upload a single file");
         final Button openMultipleButton = new Button("Upload multiple files");
+        final Button uploadButton = new Button("UPLOAD");
  
         // vertical container for butons and dropdown
         VBox vbox = new VBox();
         vbox.setId("container");
-        vbox.setMinWidth(700);
+        vbox.setMinWidth(200);
         vbox.setAlignment(Pos.CENTER);
         
         // horizontal button row for single and multi file selection
@@ -50,8 +52,15 @@ public class TabUpload extends Tab {
         serviceDropdownSelectorRow.setAlignment(Pos.CENTER);
         serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown());
         
+        // a text area displaying selected file path
+        TextArea filePath = new TextArea();
+        filePath.setMaxWidth(400);
+        filePath.setMaxHeight(10);
+        filePath.setEditable(false);
+
+        
         // everything put together
-        vbox.getChildren().addAll(buttonRow, serviceDropdownSelectorRow);
+        vbox.getChildren().addAll(buttonRow, serviceDropdownSelectorRow, filePath, uploadButton);
         this.setContent(vbox);
         
         // from the oracle file chooser docs
@@ -71,6 +80,7 @@ public class TabUpload extends Tab {
                         } catch (POIXMLException error) {
                             error.printStackTrace();
                         }
+                    	filePath.setText(file.getPath());
                     }
                 }
             });
@@ -82,6 +92,7 @@ public class TabUpload extends Tab {
                     List<File> list =
                         fileChooser.showOpenMultipleDialog(stage);
                     if (list != null) {
+                    	String paths = "";
                         for (File file : list) {
                             if (file != null) {
                                 try {
@@ -92,14 +103,35 @@ public class TabUpload extends Tab {
                                 } catch (POIXMLException error) {
                                     error.printStackTrace();
                                 }
+                            	paths += file.getPath() + ";";
                             }
                         }
+                        filePath.setText(paths);
                     }
                 }
             });
         this.setText("Upload Files");
+        
+        uploadButton.setOnAction(
+        	new EventHandler<ActionEvent>() {
+        		@Override
+                public void handle(final ActionEvent e) {
+        			String[] paths = filePath.getText().split(";");
+        			for (String path : paths) {        				
+        				try {
+                            ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(file.getPath(), "Employment");
+                            for (HashMap<String, String> entry : data) {
+                                DatabaseHandler.insert("EmploymentServiceStream", entry);
+                            }
+        				} catch (POIXMLException error) {
+        					error.printStackTrace();
+        				}
+        			}
+        		}
+        		
+        	}
+        );
 	}
-	
 	// dropdown for service streams
 	private ComboBox<String> getServiceStreamDropdown() {
 		ComboBox<String> serviceStream;
