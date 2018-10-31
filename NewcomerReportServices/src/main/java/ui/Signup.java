@@ -1,11 +1,11 @@
 package ui;
 
-import application.database.DatabaseUserHandler;
+import javafx.application.Application;
+import application.database.DatabaseHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -31,11 +31,6 @@ import javafx.stage.Stage;
 
 public class Signup extends Application {
 
-	public static void main(String[] args) {
-		launch(args);
-
-	}
-
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Newcomer Report Services Registration");
@@ -53,15 +48,7 @@ public class Signup extends Application {
 
 	
 	private VBox initializeServiceStreamLayout() {
-		ArrayList<String> streams = new ArrayList<String>(
-				Arrays.asList(
-		    	        "Client Profile Bulk",
-		    	        "Needs Assessment & Referral Service (NARS)",
-		    	        "Employment Related Services",
-		    	        "Community Connections Services",
-		    	        "Information & Orientation Services",
-		    	        "Language Training Services")
-		);
+		ArrayList<String> streams = DatabaseHandler.getServiceStreams();	
 		// with VBox with spacing
 		VBox serviceStreamLayout = new VBox(5);
 		
@@ -103,7 +90,7 @@ public class Signup extends Application {
 	    
 	   
 	    final Label orgLabel = new Label("Agency/Organization Name: ");
-	    final ArrayList<String> agencies = DatabaseUserHandler.getAgencies();	    
+	    final ArrayList<String> agencies = DatabaseHandler.getAgencies();	    
 	    ObservableList<String> agencyOptions = FXCollections.observableArrayList(agencies);
 	    final ComboBox<String> orgField = new ComboBox<String>(agencyOptions);
 	    
@@ -163,7 +150,7 @@ public class Signup extends Application {
 	        	String password = passwordField.getText();
 	        	String type = userType.getValue();
 	        	ArrayList<String> services = new ArrayList<String>();
-	        	String orgID = "";
+	        	String orgID = "-1";
 	        	
 	        	if(type != "ADMIN") {
 		        	if (orgname != null) {
@@ -196,8 +183,9 @@ public class Signup extends Application {
 	        		userDetails.put("Password", password);
 	        		userDetails.put("OrganizationID", orgID);
 	        		userDetails.put("Email", email);
+	        		userDetails.put("EmploymentServiceStream", "TRUE");
 	        		
-	        		boolean submitted = DatabaseUserHandler.insertUser(userDetails, services);
+	        		boolean submitted = DatabaseHandler.insert("Users", userDetails);
 	        		if(submitted) {
 	        	        Alert alert = new Alert(AlertType.INFORMATION);
 	        	        alert.setHeaderText("Successful Signup!");

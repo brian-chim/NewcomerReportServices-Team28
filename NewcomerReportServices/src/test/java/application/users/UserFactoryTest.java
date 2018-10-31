@@ -7,7 +7,7 @@ import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import application.database.DatabaseUserHandler;
+import application.database.DatabaseHandler;
 import application.database.UserNotFoundException;
 
 public class UserFactoryTest {
@@ -40,7 +40,7 @@ public class UserFactoryTest {
 	@Test
 	@DisplayName("Create Staff user using UserFactory")
 	void testCreateStaffUser() {
-		userDetails.put("UserType", "STAFF");
+		userDetails.put("UserType", "TEQLIP STAFF");
 		userDetails.put("EmploymentServiceStream", "FALSE");
 		User factGen = userFactory.getUser(userDetails);
 		User userGen = new StaffUser(1, "username", "password", 1, "STAFF", serviceStreams);

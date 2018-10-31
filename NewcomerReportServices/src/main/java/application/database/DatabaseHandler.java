@@ -4,14 +4,12 @@ import application.users.*;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class DatabaseUserHandler {
+public class DatabaseHandler {
 
     /**
      * Written by http://www.sqlitetutorial.net/sqlite-java/select/
@@ -29,35 +27,58 @@ public class DatabaseUserHandler {
         }
         return conn;
     }
-
+    
     /**
      * Insert a new row of data into the necessary tables.
      *
      * @param userDetails the details regarding the user to be inserted
      * @param streamList the list of streams that the user has access to
      */
-    public static boolean insertUser(HashMap<String, String> userDetails, ArrayList<String> streamList) {
-        String sql = "INSERT INTO Users(UserType, Username, Password, OrganizationID, Email, EmploymentServiceStream) VALUES(?,?,?,?,?,?)";
-
-        // determine which streams the user belong to
-        String employmentServiceStream = streamList.contains("Employment Related Services") ? "TRUE" : "FALSE";
-
+    public static boolean insert(String tableName, HashMap<String, String> values) {
+        String sql = "INSERT INTO " + tableName;
+        String valuesSQL = "(";
+        String placeholderSQL = "(";
+        
+        Integer numVals = values.size();
+        Integer index = 1;
+        
+        // generate sql query with the key, vals from the hasmap
+        // Iterating over keys only
+    	for (String key : values.keySet()) {
+    		if(index != numVals) {
+        		valuesSQL += key + ", ";
+        		placeholderSQL += "?, ";
+        	}
+        	else {
+        		valuesSQL += key + ") VALUES ";
+        		placeholderSQL += "?)";
+        	}
+        	index++;
+    	}
+    	
+        // combine sql query
+        sql += valuesSQL + placeholderSQL;
+        System.out.println(sql);
+    	
+    	// connect to db and perfom the query
         try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, userDetails.get("UserType"));
-            pstmt.setString(2, userDetails.get("Username"));
-            pstmt.setString(3, userDetails.get("Password"));
-            pstmt.setString(4, userDetails.get("OrganizationID"));
-            pstmt.setString(5, userDetails.get("Email"));
-            pstmt.setString(6, employmentServiceStream);
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        		
+        	// Iterating over keys and populate statement with values
+        	index = 1;
+        	for (String key : values.keySet()) {
+        	    pstmt.setString(index, values.get(key));
+        	    index++;
+        	}
             pstmt.executeUpdate();
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
         }
         return true;
     }
-
+    
     /**
      * Retrieve a user from the database.
      * @param username the username of the user
@@ -117,6 +138,28 @@ public class DatabaseUserHandler {
             System.out.println(e.getMessage());
         }
         return agencies;
+    }
+    
+    /**
+     * Gets all of the service streams that exist in the application.
+     * @return a list of agencies
+     */
+    public static ArrayList<String> getServiceStreams() {
+        String sql = "SELECT * " + "FROM ServiceStreams";
+        ArrayList<String> services = new ArrayList<>();
+
+        try (Connection conn = connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // get the results
+            ResultSet rs  = pstmt.executeQuery();
+            while (rs.next()) {
+            	services.add(rs.getString("Service"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return services;
     }
 
 
