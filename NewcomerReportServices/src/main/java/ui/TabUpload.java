@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import application.application.util.FileParser;
+import application.util.FileParser;
 import application.database.DatabaseHandler;
 import application.users.User;
 import javafx.collections.FXCollections;
