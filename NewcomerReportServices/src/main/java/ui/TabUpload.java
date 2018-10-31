@@ -64,8 +64,10 @@ public class TabUpload extends Tab {
                     File file = fileChooser.showOpenDialog(stage);
                     if (file != null) {
                         try {
-                            HashMap<String, String> data = FileParser.readSpreadsheet(file.getPath(), "Employment");
-                            DatabaseHandler.insert("EmploymentServiceStream", data);
+                            ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(file.getPath(), "Employment");
+                            for (HashMap<String, String> entry : data) {
+                                DatabaseHandler.insert("EmploymentServiceStream", entry);
+                            }
                         } catch (POIXMLException error) {
                             error.printStackTrace();
                         }
@@ -83,8 +85,10 @@ public class TabUpload extends Tab {
                         for (File file : list) {
                             if (file != null) {
                                 try {
-                                    HashMap<String, String> data = FileParser.readSpreadsheet(file.getPath(), "Employment");
-                                    DatabaseHandler.insert("EmploymentServiceStream", data);
+                                    ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(file.getPath(), "Employment");
+                                    for (HashMap<String, String> entry : data) {
+                                        DatabaseHandler.insert("EmploymentServiceStream", entry);
+                                    }
                                 } catch (POIXMLException error) {
                                     error.printStackTrace();
                                 }
