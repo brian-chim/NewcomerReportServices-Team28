@@ -117,15 +117,8 @@ public class TabUpload extends Tab {
         		@Override
                 public void handle(final ActionEvent e) {
         			String[] paths = filePath.getText().split(";");
-        			for (String path : paths) {        				
-        				try {
-                            ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(file.getPath(), "Employment");
-                            for (HashMap<String, String> entry : data) {
-                                DatabaseHandler.insert("EmploymentServiceStream", entry);
-                            }
-        				} catch (POIXMLException error) {
-        					error.printStackTrace();
-        				}
+        			for (String path : paths) {
+        			    //TODO: Implement
         			}
         		}
         		
