@@ -110,20 +110,21 @@ public class TabUpdate extends Tab {
         			for (String path : paths) {
                         try {
                             ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(path, "Employment");
-                            System.out.println(data.size());
+                            Integer index = 1;
                             for (HashMap<String, String> entry : data) {
                             	if(noMergeConflicts("EmploymentServiceStream", entry)) {
                             		DatabaseHandler.insert("EmploymentServiceStream", entry);
                             	}
+                            	// send error alert informing user there is a conflict with the row
                             	else {
                             		Alert alert = new Alert(AlertType.ERROR);	        		 
                 	        		alert.setTitle("Error alert");
                 	        		alert.setHeaderText("Format Error");
-                	        		alert.setContentText("There are merge conflicts with the file, please ensure the data is 100% accurate. If so, please update through the upload tab.");
+                	        		alert.setContentText("There are merge conflicts with the file in row: " + index + ", please ensure the data is 100% accurate. If so, please update through the upload tab.");
                 	        		
                 	        		alert.showAndWait();
                             	}
-                                
+                                index++;
                             }
                         }
                         // if there is an error -- should be fileNotFoundException, alert user
@@ -144,7 +145,10 @@ public class TabUpdate extends Tab {
 	}
 	
 	/**
-	 * checks for merge conflicts with the file attempting to be uploaded and the db values.
+	 * checks for merge conflicts the given row.
+	 * 
+	 * NOTE: when being properly implemented, might need to change the params
+	 * 
 	 * @param stream - service stream being updated
 	 * @param values - values being added
 	 * @return - true if no conflict, false otherwise
