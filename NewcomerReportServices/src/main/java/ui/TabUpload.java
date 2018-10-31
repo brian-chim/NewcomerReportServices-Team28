@@ -105,7 +105,6 @@ public class TabUpload extends Tab {
                         try {
                             ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(path, "Employment");
                             for (HashMap<String, String> entry : data) {
-                            	System.out.println(entry);
                                 DatabaseHandler.insert("EmploymentServiceStream", entry);
                             }
                         } catch (POIXMLException error) {
