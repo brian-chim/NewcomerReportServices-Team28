@@ -1,6 +1,7 @@
 package application.util;
 
 public enum EmploymentStreamColumnQueries {
+
 	CLIENTBIRTHDATE("client_birth_dt", "Client Birth Date"),
 	SERVICELANGUAGE("session_service_lang_id", "Language of Service"),
 	PREFLANGUAGE("session_official_lang_id", "Preferred Language"),
