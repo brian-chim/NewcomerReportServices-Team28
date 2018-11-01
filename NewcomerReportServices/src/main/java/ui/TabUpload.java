@@ -53,7 +53,7 @@ public class TabUpload extends Tab {
         serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown());
         
         // a text area displaying selected file path
-        TextArea filePath = new TextArea();
+        final TextArea filePath = new TextArea();
         filePath.setMaxWidth(400);
         filePath.setMaxHeight(10);
         filePath.setEditable(false);
