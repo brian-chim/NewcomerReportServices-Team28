@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 public class DatabaseHandler {
 
@@ -77,6 +78,45 @@ public class DatabaseHandler {
             return false;
         }
         return true;
+    }
+    
+    
+    /**
+     * Selects all columns specified from the table specified. If you want to select all columns, pass in ["*"] as cols.
+     * @param tableName - table being selecting from
+     * @param cols - columns being selected -> ["*"] selects all columns from the table
+     * @return ResultSet
+     */
+    public static ArrayList<HashMap<String, String>> selectCols(String tableName, ArrayList<String> cols) {
+        String sql = "SELECT " + cols.toString().replace("[", "").replace("]", "").replace("'", "")  + " FROM " + tableName;
+        
+        ArrayList<HashMap<String, String>> result = new ArrayList<>();
+        try (Connection conn = connect();
+            PreparedStatement pstmt  = conn.prepareStatement(sql)){
+        	ResultSet rowResult  = pstmt.executeQuery();
+
+        	ResultSetMetaData rsmd = rowResult.getMetaData();
+        	// get number of columns in the result (need to do this instead of cols.size since cols can be ["*"] to get all)
+        	int columnsNumber = rsmd.getColumnCount();
+        	rowResult.next();
+        	do {
+    
+        		// hashmap for storing the row results (key = col, val = db result)
+        		HashMap<String, String> rowVals = new HashMap<>();
+        		for(int i = 1; i <= columnsNumber; i++) {
+        			// use this instead of cols passed in because they might be "*"
+        			String colName = rsmd.getColumnName(i);
+        			rowVals.put(colName, rowResult.getString(colName));
+        		}
+        		// store the row results in the list
+        		result.add(rowVals);
+        	}
+        	while(rowResult.next());
+        } 
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }  
+        return result;
     }
     
     /**
