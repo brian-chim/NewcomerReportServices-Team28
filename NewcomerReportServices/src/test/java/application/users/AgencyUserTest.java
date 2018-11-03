@@ -22,6 +22,7 @@ public class AgencyUserTest {
 			permissions.put(UserPermissions.values()[i], (Boolean) false);
 		}
 		permissions.replace(UserPermissions.UPLOADFILES, (Boolean) true);
+		permissions.replace(UserPermissions.UPDATEFILES, (Boolean) true);
 		assertEquals(testAgencyUser.getPermissions(), permissions);
 	}
 

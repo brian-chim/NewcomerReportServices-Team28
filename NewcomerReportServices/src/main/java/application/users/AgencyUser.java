@@ -8,6 +8,7 @@ public class AgencyUser extends User {
 		super(userId, username, password, orgId, orgType, serviceStreams);
 		// add permissions for the agency user
 		this.getPermissions().replace(UserPermissions.UPLOADFILES, (Boolean) true);
+		this.getPermissions().replace(UserPermissions.UPDATEFILES, (Boolean) true);
 	}
 
 }

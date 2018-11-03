@@ -28,6 +28,9 @@ public class Home extends Application {
 			  	case UPLOADFILES: 
 			  		tab = new TabUpload(user, stage);
 			  		break;
+			  	case UPDATEFILES:
+			  		tab = new TabUpdate(user, stage);
+			  		break;
 			  	case GENERATESUMMARYREPORT:
 			  		tab = new TabSummaryReport(user, stage);
 			  		break;
