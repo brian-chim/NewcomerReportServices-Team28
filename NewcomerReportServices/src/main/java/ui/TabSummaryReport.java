@@ -1,16 +1,22 @@
 package ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import application.database.DatabaseHandler;
 import application.users.User;
+import application.util.DatabaseServiceStreams;
+import application.util.EmploymentStreamColumnQueries;
+import application.util.NeedsAssessmentsColumnQueries;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -27,20 +33,37 @@ public class TabSummaryReport extends Tab {
 		ComboBox<String> streamDropdown = getServiceStreamDropdown();
 		serviceStream.setMinWidth(700);
 		serviceStream.getChildren().add(streamDropdown);
+		// create a flowpane for the checkboxes
+		final FlowPane fp = new FlowPane();
+		Text defaultText = new Text("Please select a service stream.");
+		fp.getChildren().add(defaultText);
+		// key is the stream, value is the list of queries
+		final HashMap<String, ArrayList<String>> allQueries = createQueries();
+	    final Button genReport = new Button("Generate Report");
+	    genReport.setDisable(true);
+		final Text noQueries = new Text("Unfortunately we do not support this stream yet.");
+		// add a listener for whenever the value changes
 	    streamDropdown.valueProperty().addListener(new ChangeListener<String>() {
 	        @Override 
 	        public void changed(ObservableValue ov, String prev, String curr) {
-	        	if (curr != "") {
-	        		
-	        	}
+	        	fp.getChildren().clear();
+	    		ArrayList<String> streamQueries = allQueries.get(curr);
+	    		if (streamQueries != null) {
+	    			for (String query : streamQueries) {
+	    				fp.getChildren().add(new CheckBox(query));
+	    			}
+	    			genReport.setDisable(false);
+	    		} else {
+	    			// so no checkboxes
+	    			fp.getChildren().add(noQueries);
+	    			noQueries.setVisible(true);
+	    			genReport.setDisable(true);
+	    		}
 	        }});
-
-		gp.add(serviceStream, 0, 0, 2, 1);
-
-		ArrayList<String> queries = new ArrayList<String>();
-		switch(streamDropdown.getValue()) {
-		
-		}
+	    
+		gp.add(serviceStream, 0, 0);
+		gp.add(fp, 0, 1);
+		gp.add(genReport, 0, 3);
 		this.setContent(gp);
 	}
 
@@ -53,13 +76,23 @@ public class TabSummaryReport extends Tab {
 		serviceStream.setPromptText("Select a service stream");
 		return serviceStream;
 	}
-	private GridPane createCheckboxScheme() {
-		GridPane gp = new GridPane();
-		Text filterText = new Text("Filter By:");
-		ArrayList<String> checkboxNames = new ArrayList<String>();
-		gp.add(filterText, 0, 0, 2, 1);
-		gp.setGridLinesVisible(true);
-		gp.setAlignment(Pos.CENTER);
-		return gp;
+
+	private HashMap<String, ArrayList<String>> createQueries() {
+		HashMap<String, ArrayList<String>> queries = new HashMap<String, ArrayList<String>>();
+		ArrayList<String> employmentStreamQueries = new ArrayList<String>();
+		// get the queries from Employment Stream
+		for (EmploymentStreamColumnQueries query : EmploymentStreamColumnQueries.values()) {
+			employmentStreamQueries.add(query.getUiName());
+		}
+		queries.put(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getName(), employmentStreamQueries);
+		
+		// add NARS Stream
+		ArrayList<String> narsStreamQueries = new ArrayList<String>();
+		for (NeedsAssessmentsColumnQueries query : NeedsAssessmentsColumnQueries.values()) {
+			narsStreamQueries.add(query.getUiName());
+		}
+		queries.put(DatabaseServiceStreams.NEEDSASSESSMENT.getName(), narsStreamQueries);
+		return queries;
 	}
+	
 }

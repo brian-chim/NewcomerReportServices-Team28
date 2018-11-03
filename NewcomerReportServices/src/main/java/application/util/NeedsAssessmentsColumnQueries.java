@@ -1,6 +1,7 @@
 package application.util;
 
 public enum NeedsAssessmentsColumnQueries {
+
 	CLIENTBIRTHDATE("client_birth_dt", "Client Birth Date"),
 	SERVICELANGUAGE("assessment_language_id", "Language of Service"),
 	PREFLANGUAGE("preferred_official_language_id", "Preferred Language"),
