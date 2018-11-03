@@ -9,6 +9,8 @@ import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import application.database.DatabaseHandler.ConditionOP;
+
 public class DatabaseHandlerTest {
 	
 	@Test
@@ -65,6 +67,7 @@ public class DatabaseHandlerTest {
 		resRow1.put("Test1", "a");
 		HashMap<String, String> resRow2 = new HashMap<>();
 		resRow2.put("Test1", "d");
+		System.out.println(res);
 		
 		assertEquals(resRow1, res.get(0));
 		assertEquals(resRow2, res.get(1));
@@ -115,5 +118,48 @@ public class DatabaseHandlerTest {
 		ArrayList<HashMap<String, String>> emptyArr = new ArrayList<>();
 		
 		assertEquals(emptyArr, res);
+	}
+	
+	@Test
+	@DisplayName("select * of a row")
+	void testSelectRowAll() {
+		HashMap<String, String> where = new HashMap<>();
+		where.put("Test3", "\"c\"");
+		ArrayList<HashMap<String, String>> res = DatabaseHandler.selectRows("Test", where, null, null);
+		HashMap<String, String> resRow = new HashMap<>();
+		resRow.put("Test1", "a");
+		resRow.put("Test2", "b");
+		resRow.put("Test3", "c");
+		
+		assertEquals(resRow, res.get(0));		
+	}
+	
+	@Test
+	@DisplayName("select some columns of a row")
+	void testSelectRowCols() {
+		HashMap<String, String> where = new HashMap<>();
+		where.put("Test3", "\"c\"");
+		ArrayList<String> select = new ArrayList<>();
+		select.add("Test2");
+		ArrayList<HashMap<String, String>> res = DatabaseHandler.selectRows("Test", where, select, null);
+		HashMap<String, String> resRow = new HashMap<>();
+		resRow.put("Test2", "b");
+		
+		assertEquals(resRow, res.get(0));		
+	}
+	
+	@Test
+	@DisplayName("multiple where conditions")
+	void testSelectMultipleConditions() {
+		HashMap<String, String> where = new HashMap<>();
+		where.put("Test1", "\"a\"");
+		where.put("Test3", "\"g\"");
+		ArrayList<String> select = new ArrayList<>();
+		select.add("Test2");
+		ArrayList<HashMap<String, String>> res = DatabaseHandler.selectRows("Test", where, select, ConditionOP.AND);
+		HashMap<String, String> resRow = new HashMap<>();
+		resRow.put("Test2", "k");
+		
+		assertEquals(resRow, res.get(0));		
 	}
 }

@@ -7,24 +7,37 @@ import application.database.DatabaseHandler;
 
 public class SafeUploader {
 	
-	public static ArrayList<String> safeUpload(String tableName, String path){
+	private static int headerOffset = 4;
+	private static String sheetName = "Employment";
+	
+	
+	/**
+	 * Checks if conflict in client_validation_id exists in database for the parsed rows in excel specified by path, if not
+	 * insert the row into specified table; otherwise, return the conflicting rows in the file
+	 * @param tableName
+	 * @param path
+	 * @return a list of conflicting rows. Empty list indicates that all rows are successfully inserted
+	 */
+	public static ArrayList<Integer> safeUpload(String tableName, String path){
 		
-		ArrayList<String> conflicts = new ArrayList<>();
+		ArrayList<Integer> conflicts = new ArrayList<>();
 		
-		ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(path, tableName);
+		ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(path, sheetName);
 		
-		for (HashMap<String, String> row : data) {
+		HashMap<String, String> select = new HashMap<>();
+		
+		for (int i=0; i< data.size(); i++) {
+			HashMap<String, String> row = data.get(i);
 			String id = row.get("client_validation_id");
-			if (DatabaseHandler.select(tableName, id) != null) {
+			select.put("client_validation_id", id);
+			if (DatabaseHandler.selectRows(tableName, select, null, null).isEmpty()) {
 				DatabaseHandler.insert(tableName, row);
 			} else {
-				conflicts.add(row.get("rowNumber"));
+				conflicts.add(i+headerOffset);
 			}
-		}
-		
+		}		
 		return conflicts;
-		
-		
+				
 	}
 
 }
