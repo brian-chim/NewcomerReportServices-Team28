@@ -28,4 +28,22 @@ public enum EmploymentStreamColumnQueries {
 	public String getUiName() {
 		return this.uiName;
 	}
+
+	public static EmploymentStreamColumnQueries fromUiName(String text) {
+		for (EmploymentStreamColumnQueries query : EmploymentStreamColumnQueries.values()) {
+			if(query.getUiName().equals(text)) {
+				return query;
+			}
+		}
+		return null;
+	}
+	
+	public static EmploymentStreamColumnQueries fromDbName(String text) {
+		for (EmploymentStreamColumnQueries query : EmploymentStreamColumnQueries.values()) {
+			if(query.getDbName().equals(text)) {
+				return query;
+			}
+		}
+		return null;
+	}
 }

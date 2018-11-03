@@ -28,4 +28,22 @@ public enum NeedsAssessmentsColumnQueries {
 	public String getUiName() {
 		return this.uiName;
 	}
+	
+	public static NeedsAssessmentsColumnQueries fromUiName(String text) {
+		for (NeedsAssessmentsColumnQueries query : NeedsAssessmentsColumnQueries.values()) {
+			if(query.getUiName().equals(text)) {
+				return query;
+			}
+		}
+		return null;
+	}
+	
+	public static NeedsAssessmentsColumnQueries fromDbName(String text) {
+		for (NeedsAssessmentsColumnQueries query : NeedsAssessmentsColumnQueries.values()) {
+			if(query.getDbName().equals(text)) {
+				return query;
+			}
+		}
+		return null;
+	}
 }
