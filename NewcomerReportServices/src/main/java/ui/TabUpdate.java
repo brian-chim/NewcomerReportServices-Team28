@@ -1,14 +1,16 @@
 package ui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import application.util.FileParser;
-import application.util.SafeUploader;
+import org.apache.poi.POIXMLException;
+
 import application.database.DatabaseHandler;
 import application.users.User;
+import application.util.FileParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,17 +26,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.poi.POIXMLException;
 
-public class TabUpload extends Tab {
-	
-	 TabUpload(User user, final Stage stage) {
+public class TabUpdate extends Tab {
+
+	TabUpdate(User user, final Stage stage) {
 		this.setClosable(false);
+		this.setText("Update Files");
 
 		final FileChooser fileChooser = new FileChooser();
         final Button openButton = new Button("Upload a single file");
         final Button openMultipleButton = new Button("Upload multiple files");
-        final Button uploadButton = new Button("UPLOAD");
+        final Button updateButton = new Button("UPDATE");
+        
+        
  
         // vertical container for butons and dropdown
         VBox vbox = new VBox();
@@ -56,14 +60,14 @@ public class TabUpload extends Tab {
         serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown());
         
         // a text area displaying selected file path
-        final TextArea filePath = new TextArea();
+        TextArea filePath = new TextArea();
         filePath.setMaxWidth(400);
         filePath.setMaxHeight(10);
         filePath.setEditable(false);
 
         
         // everything put together
-        vbox.getChildren().addAll(buttonRow, serviceDropdownSelectorRow, filePath, uploadButton);
+        vbox.getChildren().addAll(buttonRow, serviceDropdownSelectorRow, filePath, updateButton);
         this.setContent(vbox);
         
         // from the oracle file chooser docs
@@ -97,27 +101,41 @@ public class TabUpload extends Tab {
                     }
                 }
             });
-        this.setText("Upload Files");
         
-        uploadButton.setOnAction(
+        updateButton.setOnAction(
         	new EventHandler<ActionEvent>() {
         		@Override
                 public void handle(final ActionEvent e) {
         			String[] paths = filePath.getText().split(";");
         			for (String path : paths) {
                         try {
-                            ArrayList<Integer> conflicts = SafeUploader.safeUpload("EmploymentServiceStream", path);
-                            if(!conflicts.isEmpty()) {
-                            	
-                        		Alert alert = new Alert(AlertType.ERROR);	        		 
-            	        		alert.setTitle("Upload Error");
-            	        		alert.setHeaderText("Conflicting Record");
-            	        		alert.setContentText("Records in row: " + conflicts.toString() + " failed to be uploaded because of database conflicts, please check the listed records again!");
-            	        		
-            	        		alert.showAndWait();
+                            ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(path, "Employment");
+                            Integer index = 1;
+                            for (HashMap<String, String> entry : data) {
+                            	if(noMergeConflicts("EmploymentServiceStream", entry)) {
+                            		DatabaseHandler.insert("EmploymentServiceStream", entry);
+                            	}
+                            	// send error alert informing user there is a conflict with the row
+                            	else {
+                            		Alert alert = new Alert(AlertType.ERROR);	        		 
+                	        		alert.setTitle("Error alert");
+                	        		alert.setHeaderText("Format Error");
+                	        		alert.setContentText("There are merge conflicts with the file in row: " + index + ", please ensure the data is 100% accurate. If so, please update through the upload tab.");
+                	        		
+                	        		alert.showAndWait();
+                            	}
+                                index++;
                             }
-                        } catch (POIXMLException error) {
-                            error.printStackTrace();
+                        }
+                        // if there is an error -- should be fileNotFoundException, alert user
+                        catch (Exception error) {
+                            
+                            Alert alert = new Alert(AlertType.ERROR);	        		 
+        	        		alert.setTitle("Retrieval Error");
+        	        		alert.setHeaderText("There was an issue retrieving the file(s)");
+        	        		alert.setContentText("Please ensure file(s) are selected and try again.");
+        	        		
+        	        		alert.showAndWait();
                         }
         			}
         		}
@@ -125,6 +143,21 @@ public class TabUpload extends Tab {
         	}
         );
 	}
+	
+	/**
+	 * checks for merge conflicts the given row.
+	 * 
+	 * NOTE: when being properly implemented, might need to change the params
+	 * 
+	 * @param stream - service stream being updated
+	 * @param values - values being added
+	 * @return - true if no conflict, false otherwise
+	 */
+	private boolean noMergeConflicts(String stream, HashMap<String, String> values) {
+		// TODO: implement properly
+		return false;
+	}
+	
 	// dropdown for service streams
 	private ComboBox<String> getServiceStreamDropdown() {
 		ComboBox<String> serviceStream;

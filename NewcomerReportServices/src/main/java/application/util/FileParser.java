@@ -119,7 +119,6 @@ public class FileParser {
                 map.put(column, formatter.formatCellValue(cell));
 
             }
-            map.put("rowNumber", Integer.toString(row.getRowNum()));
             result.add(map);
         }
         return result;

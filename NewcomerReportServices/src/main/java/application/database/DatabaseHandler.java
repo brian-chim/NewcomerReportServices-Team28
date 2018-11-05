@@ -2,14 +2,22 @@ package application.database;
 
 import application.users.*;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 public class DatabaseHandler {
+	
+	public enum ConditionOP {
+		AND, OR
+	}
 
     /**
      * Written by http://www.sqlitetutorial.net/sqlite-java/select/
@@ -77,6 +85,103 @@ public class DatabaseHandler {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * Selects row(s) specified by where clause condition from the table specified. 
+     * @param tableName - table being selecting from
+     * @param where - where clause conditions <col, value>
+     * @param select - columns of the row that will be returned, if null, return *
+     * @param op - condition operation for multiple where clauses (AND or OR), if not required, can set to null
+     * @return ResultSet
+     */
+    public static ArrayList<HashMap<String, String>> selectRows(String tableName, HashMap<String, String> where, ArrayList<String> select, ConditionOP op) {
+    	if(where.isEmpty()) {
+    		return new ArrayList<HashMap<String, String>>();
+    	}
+    	String cols = "";
+    	if(select != null) {
+    		for(String col : select) {
+    			cols = cols + col + ", ";
+    		}
+    		cols = cols.substring(0, cols.length()-2);
+    	} else {
+    		cols = "*";
+    	}
+    	
+    	String delimeter = " " + op + " ";
+    		 
+    	String whereClause = where.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining(delimeter));  	
+    	String sql = "SELECT " + cols + " FROM " + tableName + " WHERE " + whereClause;
+    	
+    	ArrayList<HashMap<String, String>> result = new ArrayList<>();
+    	System.out.println(sql);
+    	
+        try (Connection conn = connect();
+                PreparedStatement pstmt  = conn.prepareStatement(sql)){
+            	ResultSet rowResult  = pstmt.executeQuery();
+
+            	ResultSetMetaData rsmd = rowResult.getMetaData();
+            	// get number of columns in the result (need to do this instead of cols.size since cols can be ["*"] to get all)
+            	int columnsNumber = rsmd.getColumnCount();
+            	rowResult.next();
+            	do {
+        
+            		// hashmap for storing the row results (key = col, val = db result)
+            		HashMap<String, String> rowVals = new HashMap<>();
+            		for(int i = 1; i <= columnsNumber; i++) {
+            			// use this instead of cols passed in because they might be "*"
+            			String colName = rsmd.getColumnName(i);
+            			rowVals.put(colName, rowResult.getString(colName));
+            		}
+            		// store the row results in the list
+            		result.add(rowVals);
+            	}
+            	while(rowResult.next());
+            } 
+            catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            return result;
+    }
+    
+    
+    /**
+     * Selects all columns specified from the table specified. If you want to select all columns, pass in ["*"] as cols.
+     * @param tableName - table being selecting from
+     * @param cols - columns being selected -> ["*"] selects all columns from the table
+     * @return ResultSet
+     */
+    public static ArrayList<HashMap<String, String>> selectCols(String tableName, ArrayList<String> cols) {
+        String sql = "SELECT " + cols.toString().replace("[", "").replace("]", "").replace("'", "")  + " FROM " + tableName;
+        
+        ArrayList<HashMap<String, String>> result = new ArrayList<>();
+        try (Connection conn = connect();
+            PreparedStatement pstmt  = conn.prepareStatement(sql)){
+        	ResultSet rowResult  = pstmt.executeQuery();
+
+        	ResultSetMetaData rsmd = rowResult.getMetaData();
+        	// get number of columns in the result (need to do this instead of cols.size since cols can be ["*"] to get all)
+        	int columnsNumber = rsmd.getColumnCount();
+        	rowResult.next();
+        	do {
+    
+        		// hashmap for storing the row results (key = col, val = db result)
+        		HashMap<String, String> rowVals = new HashMap<>();
+        		for(int i = 1; i <= columnsNumber; i++) {
+        			// use this instead of cols passed in because they might be "*"
+        			String colName = rsmd.getColumnName(i);
+        			rowVals.put(colName, rowResult.getString(colName));
+        		}
+        		// store the row results in the list
+        		result.add(rowVals);
+        	}
+        	while(rowResult.next());
+        } 
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }  
+        return result;
     }
     
     /**
@@ -172,4 +277,5 @@ public class DatabaseHandler {
     public static boolean authenticate(String password, String checkPassword) {
         return password.equals(checkPassword);
     }
+
 }
