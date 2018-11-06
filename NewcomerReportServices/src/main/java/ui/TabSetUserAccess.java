@@ -5,12 +5,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class TabSetAccess extends Tab {
+public class TabSetUserAccess extends Tab {
 
-	TabSetAccess(User user, Stage stage) {
-		this.setText("Set Access");
+	TabSetUserAccess(User user, Stage stage) {
+		this.setText("User Access");
 		this.setClosable(false);
-		Text text = new Text("This is the set access tab.");
+		Text text = new Text("This is the set user access tab.");
 		this.setContent(text);
 	}
 
