@@ -162,4 +162,101 @@ public class DatabaseHandlerTest {
 		
 		assertEquals(resRow, res.get(0));		
 	}
+
+	@Test
+	@DisplayName("delete none of the rows")
+	void testDeleteNone() {
+		HashMap<String, String> data = new HashMap<>();
+		data.put("Test1", "toBeDeleted1");
+		data.put("Test2", "toBeDeleted2");
+		data.put("Test3", "toBeDeleted3");
+
+		// insert into the db 10 times
+		for(int i = 0; i < 10; i++) {
+			DatabaseHandler.insert("Test", data);
+		}
+
+ 		// check if they have been inserted properly
+		HashMap<String, String> where = new HashMap<>();
+		where.put("Test1", "\"toBeDeleted1\"");
+		assertEquals(DatabaseHandler.selectRows("Test", where, null, null).size(), 10);
+		// delete none of the rows
+		DatabaseHandler.delete("Test", "Test1", "randomString");
+		assertEquals(DatabaseHandler.selectRows("Test", where, null, null).size(), 10);
+		// clean up the test db by removing added entries
+		DatabaseHandler.delete("Test", "Test1", "toBeDeleted1");
+	}
+
+	@Test
+	@DisplayName("delete some of the rows")
+	void testDeleteSome() {
+		HashMap<String, String> data = new HashMap<>();
+		data.put("Test1", "toBeDeleted1");
+		data.put("Test2", "toBeDeleted2");
+		data.put("Test3", "toBeDeleted3");
+
+		// insert into the db 10 times
+		for(int i = 0; i < 10; i++) {
+			DatabaseHandler.insert("Test", data);
+		}
+		data.replace("Test2", "NotDeleted");
+		DatabaseHandler.insert("Test", data);
+
+		// check if they have been inserted properly
+		HashMap<String, String> where = new HashMap<>();
+		where.put("Test1", "\"toBeDeleted1\"");
+		assertEquals(DatabaseHandler.selectRows("Test", where, null, null).size(), 11);
+		// delete none of the rows
+		DatabaseHandler.delete("Test", "Test2", "toBeDeleted2");
+		assertEquals(DatabaseHandler.selectRows("Test", where, null, null).size(), 1);
+		// clean up the test db by removing added entries
+		DatabaseHandler.delete("Test", "Test1", "toBeDeleted1");
+	}
+
+	@Test
+	@DisplayName("delete all of the rows")
+	void testDeleteAll() {
+		HashMap<String, String> data = new HashMap<>();
+		data.put("Test1", "toBeDeleted1");
+		data.put("Test2", "toBeDeleted2");
+		data.put("Test3", "toBeDeleted3");
+
+		// insert into the db 10 times
+		for(int i = 0; i < 10; i++) {
+			DatabaseHandler.insert("Test", data);
+		}
+
+		// check if they have been inserted properly
+		HashMap<String, String> where = new HashMap<>();
+		where.put("Test1", "\"toBeDeleted1\"");
+		assertEquals(DatabaseHandler.selectRows("Test", where, null, null).size(), 10);
+		// delete none of the rows
+		DatabaseHandler.delete("Test", "Test2", "toBeDeleted2");
+		assertEquals(DatabaseHandler.selectRows("Test", where, null, null).size(), 0);
+	}
+
+	@Test
+	@DisplayName("insert a row successfully")
+	void testInsert() {
+		HashMap<String, String> data = new HashMap<>();
+		data.put("Test1", "toBeDeleted1");
+		data.put("Test2", "toBeDeleted2");
+		data.put("Test3", "toBeDeleted3");
+
+		// insert into the db 10 times
+		for(int i = 0; i < 10; i++) {
+			DatabaseHandler.insert("Test", data);
+		}
+
+		// check if they have been inserted properly
+		HashMap<String, String> where = new HashMap<>();
+		where.put("Test1", "\"toBeDeleted1\"");
+		assertEquals(DatabaseHandler.selectRows("Test", where, null, null).size(), 10);
+		ArrayList<HashMap<String, String>> res = DatabaseHandler.selectRows("Test", where, null, null);
+		HashMap<String, String> resRow = res.get(0);
+
+		assertEquals(resRow, data);
+		// delete the newly inserted row
+		DatabaseHandler.delete("Test", "Test2", "toBeDeleted2");
+	}
 }

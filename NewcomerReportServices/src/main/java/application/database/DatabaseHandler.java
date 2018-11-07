@@ -39,17 +39,17 @@ public class DatabaseHandler {
     /**
      * Insert a new row of data into the necessary tables.
      *
-     * @param userDetails the details regarding the user to be inserted
-     * @param streamList the list of streams that the user has access to
+     * @param tableName the name of the table
+     * @param values hashmap mappign column names to values
      */
     public static boolean insert(String tableName, HashMap<String, String> values) {
         String sql = "INSERT INTO " + tableName;
         String valuesSQL = "(";
         String placeholderSQL = "(";
-        
+
         Integer numVals = values.size();
         Integer index = 1;
-        
+
         // generate sql query with the key, vals from the hasmap
         // Iterating over keys only
     	for (String key : values.keySet()) {
@@ -63,15 +63,15 @@ public class DatabaseHandler {
         	}
         	index++;
     	}
-    	
+
         // combine sql query
         sql += valuesSQL + placeholderSQL;
         System.out.println(sql);
-    	
+
     	// connect to db and perfom the query
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        		
+
         	// Iterating over keys and populate statement with values
         	index = 1;
         	for (String key : values.keySet()) {
@@ -79,8 +79,31 @@ public class DatabaseHandler {
         	    index++;
         	}
             pstmt.executeUpdate();
-        } 
+        }
         catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Delete rows from the db based on a SQL where clause
+     * @param tableName the name of the db to delete from
+     * @param primaryKey the name of the primary column id to compare the value against
+     * @param value delete all entries with primaryKey=value
+     * @return a boolean representing if the delete operation was successful or not
+     */
+    public static boolean delete(String tableName, String primaryKey, String value) {
+        String sql = "DELETE FROM " + tableName + " WHERE " + primaryKey + " = (?)";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // set the comparing value
+            pstmt.setString(1, value);
+            // execute the delete statement
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
         }
