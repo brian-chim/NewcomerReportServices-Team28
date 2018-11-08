@@ -1,12 +1,9 @@
 package ui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import org.apache.poi.POIXMLException;
 
 import application.database.DatabaseHandler;
 import application.users.User;
@@ -60,7 +57,7 @@ public class TabUpdate extends Tab {
         serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown());
         
         // a text area displaying selected file path
-        TextArea filePath = new TextArea();
+        final TextArea filePath = new TextArea();
         filePath.setMaxWidth(400);
         filePath.setMaxHeight(10);
         filePath.setEditable(false);
