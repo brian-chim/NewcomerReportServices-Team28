@@ -2,10 +2,8 @@ package application.database;
 
 import application.users.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -87,6 +85,34 @@ public class DatabaseHandler {
         return true;
     }
 
+    /**
+     * Inserts a new agency into the database provided they do not
+     * exist already (the name is already in the db)
+     * 
+     * @param agencyName the name of the agency to add
+     * @return true iff agency was added successfully
+     */
+    public static boolean insertAgency(String agencyName) {
+    	// get a list of the existing agencies
+    	ArrayList<String> existingAgencies = getAgencies();
+    	// set the table name
+    	String tableName = "Agency";
+    	// create the agency to add
+    	HashMap<String, String> agencyToAdd = new HashMap<>();
+    	agencyToAdd.put("AgencyName", agencyName);
+    	// check if the agency already exists
+    	if (existingAgencies.contains(agencyName)) {
+    		return false;
+    	} else {
+    		// try inserting
+    		if (insert(tableName, agencyToAdd)) {
+    			return true;
+    		}
+    		// if didn't insert then return false
+        	return false;
+    	}
+    }
+    
     /**
      * Delete rows from the db based on a SQL where clause
      * @param tableName the name of the db to delete from
@@ -289,7 +315,6 @@ public class DatabaseHandler {
         }
         return services;
     }
-
 
     /**
      * Authenticates the password
