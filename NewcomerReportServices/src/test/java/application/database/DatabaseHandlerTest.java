@@ -1,6 +1,8 @@
 package application.database;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -259,4 +261,32 @@ public class DatabaseHandlerTest {
 		// delete the newly inserted row
 		DatabaseHandler.delete("Test", "Test2", "toBeDeleted2");
 	}
+	
+	
+	@Test
+	@DisplayName("insert new agency")
+	void testInsertNewAgency() {
+		String agencyName = "TestAgency";
+		// check that this is not false because agency already exists
+		assertTrue(DatabaseHandler.insertAgency(agencyName));
+		// check that it was properly added
+		assertTrue(DatabaseHandler.getAgencies().contains(agencyName));
+		// clear the db
+		DatabaseHandler.delete("Agency", "AgencyName", agencyName);
+	}
+
+	@Test
+	@DisplayName("insert existing agency")
+	void testInsertExistingAgency() {
+		String agencyName = "TestExistingAgency";
+		// insert the agency first so it exists
+		DatabaseHandler.insertAgency(agencyName);
+		// check that this is false because agency already exists
+		assertFalse(DatabaseHandler.insertAgency(agencyName));
+		// check that it is still in the db
+		assertTrue(DatabaseHandler.getAgencies().contains(agencyName));
+		// clear the db
+		DatabaseHandler.delete("Agency", "AgencyName", agencyName);
+	}
+
 }
