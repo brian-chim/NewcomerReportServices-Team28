@@ -7,7 +7,10 @@ public enum DatabaseServiceStreams {
 	INFOANDORIENTATION("Information & Orientation Services"),
 	COMMUNITYCONN("Community Connections Services"),
 	NEEDSASSESSMENT("Needs Assessment & Referral Service (NARS)"),
-	CLIENTPROFILEBULK("Client Profile Bulk");
+	CLIENTPROFILEBULK("Client Profile Bulk"),
+	
+	EMPLOYMENTSERVICESTREAMTABLENAME("EmploymentServiceStream"),
+	NEEDSASSESSMENTTABLENAME("NeedsAssesmentAndReferralsService");
 	
 	private String name;
 	
