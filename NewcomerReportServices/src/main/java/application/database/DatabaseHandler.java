@@ -203,7 +203,7 @@ public class DatabaseHandler {
      */
     public static ArrayList<HashMap<String, String>> selectCols(String tableName, ArrayList<String> cols) {
         String sql = "SELECT " + cols.toString().replace("[", "").replace("]", "").replace("'", "")  + " FROM " + tableName;
-        
+
         ArrayList<HashMap<String, String>> result = new ArrayList<>();
         try (Connection conn = connect();
             PreparedStatement pstmt  = conn.prepareStatement(sql)){
