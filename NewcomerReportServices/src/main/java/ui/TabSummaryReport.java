@@ -8,6 +8,8 @@ import application.users.User;
 import application.util.DatabaseServiceStreams;
 import application.util.EmploymentStreamColumnQueries;
 import application.util.NeedsAssessmentsColumnQueries;
+import application.util.ReportDirectory;
+import application.util.ReportGenerator;
 import application.util.WriteReport;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -103,9 +105,9 @@ public class TabSummaryReport extends Tab {
                     		}
                     	}
                     	// call db handler with cols and table
-                    	ArrayList<HashMap<String, String>> report = DatabaseHandler.selectCols(tableName, ReportCols);
-                    	// write report
-                    	WriteReport.summaryReport(report);
+                    	String report = ReportGenerator.generateSummaryReport(tableName, ReportCols);
+                    	// write report to summary report location
+                    	WriteReport.toTxt(report, ReportDirectory.SUMMARYREPORT.getName());
                     }
                 });
 	    // cap the horizontal area of the checkboxes

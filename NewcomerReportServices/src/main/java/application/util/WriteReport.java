@@ -9,28 +9,15 @@ import java.util.HashMap;
 public class WriteReport {
 	
 	/**
-	 * creates a summary report in the Summary Reports folder located at the project root.
-	 * @param unformattedReport - list of hashmaps, where hashmap is col:val
+	 * Writes a report passed in as a string to a txt file located in the path provided.
 	 */
-	public static void summaryReport(ArrayList<HashMap<String, String>> unformattedReport ) {
+	public static void toTxt(String report, String path) {
 		
 		// try to write to file
 	    try {
-	    	FileWriter fileWriter = new FileWriter("../Summary Reports/report.txt");
+	    	FileWriter fileWriter = new FileWriter(path);
 	        PrintWriter printWriter = new PrintWriter(fileWriter);
-	        
-	        // loops through each row
-	        for (HashMap<String, String> row : unformattedReport) {
-	        	
-	        	String rowString = "|  ";
-
-	        	// loops through cols
-		        for (String key : row.keySet()) {
-		        	rowString += key + ": " + row.get(key) + "  |  ";
-		        }
-		        // write row to file
-		        printWriter.printf("%s" + "%n", rowString);
-	        }
+	        printWriter.printf("%s" + "%n", report);
 	        
 	        printWriter.close();
 	    }
