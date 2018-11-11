@@ -25,7 +25,9 @@ public class ReportGeneratorTest {
         assertEquals("Summary Report of Frequencies of EmploymentServiceStream\n" +
                 "SERVICELANGUAGE:\n" +
                 "\n" +
-                "English: 2\n" +
+                "English: 1\n" +
+                "\n" +
+                "French: 1\n" +
                 "\n" +
                 "EMPLOYMENTSTATUS:\n" +
                 "\n" +

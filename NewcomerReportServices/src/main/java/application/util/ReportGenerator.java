@@ -24,7 +24,7 @@ public class ReportGenerator {
                 // go through all the column elements and count the values
                 HashMap<String, Integer> frequencyResult = new HashMap<>();
                 for (int i = 0; i < columnListResult.size(); i++) {
-                    String value = columnListResult.get(0).get(key);
+                    String value = columnListResult.get(i).get(key);
                     if (frequencyResult.containsKey(value)) {
                         frequencyResult.replace(value, frequencyResult.get(value) + 1);
                     } else {
