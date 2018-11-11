@@ -65,6 +65,7 @@ public class TabSetOrganizationAccess extends Tab {
         			failed.setContentText("Failed to add the organization!");
         			failed.show();
         		}
+        		orgNameInput.setText("");
         	}
     	});
 		
