@@ -1,5 +1,5 @@
 package application.database;
-
+import application.database.UserNotFoundException;
 import application.users.*;
 import java.util.HashMap;
 import java.util.stream.Collectors;
