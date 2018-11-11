@@ -82,7 +82,6 @@ public class TabSummaryReport extends Tab {
                     public void handle(final ActionEvent e) {
                     	// first figure out what stream we are handling
                     	String handlingStream = streamDropdown.getValue();
-                    	System.out.println(handlingStream);
                     	
                     	ArrayList<String> ReportCols = new ArrayList<>();
                     	String tableName = new String();
@@ -103,10 +102,8 @@ public class TabSummaryReport extends Tab {
                     			}
                     		}
                     	}
-                    	System.out.println(ReportCols);
                     	// call db handler with cols and table
                     	ArrayList<HashMap<String, String>> report = DatabaseHandler.selectCols(tableName, ReportCols);
-                    	System.out.println(report);
                     	// write report
                     	WriteReport.summaryReport(report);
                     }
