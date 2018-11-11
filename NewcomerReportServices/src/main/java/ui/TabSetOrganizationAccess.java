@@ -1,7 +1,6 @@
 package ui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,12 +11,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -53,7 +54,17 @@ public class TabSetOrganizationAccess extends Tab {
 		
 		addOrgButton.setOnAction(new EventHandler<ActionEvent>() {
         	public void handle(ActionEvent event) {
-        		// TODO: handle organization being added
+        		// get text field value and insert it as an agency
+        		boolean inserted = DatabaseHandler.insertAgency(orgNameInput.getText());
+        		if (inserted) {
+        			table.setItems(buildOrganizationTable());
+        		} else {
+        			Alert failed = new Alert(AlertType.ERROR);
+        			failed.setTitle("Failed!");
+        			failed.setHeaderText("Failed!");
+        			failed.setContentText("Failed to add the organization!");
+        			failed.show();
+        		}
         	}
     	});
 		
@@ -75,14 +86,12 @@ public class TabSetOrganizationAccess extends Tab {
 	private ObservableList<HashMap<String, String>> buildOrganizationTable(){
 		ObservableList<HashMap<String, String>> tableData = FXCollections.observableArrayList();
 		ArrayList<String> raw = DatabaseHandler.getAgencies();
-		HashMap<String, String> orgsMap = new HashMap<>();
-		
 		for(String org : raw) {
+			HashMap<String, String> orgsMap = new HashMap<>();
 			orgsMap.put("OrganizationName", org);
+			tableData.add(orgsMap);
 		}
-		tableData.add(orgsMap);
 		return tableData;
-		
 	}
 }
 
