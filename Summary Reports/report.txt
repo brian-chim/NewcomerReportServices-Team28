@@ -1,0 +1,21 @@
+Summary Report of Frequencies of EmploymentServiceStream
+SERVICELANGUAGE:
+
+English: 2
+
+PREFLANGUAGE:
+
+English: 2
+
+CLIENTBIRTHDATE:
+
+1978-05-20: 2
+
+CURROCCUPATION:
+
+00 Senior management occupations: 2
+
+REGISTERININTERVENTION:
+
+Yes: 2
+
