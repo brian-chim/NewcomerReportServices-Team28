@@ -21,9 +21,10 @@ public class AdminUserTest {
 		for(int i = 0; i < UserPermissions.values().length; i++) {
 			permissions.put(UserPermissions.values()[i], (Boolean) false);
 		}
-		permissions.replace(UserPermissions.GENERATESUMMARYREPORT, (Boolean) true);
-		permissions.replace(UserPermissions.GENERATETRENDREPORT, (Boolean) true);
-		permissions.replace(UserPermissions.SETACCESS, (Boolean) true);
+//		permissions.replace(UserPermissions.GENERATESUMMARYREPORT, (Boolean) true);
+//		permissions.replace(UserPermissions.GENERATETRENDREPORT, (Boolean) true);
+		permissions.replace(UserPermissions.SETUSERACCESS, (Boolean) true);
+		permissions.replace(UserPermissions.SETORGANIZATIONACCESS, (Boolean) true);
 		assertEquals(testAdminUser.getPermissions(), permissions);
 	}
 
