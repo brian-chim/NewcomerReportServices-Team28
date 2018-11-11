@@ -9,7 +9,7 @@ public enum NeedsAssessmentsColumnQueries {
 	REFERREDBY("assessment_referral_id", "Referral Service"),
 	FINDEMPLOYMENTNEEDS("find_employment_needs_ind", "Needs Employment Finding Services"),
 	CANADIANINTENTION("intention_canadian_citizen_ind", "Intention to become Canadian Citizen"),
-	TRANSPORTATIONNEED("transporation_required_ind", "Transporation needed"),
+	TRANSPORTATIONNEED("transportation_required_ind", "Transporation needed"),
 	TRANSLATIONNEED("translation_required_ind", "Translation needed"),
 	HOUSINGNEED("housing_accommodation_needs_ind", "Housing needed");
 

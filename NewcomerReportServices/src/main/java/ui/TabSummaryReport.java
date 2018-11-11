@@ -8,6 +8,9 @@ import application.users.User;
 import application.util.DatabaseServiceStreams;
 import application.util.EmploymentStreamColumnQueries;
 import application.util.NeedsAssessmentsColumnQueries;
+import application.util.ReportDirectory;
+import application.util.ReportGenerator;
+import application.util.WriteReport;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -81,20 +84,30 @@ public class TabSummaryReport extends Tab {
                     public void handle(final ActionEvent e) {
                     	// first figure out what stream we are handling
                     	String handlingStream = streamDropdown.getValue();
+                    	
+                    	ArrayList<String> ReportCols = new ArrayList<>();
+                    	String tableName = new String();
+                    	
                     	// for now print the selected query boxes with its column name in db
                     	for (Node checkbox : fp.getChildren()) {
                     		if (checkbox instanceof CheckBox) {
                     			if (((CheckBox)checkbox).isSelected()) {
                     				if (handlingStream.equals(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getName()) ) {
                     					// get the text from the checkbox, then get the enum, then get the db name from enum
-                    					System.out.println(EmploymentStreamColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
+                    					ReportCols.add(EmploymentStreamColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
+                    					tableName = DatabaseServiceStreams.EMPLOYMENTSERVICESTREAMTABLENAME.getName();
                     				} else if (handlingStream.equals(DatabaseServiceStreams.NEEDSASSESSMENT.getName()) ) {
-                    					System.out.println(NeedsAssessmentsColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
+                    					ReportCols.add(NeedsAssessmentsColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
+                    					tableName = DatabaseServiceStreams.NEEDSASSESSMENTTABLENAME.getName();
                     				}
                     				// add else ifs as streams are supported
                     			}
                     		}
                     	}
+                    	// call db handler with cols and table
+                    	String report = ReportGenerator.generateSummaryReport(tableName, ReportCols);
+                    	// write report to summary report location
+                    	WriteReport.toTxt(report, ReportDirectory.SUMMARYREPORT.getName());
                     }
                 });
 	    // cap the horizontal area of the checkboxes
