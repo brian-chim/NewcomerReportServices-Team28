@@ -75,12 +75,12 @@ public class TabSetOrganizationAccess extends Tab {
 	private ObservableList<HashMap<String, String>> buildOrganizationTable(){
 		ObservableList<HashMap<String, String>> tableData = FXCollections.observableArrayList();
 		ArrayList<String> raw = DatabaseHandler.getAgencies();
-		HashMap<String, String> test = new HashMap<>();
+		HashMap<String, String> orgsMap = new HashMap<>();
 		
 		for(String org : raw) {
-			test.put("OrganizationName", org);
+			orgsMap.put("OrganizationName", org);
 		}
-		tableData.add(test);
+		tableData.add(orgsMap);
 		return tableData;
 		
 	}
