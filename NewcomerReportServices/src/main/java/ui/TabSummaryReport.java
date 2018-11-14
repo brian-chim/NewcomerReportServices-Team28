@@ -105,9 +105,9 @@ public class TabSummaryReport extends Tab {
                     		}
                     	}
                     	// call db handler with cols and table
-                    	String report = ReportGenerator.generateSummaryReport(tableName, ReportCols);
+                    	String report = ReportGenerator.generateSummaryReport(tableName, ReportCols, ReportDirectory.SUMMARYREPORT.getName());
                     	// write report to summary report location
-                    	WriteReport.toTxt(report, ReportDirectory.SUMMARYREPORT.getName());
+                    	WriteReport.toTxt(report, ReportDirectory.SUMMARYREPORT.getName() + "report.txt");
                     }
                 });
 	    // cap the horizontal area of the checkboxes
