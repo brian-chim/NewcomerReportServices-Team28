@@ -19,11 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -108,6 +104,10 @@ public class TabSummaryReport extends Tab {
                     	String report = ReportGenerator.generateSummaryReport(tableName, ReportCols, ReportDirectory.SUMMARYREPORT.getName());
                     	// write report to summary report location
                     	WriteReport.toTxt(report, ReportDirectory.SUMMARYREPORT.getName() + "report.txt");
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						alert.setHeaderText("Reports have been successfully generated!");
+						alert.setContentText("The reports can be found at " + ReportDirectory.SUMMARYREPORT.getName());
+						alert.showAndWait();
                     }
                 });
 	    // cap the horizontal area of the checkboxes
