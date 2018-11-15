@@ -116,7 +116,12 @@ public class TabUpload extends Tab {
             	        		
             	        		alert.showAndWait();
                             }
-                        } catch (POIXMLException error) {
+                        } catch (Exception error) {
+                        	Alert alert = new Alert(AlertType.ERROR);	        		 
+        	        		alert.setTitle("Retrieval Error");
+        	        		alert.setHeaderText("There was an issue retrieving the file(s)");
+        	        		alert.setContentText("Please ensure file(s) are selected and try again.");
+        	        		alert.showAndWait();
                             error.printStackTrace();
                         }
         			}
