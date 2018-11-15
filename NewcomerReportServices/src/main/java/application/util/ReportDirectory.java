@@ -1,7 +1,7 @@
 package application.util;
 
 public enum ReportDirectory {
-	SUMMARYREPORT("../Summary Reports/report.txt");
+	SUMMARYREPORT("../SummaryReports/report.txt");
 	
 	
 	private String name;
