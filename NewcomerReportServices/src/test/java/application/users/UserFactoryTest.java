@@ -1,4 +1,4 @@
-/*package application.users;
+package application.users;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,10 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import application.database.DatabaseHandler;
 import application.database.UserNotFoundException;
+import application.util.DatabaseServiceStreams;
 
 public class UserFactoryTest {
 
-	private final HashMap<ServiceStreams, Boolean> serviceStreams = new HashMap<ServiceStreams, Boolean>();
+	private final HashMap<DatabaseServiceStreams, Boolean> serviceStreams = new HashMap<DatabaseServiceStreams, Boolean>();
 	private HashMap<String, String> userDetails = createUserDetails();
 	private UserFactory userFactory = new UserFactory();
 	
@@ -32,7 +33,7 @@ public class UserFactoryTest {
 		userDetails.put("UserType", "AGENCY");
 		userDetails.put("EmploymentServiceStream", "TRUE");
 		User factGen = userFactory.getUser(userDetails);
-		serviceStreams.put(ServiceStreams.EMPLOYMENTSERVICES, (Boolean) true);
+		serviceStreams.put(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES, (Boolean) true);
 		User userGen = new AgencyUser(1, "username", "password", 1, "AGENCY", serviceStreams);
 		assertTrue(factGen.equals(userGen));
 	}
@@ -57,4 +58,3 @@ public class UserFactoryTest {
 		return userDetails;
 	}
 }
-*/
