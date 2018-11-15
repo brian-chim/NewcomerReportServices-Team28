@@ -16,7 +16,7 @@ public class FormatterTest {
 		String result = "";
 		try {
 			result = Formatter.formatPostalCode(validPostalCode);
-			assertEquals(result, "2R4 5T3");
+			assertEquals(result, "K2M 5T3");
 		} catch (InvalidValueException e) {
 			e.printStackTrace();
 		}
