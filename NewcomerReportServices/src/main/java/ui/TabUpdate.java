@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import application.database.DatabaseHandler;
 import application.users.User;
 import application.util.DatabaseServiceStreams;
@@ -56,7 +54,8 @@ public class TabUpdate extends Tab {
         HBox serviceDropdownSelectorRow = new HBox();
         serviceDropdownSelectorRow.setMinWidth(700);
         serviceDropdownSelectorRow.setAlignment(Pos.CENTER);
-        serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown(user));
+        ComboBox<String> serviceStream = getServiceStreamDropdown(user);
+        serviceDropdownSelectorRow.getChildren().addAll(serviceStream);
         
         // a text area displaying selected file path
         final TextArea filePath = new TextArea();
@@ -100,19 +99,20 @@ public class TabUpdate extends Tab {
                     }
                 }
             });
-        
+
         updateButton.setOnAction(
         	new EventHandler<ActionEvent>() {
         		@Override
                 public void handle(final ActionEvent e) {
+        			DatabaseServiceStreams streamEnum = DatabaseServiceStreams.fromUiName(serviceStream.getValue());
         			String[] paths = filePath.getText().split(";");
         			for (String path : paths) {
                         try {
-                            ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(path, "Employment");
+                            ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(path, streamEnum.getSheetName());
                             Integer index = 1;
                             for (HashMap<String, String> entry : data) {
-                            	if(noMergeConflicts("EmploymentServiceStream", entry)) {
-                            		DatabaseHandler.insert("EmploymentServiceStream", entry);
+                            	if(noMergeConflicts(streamEnum.getDbName(), entry)) {
+                            		DatabaseHandler.insert(streamEnum.getDbName(), entry);
                             	}
                             	// send error alert informing user there is a conflict with the row
                             	else {

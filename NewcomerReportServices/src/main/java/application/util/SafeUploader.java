@@ -7,18 +7,17 @@ import application.database.DatabaseHandler;
 
 public class SafeUploader {
 	
-	private static int headerOffset = 4;
-	private static String sheetName = "Employment";
-	
+	private static int headerOffset = 4;	
 	
 	/**
 	 * Checks if conflict in client_validation_id exists in database for the parsed rows in excel specified by path, if not
 	 * insert the row into specified table; otherwise, return the conflicting rows in the file
 	 * @param tableName
 	 * @param path
+	 * @param sheetName
 	 * @return a list of conflicting rows. Empty list indicates that all rows are successfully inserted
 	 */
-	public static ArrayList<Integer> safeUpload(String tableName, String path){
+	public static ArrayList<Integer> safeUpload(String tableName, String path, String sheetName){
 		
 		ArrayList<Integer> conflicts = new ArrayList<>();
 		

@@ -6,9 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import application.util.DatabaseServiceStreams;
-import application.util.FileParser;
 import application.util.SafeUploader;
-import application.database.DatabaseHandler;
 import application.users.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,7 +52,8 @@ public class TabUpload extends Tab {
         HBox serviceDropdownSelectorRow = new HBox();
         serviceDropdownSelectorRow.setMinWidth(700);
         serviceDropdownSelectorRow.setAlignment(Pos.CENTER);
-        serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown(user));
+        ComboBox<String> serviceStream = getServiceStreamDropdown(user);
+        serviceDropdownSelectorRow.getChildren().addAll(serviceStream);
         
         // a text area displaying selected file path
         final TextArea filePath = new TextArea();
@@ -99,15 +98,17 @@ public class TabUpload extends Tab {
                 }
             });
         this.setText("Upload Files");
-        
+ 
         uploadButton.setOnAction(
         	new EventHandler<ActionEvent>() {
         		@Override
                 public void handle(final ActionEvent e) {
+        			// get the service stream value
+        			DatabaseServiceStreams streamEnum = DatabaseServiceStreams.fromUiName(serviceStream.getValue());
         			String[] paths = filePath.getText().split(";");
         			for (String path : paths) {
                         try {
-                            ArrayList<Integer> conflicts = SafeUploader.safeUpload("EmploymentServiceStream", path);
+                            ArrayList<Integer> conflicts = SafeUploader.safeUpload(streamEnum.getDbName(), path, streamEnum.getSheetName());
                             if(!conflicts.isEmpty()) {
                             	
                         		Alert alert = new Alert(AlertType.ERROR);	        		 
