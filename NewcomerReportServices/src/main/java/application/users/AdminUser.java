@@ -2,9 +2,11 @@ package application.users;
 
 import java.util.HashMap;
 
+import application.util.DatabaseServiceStreams;
+
 public class AdminUser extends User {
 	
-	public AdminUser(int userId, String username, String password, int orgId, String orgType, HashMap<ServiceStreams, Boolean> serviceStreams) {
+	public AdminUser(int userId, String username, String password, int orgId, String orgType, HashMap<DatabaseServiceStreams, Boolean> serviceStreams) {
 		super(userId, username, password, orgId, orgType, serviceStreams);
 		// add permissions to the admin user
 //		this.getPermissions().replace(UserPermissions.GENERATESUMMARYREPORT, (Boolean) true);

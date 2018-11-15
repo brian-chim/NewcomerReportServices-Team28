@@ -1,4 +1,4 @@
-package application.users;
+/*package application.users;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -57,3 +57,4 @@ public class UserFactoryTest {
 		return userDetails;
 	}
 }
+*/

@@ -32,4 +32,13 @@ public enum DatabaseServiceStreams {
 	public String getSheetName() {
 		return this.sheetName;
 	}
+	
+	public static DatabaseServiceStreams fromUiName(String uiName) {
+		for (DatabaseServiceStreams stream : DatabaseServiceStreams.values()) {
+			if(stream.getUiName().equals(uiName)) {
+				return stream;
+			}
+		}
+		return null;
+	}
 }

@@ -2,6 +2,8 @@ package ui;
 
 import javafx.application.Application;
 import application.database.DatabaseHandler;
+import application.util.DatabaseServiceStreams;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -183,8 +185,9 @@ public class Signup extends Application {
 	        		userDetails.put("Password", password);
 	        		userDetails.put("OrganizationID", orgID);
 	        		userDetails.put("Email", email);
-	        		userDetails.put("EmploymentServiceStream", "TRUE");
-	        		
+	        		// get the values of the checkboxes and put truth value
+	        		for (String stream : services)
+	        			userDetails.put(DatabaseServiceStreams.fromUiName(stream).getDbName(), "TRUE");
 	        		boolean submitted = DatabaseHandler.insert("Users", userDetails);
 	        		if(submitted) {
 	        	        Alert alert = new Alert(AlertType.INFORMATION);

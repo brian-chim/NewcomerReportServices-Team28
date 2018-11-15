@@ -259,7 +259,15 @@ public class DatabaseHandler {
             userDetails.put("UserType", rs.getString("UserType"));
             userDetails.put("Email", rs.getString("Email"));
             userDetails.put("OrganizationID", rs.getString("OrganizationID"));
+            userDetails.put("ClientProfile", rs.getString("ClientProfile"));
+            userDetails.put("CommunityConnectionsServiceStream", rs.getString("CommunityConnectionsServiceStream"));
             userDetails.put("EmploymentServiceStream", rs.getString("EmploymentServiceStream"));
+            userDetails.put("InformationAndOrientationServiceStream", rs.getString("InformationAndOrientationServiceStream"));
+            userDetails.put("LanguageTrainingClientEnrol", rs.getString("LanguageTrainingClientEnrol"));
+            userDetails.put("LanguageTrainingClientExit", rs.getString("LanguageTrainingClientExit"));
+            userDetails.put("LanguageTrainingCourseSetup", rs.getString("LanguageTrainingCourseSetup"));
+            userDetails.put("NeedsAssesmentAndReferralsService", rs.getString("NeedsAssesmentAndReferralsService"));
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

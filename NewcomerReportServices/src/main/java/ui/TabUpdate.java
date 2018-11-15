@@ -4,9 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import application.database.DatabaseHandler;
 import application.users.User;
+import application.util.DatabaseServiceStreams;
 import application.util.FileParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,7 +56,7 @@ public class TabUpdate extends Tab {
         HBox serviceDropdownSelectorRow = new HBox();
         serviceDropdownSelectorRow.setMinWidth(700);
         serviceDropdownSelectorRow.setAlignment(Pos.CENTER);
-        serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown());
+        serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown(user));
         
         // a text area displaying selected file path
         final TextArea filePath = new TextArea();
@@ -156,9 +158,15 @@ public class TabUpdate extends Tab {
 	}
 	
 	// dropdown for service streams
-	private ComboBox<String> getServiceStreamDropdown() {
+	private ComboBox<String> getServiceStreamDropdown(User user) {
 		ComboBox<String> serviceStream;
-		ArrayList<String> services = DatabaseHandler.getServiceStreams();
+		ArrayList<String> services = new ArrayList<String>();
+		HashMap<DatabaseServiceStreams, Boolean> userStreams = user.getServiceStreams();
+		for (DatabaseServiceStreams stream : userStreams.keySet()) {
+			if (userStreams.get(stream)) {
+				services.add(stream.getUiName());
+			}
+		}
 		ObservableList<String> typeOptions = FXCollections.observableArrayList(services);
 				
 		serviceStream = new ComboBox<String>(typeOptions);

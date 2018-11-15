@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import application.util.DatabaseServiceStreams;
 import application.util.FileParser;
 import application.util.SafeUploader;
 import application.database.DatabaseHandler;
@@ -53,7 +54,7 @@ public class TabUpload extends Tab {
         HBox serviceDropdownSelectorRow = new HBox();
         serviceDropdownSelectorRow.setMinWidth(700);
         serviceDropdownSelectorRow.setAlignment(Pos.CENTER);
-        serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown());
+        serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown(user));
         
         // a text area displaying selected file path
         final TextArea filePath = new TextArea();
@@ -126,11 +127,17 @@ public class TabUpload extends Tab {
         );
 	}
 	// dropdown for service streams
-	private ComboBox<String> getServiceStreamDropdown() {
+	private ComboBox<String> getServiceStreamDropdown(User user) {
 		ComboBox<String> serviceStream;
-		ArrayList<String> services = DatabaseHandler.getServiceStreams();
-		ObservableList<String> typeOptions = FXCollections.observableArrayList(services);
-				
+		ArrayList<String> services = new ArrayList<String>();
+		HashMap<DatabaseServiceStreams, Boolean> userStreams = user.getServiceStreams();
+		for (DatabaseServiceStreams stream : userStreams.keySet()) {
+			if (userStreams.get(stream)) {
+				services.add(stream.getUiName());
+			}
+		}
+
+		ObservableList<String> typeOptions = FXCollections.observableArrayList(services);		
 		serviceStream = new ComboBox<String>(typeOptions);
 		serviceStream.setPromptText("Select a service stream");
 		return serviceStream;
