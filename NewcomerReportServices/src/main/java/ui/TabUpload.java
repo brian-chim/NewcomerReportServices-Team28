@@ -104,9 +104,10 @@ public class TabUpload extends Tab {
         		@Override
                 public void handle(final ActionEvent e) {
         			String[] paths = filePath.getText().split(";");
+        			ArrayList<Integer> conflicts = new ArrayList<>();
         			for (String path : paths) {
                         try {
-                            ArrayList<Integer> conflicts = SafeUploader.safeUpload("EmploymentServiceStream", path);
+                            conflicts = SafeUploader.safeUpload("EmploymentServiceStream", path);
                             if(!conflicts.isEmpty()) {
                             	
                         		Alert alert = new Alert(AlertType.ERROR);	        		 
@@ -123,8 +124,16 @@ public class TabUpload extends Tab {
         	        		alert.setContentText("Please ensure file(s) are selected and try again.");
         	        		alert.showAndWait();
                             error.printStackTrace();
+                            return;
                         }
         			}
+        			
+    				Alert alert = new Alert(AlertType.CONFIRMATION);	        		 
+	        		alert.setTitle("Complete");
+	        		alert.setHeaderText("The upload has finished");
+	        		alert.setContentText("There were " + conflicts.size() + " rows with errors!");
+	        		alert.showAndWait();
+        			
         		}
         		
         	}
