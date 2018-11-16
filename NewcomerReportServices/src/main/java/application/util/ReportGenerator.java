@@ -9,6 +9,8 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 import java.awt.*;
@@ -53,8 +55,9 @@ public class ReportGenerator {
                     result += "\n" + value + ": " + frequencyResult.get(value) + "\n";
                     tempResult += "\n" + value + ": " + frequencyResult.get(value) + "\n";
                 }
-                // generate a chart for this column
-                writeChartToPDF(generatePieChart(frequencyResult, streamName), 500, 400, path + title + ".pdf", tempResult, "Summary Graph of " + title);
+                // generate a pie chart and bar graph for this column
+                writeChartToPDF(generatePieChart(frequencyResult, streamName), 500, 400, path + title + "-PieChart.pdf", tempResult, "Summary Graph of " + title);
+                writeChartToPDF(generateBarChart(frequencyResult, streamName), 500, 400, path + title + "-BarChart.pdf", tempResult, "Summary Graph of " + title);
                 columnResults.add(frequencyResult);
             }
         }
@@ -66,7 +69,7 @@ public class ReportGenerator {
      * Generates a pie chart.
      * @param frequencyResult the dataset
      * @param streamName name of the stream to place as title
-     * @return a Pie Chart representatio using JFreeChart object
+     * @return a Pie Chart representation using JFreeChart object
      */
     private static JFreeChart generatePieChart(HashMap<String, Integer> frequencyResult, String streamName) {
         DefaultPieDataset dataSet = new DefaultPieDataset();
@@ -78,6 +81,26 @@ public class ReportGenerator {
 
         JFreeChart chart = ChartFactory.createPieChart(
                 streamName, dataSet, true, true, false);
+
+        return chart;
+    }
+
+    /**
+     * Generates a bar chart.
+     * @param frequencyResult the dataset
+     * @param streamName name of the stream to place as title
+     * @return a Bar Chart representation using JFreeChart object
+     */
+    private static JFreeChart generateBarChart(HashMap<String, Integer> frequencyResult, String streamName) {
+        DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
+
+        // loop through all the frequencies and add it to the data set
+        for (String value : frequencyResult.keySet()) {
+            dataSet.setValue(frequencyResult.get(value), "Value", value);
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                streamName, "Value", "Frequency", dataSet,  PlotOrientation.VERTICAL, false, true, false);
 
         return chart;
     }
