@@ -38,5 +38,13 @@ public class Formatter {
 			throw new InvalidValueException();
 		}
 	}
+	
+	public static boolean checkValidEmail(String email) {
+		if(email.matches("[A-Za-z0-9]+@([A-Za-z]+\\.)+[A-Za-z]+")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }

@@ -1,7 +1,9 @@
 package application.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -79,5 +81,41 @@ public class FormatterTest {
 	void testNonNumericPhoneNum() {
 		String invalidPhoneNum = "!@#-$%^-&*12";
 		assertThrows(InvalidValueException.class, ()->Formatter.formatPostalCode(invalidPhoneNum));
+	}
+	
+	@Test
+	@DisplayName("test valid email")
+	void testValidEmail() {
+		assertTrue(Formatter.checkValidEmail("test@gmail.com"));
+	}
+	
+	@Test
+	@DisplayName("test valid email with numerics and multiple periods")
+	void testValidEmailWithNumerics() {
+		assertTrue(Formatter.checkValidEmail("test123@mail.utoronto.ca"));
+	}
+	
+	@Test
+	@DisplayName("test invalid email starting with special char")
+	void testInvalidEmail() {
+		assertFalse(Formatter.checkValidEmail("@asdf@bcd.com"));
+	}
+	
+	@Test
+	@DisplayName("test invalid email with no email domain")
+	void testInvalidEmailNoDomain() {
+		assertFalse(Formatter.checkValidEmail("test123.com"));
+	}
+	
+	@Test
+	@DisplayName("test invalid email with no .com")
+	void testInvalidEmailNoDotCom() {
+		assertFalse(Formatter.checkValidEmail("test123@asdf"));
+	}
+	
+	@Test
+	@DisplayName("test invalid email with bad format")
+	void testBadFormat() {
+		assertFalse(Formatter.checkValidEmail("Team28@.com"));
 	}
 }
