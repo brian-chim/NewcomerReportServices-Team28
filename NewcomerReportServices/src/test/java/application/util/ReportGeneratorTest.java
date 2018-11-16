@@ -21,7 +21,7 @@ public class ReportGeneratorTest {
                 )
         );
 
-        String actual = ReportGenerator.generateSummaryReport("EmploymentServiceStream", cols);
+        String actual = ReportGenerator.generateSummaryReport("EmploymentServiceStream", cols, "../test/");
         assertEquals("Summary Report of Frequencies of EmploymentServiceStream\n" +
                 "SERVICELANGUAGE:\n" +
                 "\n" +
@@ -46,7 +46,7 @@ public class ReportGeneratorTest {
                 )
         );
 
-        String actual = ReportGenerator.generateSummaryReport("EmploymentServiceStream", cols);
+        String actual = ReportGenerator.generateSummaryReport("EmploymentServiceStream", cols, "../test/");
         assertEquals("Summary Report of Frequencies of EmploymentServiceStream", actual);
     }
 }
