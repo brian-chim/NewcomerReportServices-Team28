@@ -29,5 +29,55 @@ public class FormatterTest {
 		assertThrows(InvalidValueException.class, ()->Formatter.formatPostalCode(invalidPostalCode));
 	}
 
-
+	@Test
+	@DisplayName("format regular canadian phone number")
+	void testRegCanPhoneNum() {
+		String regCanPhoneNum = "416-123-4567";
+		try {
+			String formatted = Formatter.formatPhoneNumber(regCanPhoneNum);
+			assertEquals("(416) 123-4567", formatted);
+		} catch (InvalidValueException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	@DisplayName("format odd phone number")
+	void testOddPhoneNum() {
+		String oddPhoneNum = "(905)        -234-(56)-78";
+		try {
+			String formatted = Formatter.formatPhoneNumber(oddPhoneNum);
+			assertEquals("(905) 234-5678", formatted);
+		} catch (InvalidValueException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	@DisplayName("format invalid phone number with < 10 digits")
+	void testLessDigPhoneNum() {
+		String invalidPhoneNum = "416123456";
+		assertThrows(InvalidValueException.class, ()->Formatter.formatPostalCode(invalidPhoneNum));
+	}
+	
+	@Test
+	@DisplayName("format invalid phone number with > 10 digits")
+	void testMoreDigPhoneNum() {
+		String invalidPhoneNum = "41612345678";
+		assertThrows(InvalidValueException.class, ()->Formatter.formatPostalCode(invalidPhoneNum));
+	}
+	
+	@Test
+	@DisplayName("format invalid phone number with alpha char")
+	void testAlphaPhoneNum() {
+		String invalidPhoneNum = "abc-123-4567";
+		assertThrows(InvalidValueException.class, ()->Formatter.formatPostalCode(invalidPhoneNum));
+	}
+	
+	@Test
+	@DisplayName("format invalid phone number with non-alphanumeric char")
+	void testNonNumericPhoneNum() {
+		String invalidPhoneNum = "!@#-$%^-&*12";
+		assertThrows(InvalidValueException.class, ()->Formatter.formatPostalCode(invalidPhoneNum));
+	}
 }
