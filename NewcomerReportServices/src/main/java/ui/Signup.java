@@ -2,6 +2,8 @@ package ui;
 
 import javafx.application.Application;
 import application.database.DatabaseHandler;
+import application.util.Formatter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -175,8 +177,9 @@ public class Signup extends Application {
 	        			complete = true;
 	        		}
 	        	}
-	        	
-				if (complete) {
+	        	// check for a valid email
+	        	boolean validEmail = Formatter.checkValidEmail(email);
+				if (complete && validEmail) {
 	        		HashMap<String, String> userDetails = new HashMap<>();
 	        		userDetails.put("UserType", type);
 	        		userDetails.put("Username", username);
@@ -197,17 +200,22 @@ public class Signup extends Application {
 		        		Alert alert = new Alert(AlertType.ERROR);		        		 
 		        		alert.setTitle("Error alert");
 		        		alert.setHeaderText("Signup Failed..");
-		        		alert.setContentText("Errors occur during submission..");	        		 
+		        		alert.setContentText("Errors occured during submission..");	        		 
 		        		alert.showAndWait();
 	        		}
 		        	
-	        	} else {
+	        	} else if (complete && !validEmail){
+	        		Alert alert = new Alert(AlertType.ERROR);
+	        		alert.setTitle("Error alert");
+	        		alert.setHeaderText("Invalid Email");
+	        		alert.setContentText("Please enter in a valid email!");
+	        		alert.showAndWait();
 
+	        	} else {
 	        		Alert alert = new Alert(AlertType.ERROR);	        		 
 	        		alert.setTitle("Error alert");
 	        		alert.setHeaderText("Mandatory Field(s) Missing");
 	        		alert.setContentText("Please fill in all the fields!");
-	        		 
 	        		alert.showAndWait();
 	        	}
 	        }
