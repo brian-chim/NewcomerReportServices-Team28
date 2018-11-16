@@ -1,0 +1,19 @@
+Summary Report of Frequencies of EmploymentServiceStream
+SERVICELANGUAGE:
+
+English: 7
+
+French: 1
+
+INTERVENTIONTYPE:
+
+Long Term: 8
+
+CURROCCUPATION:
+
+00 Senior management occupations: 8
+
+REFERREDBY:
+
+Community centre / library: 8
+
