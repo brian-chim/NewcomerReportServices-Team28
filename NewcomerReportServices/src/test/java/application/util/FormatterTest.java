@@ -118,4 +118,71 @@ public class FormatterTest {
 	void testBadFormat() {
 		assertFalse(Formatter.checkValidEmail("Team28@.com"));
 	}
+	
+	@Test
+	@DisplayName("yyyy-mm-dd date format test where dd > 12")
+	void testdateOne() {
+		String date = "2016-07-13";
+		try {
+			String formatted = Formatter.formatDate(date);
+			assertEquals("2016-07-13", formatted);
+		} catch (InvalidValueException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	@DisplayName("yyyy-mm-dd date format test where dd < 12")
+	void testdateTwo() {
+		String date = "2016-07-08";
+		try {
+			String formatted = Formatter.formatDate(date);
+			assertEquals("2016-07-08", formatted);
+		} catch (InvalidValueException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	@DisplayName("mm-dd-yyyy date format test where dd > 12")
+	void testdateThree() {
+		String date = "11-13-2019";
+		try {
+			String formatted = Formatter.formatDate(date);
+			assertEquals("2019-11-13", formatted);
+		} catch (InvalidValueException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	@DisplayName("mm/dd/yyyy date format test where dd > 12")
+	void testdateFour() {
+		String date = "11/13/2019";
+		try {
+			String formatted = Formatter.formatDate(date);
+			assertEquals("2019-11-13", formatted);
+		} catch (InvalidValueException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	@DisplayName("yyyy\\mm\\dd date format test where dd > 12")
+	void testdateFive() {
+		String date = "2016\\07\\13";
+		try {
+			String formatted = Formatter.formatDate(date);
+			assertEquals("2016-07-13", formatted);
+		} catch (InvalidValueException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	@DisplayName("format invalid phone number with non-alphanumeric char")
+	void testDateInvalid() {
+		String invalidDate = "adshfg";
+		assertThrows(InvalidValueException.class, ()->Formatter.formatDate(invalidDate));
+	}
 }
