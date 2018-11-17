@@ -114,19 +114,27 @@ public class DatabaseHandler {
     }
     
     /**
-     * Delete rows from the db based on a SQL where clause
+     * Delete rows from the db based on a SQL where clause (or clears that table if primaryKey and value are empty)
      * @param tableName the name of the db to delete from
      * @param primaryKey the name of the primary column id to compare the value against
      * @param value delete all entries with primaryKey=value
      * @return a boolean representing if the delete operation was successful or not
      */
     public static boolean delete(String tableName, String primaryKey, String value) {
-        String sql = "DELETE FROM " + tableName + " WHERE " + primaryKey + " = (?)";
+    	String sql;
+    	boolean delAll = (primaryKey == "" && value == "");
+    	if (delAll) {
+    		sql = "DELETE FROM " + tableName;
+    	} else {
+            sql = "DELETE FROM " + tableName + " WHERE " + primaryKey + " = (?)";
+    	}
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the comparing value
-            pstmt.setString(1, value);
+        	if (!delAll) {
+                pstmt.setString(1, value);
+        	}
             // execute the delete statement
             pstmt.executeUpdate();
         } catch (SQLException e) {
