@@ -9,7 +9,7 @@ Welcome to Team 28's CSCC01 Group project.
 The source code for the application is located in the `NewcomerReportServices` directory located in the project root.
 
 ##### Summary Reports
-When generating a summary report through the application, it will be located at `Summary Reports/report.txt` in the project root.
+When generating a summary report through the application, it will be located at `SummaryReports/report.txt` in the project root.
 
 **_Note:_** If a report already existing the folder, it will be overwritten when generating a new report.
 

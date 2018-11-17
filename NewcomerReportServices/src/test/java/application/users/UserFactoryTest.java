@@ -18,7 +18,7 @@ public class UserFactoryTest {
 	@Test
 	@DisplayName("Create Admin using UserFactory")
 	void testCreateAdmin() {
-		userDetails.put("UserType", "ADMIN");
+		userDetails.put("UserType", "Admin");
 		userDetails.put("EmploymentServiceStream", "FALSE");
 		User factGen = userFactory.getUser(userDetails);
 		User userGen = new AdminUser(1, "username", "password", 1, "ADMIN", serviceStreams);
@@ -28,7 +28,7 @@ public class UserFactoryTest {
 	@Test
 	@DisplayName("Create Agency user using UserFactory")
 	void testCreateAgencyUser() {
-		userDetails.put("UserType", "AGENCY");
+		userDetails.put("UserType", "Agency");
 		userDetails.put("EmploymentServiceStream", "TRUE");
 		User factGen = userFactory.getUser(userDetails);
 		serviceStreams.put(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES, (Boolean) true);
@@ -39,7 +39,7 @@ public class UserFactoryTest {
 	@Test
 	@DisplayName("Create Staff user using UserFactory")
 	void testCreateStaffUser() {
-		userDetails.put("UserType", "TEQLIP STAFF");
+		userDetails.put("UserType", "TEQLIP Staff");
 		userDetails.put("EmploymentServiceStream", "FALSE");
 		User factGen = userFactory.getUser(userDetails);
 		User userGen = new StaffUser(1, "username", "password", 1, "STAFF", serviceStreams);

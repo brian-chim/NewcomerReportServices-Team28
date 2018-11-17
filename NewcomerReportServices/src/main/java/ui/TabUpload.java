@@ -23,7 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.poi.POIXMLException;
 
 public class TabUpload extends Tab {
 	
@@ -106,9 +105,10 @@ public class TabUpload extends Tab {
         			// get the service stream value
         			DatabaseServiceStreams streamEnum = DatabaseServiceStreams.fromUiName(serviceStream.getValue());
         			String[] paths = filePath.getText().split(";");
+        			ArrayList<Integer> conflicts = new ArrayList<>();
         			for (String path : paths) {
                         try {
-                            ArrayList<Integer> conflicts = SafeUploader.safeUpload(streamEnum.getDbName(), path, streamEnum.getSheetName());
+                            conflicts = SafeUploader.safeUpload(streamEnum.getDbName(), path, streamEnum.getSheetName());
                             if(!conflicts.isEmpty()) {
                             	
                         		Alert alert = new Alert(AlertType.ERROR);	        		 
@@ -118,10 +118,23 @@ public class TabUpload extends Tab {
             	        		
             	        		alert.showAndWait();
                             }
-                        } catch (POIXMLException error) {
+                        } catch (Exception error) {
+                        	Alert alert = new Alert(AlertType.ERROR);	        		 
+        	        		alert.setTitle("Retrieval Error");
+        	        		alert.setHeaderText("There was an issue retrieving the file(s)");
+        	        		alert.setContentText("Please ensure file(s) are selected and try again.");
+        	        		alert.showAndWait();
                             error.printStackTrace();
+                            return;
                         }
         			}
+        			
+    				Alert alert = new Alert(AlertType.CONFIRMATION);	        		 
+	        		alert.setTitle("Complete");
+	        		alert.setHeaderText("The upload has finished");
+	        		alert.setContentText("There were " + conflicts.size() + " rows with errors!");
+	        		alert.showAndWait();
+        			
         		}
         		
         	}

@@ -14,7 +14,6 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -71,7 +70,6 @@ public class ReportGeneratorTest {
                         "session_employment_status_id"
                 )
         );
-
         // drop the db for Employment Service Stream first
         DatabaseHandler.delete("EmploymentServiceStream", "", "");
         ArrayList<HashMap<String, String>> testSs = FileParser.readSpreadsheet("src/test/java/application/util/reportgeneratortestexcel.xlsx", "Employment");
@@ -79,8 +77,7 @@ public class ReportGeneratorTest {
 			HashMap<String, String> row = testSs.get(i);
 			DatabaseHandler.insert("EmploymentServiceStream", row);
 		}
-
-        String actual = ReportGenerator.generateSummaryReport("EmploymentServiceStream", cols);
+        String actual = ReportGenerator.generateSummaryReport("EmploymentServiceStream", cols, "../test/");
         assertEquals("Summary Report of Frequencies of EmploymentServiceStream\n" +
                 "SERVICELANGUAGE:\n" +
                 "\n" +
@@ -105,7 +102,7 @@ public class ReportGeneratorTest {
                 )
         );
 
-        String actual = ReportGenerator.generateSummaryReport("EmploymentServiceStream", cols);
+        String actual = ReportGenerator.generateSummaryReport("EmploymentServiceStream", cols, "../test/");
         assertEquals("Summary Report of Frequencies of EmploymentServiceStream", actual);
     }
 }

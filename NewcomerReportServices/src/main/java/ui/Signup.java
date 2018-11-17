@@ -2,6 +2,7 @@ package ui;
 
 import javafx.application.Application;
 import application.database.DatabaseHandler;
+import application.users.UserTypes;
 import application.util.DatabaseServiceStreams;
 
 import java.util.ArrayList;
@@ -66,9 +67,9 @@ public class Signup extends Application {
 		ComboBox<String> userType;
 		ArrayList<String> types = new ArrayList<String>(
 				Arrays.asList(
-						"AGENCY",
-						"TEQLIP STAFF",
-						"ADMIN")
+						UserTypes.AGENCY.getUiName(),
+						UserTypes.STAFF.getUiName(),
+						UserTypes.ADMIN.getUiName())
 		);
 		ObservableList<String> typeOptions = FXCollections.observableArrayList(types);
 				
@@ -115,14 +116,14 @@ public class Signup extends Application {
 	    userType.valueProperty().addListener(new ChangeListener<String>() {
 	        @Override 
 	        public void changed(ObservableValue ov, String prev, String curr) {
-	        	if (curr == "AGENCY") {
+	        	if (curr == UserTypes.AGENCY.getUiName()) {
 	        		orgLabel.setVisible(true);
 	        		orgField.setVisible(true);
 	        		serviceLabel.setVisible(true);
 	        		serviceStreamLayout.setVisible(true);
 	        		
 	        	} else {
-	        		if (curr == "ADMIN") {
+	        		if (curr == UserTypes.ADMIN.getUiName()) {
 		        		orgLabel.setVisible(false);
 		        		orgField.setVisible(false);
 	        		} else {
@@ -154,11 +155,11 @@ public class Signup extends Application {
 	        	ArrayList<String> services = new ArrayList<String>();
 	        	String orgID = "-1";
 	        	
-	        	if(type != "ADMIN") {
+	        	if(type != UserTypes.ADMIN.getUiName()) {
 		        	if (orgname != null) {
 		        		orgID = String.valueOf(agencies.indexOf(orgname));
 		        	}  
-		        	if (type == "AGENCY") {
+		        	if (type == UserTypes.AGENCY.getUiName()) {
 			        	for (Node stream : serviceStreamLayout.getChildrenUnmodifiable()) {
 			        		if (((CheckBox)stream).isSelected()) {
 			        			services.add(((Labeled) stream).getText());
@@ -169,11 +170,11 @@ public class Signup extends Application {
 	        	} 
 	        	boolean complete = false;
 	        	if (username != "" && password != "" && email != "") {
-	        		if (type == "ADMIN") {
+	        		if (type == UserTypes.ADMIN.getUiName()) {
 	        			complete = true;
-	        		} else if (type == "TEQLIP STAFF" && orgID != "") {
+	        		} else if (type == UserTypes.STAFF.getUiName() && orgID != "") {
 	        			complete = true;
-	        		} else if (type == "AGENCY" && orgID != "" && !services.isEmpty()) {
+	        		} else if (type == UserTypes.AGENCY.getUiName() && orgID != "" && !services.isEmpty()) {
 	        			complete = true;
 	        		}
 	        	}

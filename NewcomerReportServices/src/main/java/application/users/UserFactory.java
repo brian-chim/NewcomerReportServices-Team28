@@ -9,7 +9,7 @@ import application.util.DatabaseServiceStreams;
 public class UserFactory {
 
     public User getUser(HashMap<String, String> userDetails) {
-        String orgType = userDetails.get("UserType");
+        UserTypes orgType = UserTypes.fromUiName(userDetails.get("UserType"));
         
         HashMap<DatabaseServiceStreams, Boolean> serviceStreams = new HashMap<DatabaseServiceStreams, Boolean>();
         ArrayList<String> streams = DatabaseHandler.getServiceStreams();
@@ -19,12 +19,13 @@ public class UserFactory {
         		serviceStreams.put(DatabaseServiceStreams.fromUiName(stream), Boolean.TRUE);
         	}
         }
+
         switch (orgType) {
-            case "ADMIN":
+            case ADMIN:
                 return new AdminUser(Integer.parseInt(userDetails.get("ID")), userDetails.get("Username"), userDetails.get("Password"), Integer.parseInt(userDetails.get("OrganizationID")), "ADMIN", serviceStreams);
-            case "AGENCY":
+            case AGENCY:
                 return new AgencyUser(Integer.parseInt(userDetails.get("ID")), userDetails.get("Username"), userDetails.get("Password"), Integer.parseInt(userDetails.get("OrganizationID")), "AGENCY", serviceStreams);
-            case "TEQLIP STAFF":
+            case STAFF:
                 return new StaffUser(Integer.parseInt(userDetails.get("ID")), userDetails.get("Username"), userDetails.get("Password"), Integer.parseInt(userDetails.get("OrganizationID")), "STAFF", serviceStreams);
             default:
                 return null;
