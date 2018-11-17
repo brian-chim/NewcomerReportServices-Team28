@@ -126,7 +126,7 @@ public class ReportGenerator {
             PdfTemplate template = contentByte.createTemplate(width, height);
             Graphics2D graphics2d = template.createGraphics(width, height,
                     new DefaultFontMapper());
-            Rectangle2D rectangle2d = new Rectangle2D.Double(20, 20, width,
+            Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, width,
                     height);
 
             chart.draw(graphics2d, rectangle2d);
