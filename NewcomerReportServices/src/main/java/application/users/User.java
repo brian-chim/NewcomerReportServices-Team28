@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import application.util.DatabaseServiceStreams;
+
 public class User implements UserInterface {
 
 	private int userId;
@@ -15,9 +17,9 @@ public class User implements UserInterface {
 	private String orgType;
 	// what the user has access to do
 	private HashMap<UserPermissions, Boolean> permissions = new HashMap<UserPermissions, Boolean>();
-	private HashMap<ServiceStreams, Boolean> serviceStreams = new HashMap<ServiceStreams, Boolean>();
+	private HashMap<DatabaseServiceStreams, Boolean> serviceStreams = new HashMap<DatabaseServiceStreams, Boolean>();
 	
-	public User(int userId, String username, String password, int orgId, String orgType, HashMap<ServiceStreams, Boolean> serviceStreams) {
+	public User(int userId, String username, String password, int orgId, String orgType, HashMap<DatabaseServiceStreams, Boolean> serviceStreams) {
 		this.userId = userId;
 		this.username = username;
 		this.password = password;
@@ -28,13 +30,13 @@ public class User implements UserInterface {
 			this.permissions.put(UserPermissions.values()[i], (Boolean)false);
 		}
 		// set up the service streams
-		for(int i = 0; i < ServiceStreams.values().length; i++) {
-			this.serviceStreams.put(ServiceStreams.values()[i], (Boolean)false);
+		for(int i = 0; i < DatabaseServiceStreams.values().length; i++) {
+			this.serviceStreams.put(DatabaseServiceStreams.values()[i], (Boolean)false);
 		}
 		// iterate through the a HashMap taken from https://stackoverflow.com/questions/1066589/iterate-through-a-hashmap
-		Iterator<Entry<ServiceStreams, Boolean>> it = serviceStreams.entrySet().iterator();
+		Iterator<Entry<DatabaseServiceStreams, Boolean>> it = serviceStreams.entrySet().iterator();
 		while(it.hasNext()) {
-			Map.Entry<ServiceStreams, Boolean> pair = (Map.Entry<ServiceStreams, Boolean>) it.next();
+			Map.Entry<DatabaseServiceStreams, Boolean> pair = (Map.Entry<DatabaseServiceStreams, Boolean>) it.next();
 			this.serviceStreams.replace(pair.getKey(), pair.getValue());
 			it.remove();
 		}
@@ -60,7 +62,7 @@ public class User implements UserInterface {
 		this.orgType = orgType;
 	}
 
-	public void setServiceStream(ServiceStreams stream, Boolean available) {
+	public void setServiceStream(DatabaseServiceStreams stream, Boolean available) {
 		this.serviceStreams.replace(stream, available);
 	}
 
@@ -88,7 +90,7 @@ public class User implements UserInterface {
 		return this.permissions;
 	}
 
-	public HashMap<ServiceStreams, Boolean> getServiceStreams() {
+	public HashMap<DatabaseServiceStreams, Boolean> getServiceStreams() {
 		return this.serviceStreams;
 	}
 	

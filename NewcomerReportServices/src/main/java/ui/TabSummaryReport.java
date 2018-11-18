@@ -88,13 +88,13 @@ public class TabSummaryReport extends Tab {
                     	for (Node checkbox : fp.getChildren()) {
                     		if (checkbox instanceof CheckBox) {
                     			if (((CheckBox)checkbox).isSelected()) {
-                    				if (handlingStream.equals(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getName()) ) {
+                    				if (handlingStream.equals(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getUiName()) ) {
                     					// get the text from the checkbox, then get the enum, then get the db name from enum
                     					ReportCols.add(EmploymentStreamColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
-                    					tableName = DatabaseServiceStreams.EMPLOYMENTSERVICESTREAMTABLENAME.getName();
-                    				} else if (handlingStream.equals(DatabaseServiceStreams.NEEDSASSESSMENT.getName()) ) {
+                    					tableName = DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getDbName();
+                    				} else if (handlingStream.equals(DatabaseServiceStreams.NEEDSASSESSMENT.getUiName()) ) {
                     					ReportCols.add(NeedsAssessmentsColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
-                    					tableName = DatabaseServiceStreams.NEEDSASSESSMENTTABLENAME.getName();
+                    					tableName = DatabaseServiceStreams.NEEDSASSESSMENT.getDbName();
                     				}
                     				// add else ifs as streams are supported
                     			}
@@ -153,14 +153,14 @@ public class TabSummaryReport extends Tab {
 		for (EmploymentStreamColumnQueries query : EmploymentStreamColumnQueries.values()) {
 			employmentStreamQueries.add(query.getUiName());
 		}
-		queries.put(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getName(), employmentStreamQueries);
+		queries.put(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getUiName(), employmentStreamQueries);
 		
 		// add NARS Stream
 		ArrayList<String> narsStreamQueries = new ArrayList<String>();
 		for (NeedsAssessmentsColumnQueries query : NeedsAssessmentsColumnQueries.values()) {
 			narsStreamQueries.add(query.getUiName());
 		}
-		queries.put(DatabaseServiceStreams.NEEDSASSESSMENT.getName(), narsStreamQueries);
+		queries.put(DatabaseServiceStreams.NEEDSASSESSMENT.getUiName(), narsStreamQueries);
 		return queries;
 		
 		// add streams as desired from above template

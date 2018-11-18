@@ -7,12 +7,14 @@ import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import application.util.DatabaseServiceStreams;
+
 public class AgencyUserTest {
 
-	private final HashMap<ServiceStreams, Boolean> serviceStreams = createTestHashMap();
+	private final HashMap<DatabaseServiceStreams, Boolean> serviceStreams = createTestHashMap();
 
 	private final AgencyUser testAgencyUser = new AgencyUser(1, "username", "password",
-			1, "Employment Services", serviceStreams);
+			1, "AGENCY", serviceStreams);
 
 	@Test
 	@DisplayName("Test Get Permissions")
@@ -26,11 +28,11 @@ public class AgencyUserTest {
 		assertEquals(testAgencyUser.getPermissions(), permissions);
 	}
 
-	private static HashMap<ServiceStreams, Boolean> createTestHashMap() {
-		HashMap<ServiceStreams, Boolean> serviceStreams = new HashMap<ServiceStreams, Boolean>();
-		serviceStreams.put(ServiceStreams.EMPLOYMENTSERVICES, (Boolean) true);
-		serviceStreams.put(ServiceStreams.CLIENTPROFILEBULK, (Boolean) true);
-		serviceStreams.put(ServiceStreams.COMMUNITYCONNECTIONS, (Boolean) true);
+	private static HashMap<DatabaseServiceStreams, Boolean> createTestHashMap() {
+		HashMap<DatabaseServiceStreams, Boolean> serviceStreams = new HashMap<DatabaseServiceStreams, Boolean>();
+		serviceStreams.put(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES, (Boolean) true);
+		serviceStreams.put(DatabaseServiceStreams.CLIENTPROFILEBULK, (Boolean) true);
+		serviceStreams.put(DatabaseServiceStreams.COMMUNITYCONN, (Boolean) true);
 		return serviceStreams;
 	}
 

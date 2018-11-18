@@ -114,19 +114,27 @@ public class DatabaseHandler {
     }
     
     /**
-     * Delete rows from the db based on a SQL where clause
+     * Delete rows from the db based on a SQL where clause (or clears that table if primaryKey and value are empty)
      * @param tableName the name of the db to delete from
      * @param primaryKey the name of the primary column id to compare the value against
      * @param value delete all entries with primaryKey=value
      * @return a boolean representing if the delete operation was successful or not
      */
     public static boolean delete(String tableName, String primaryKey, String value) {
-        String sql = "DELETE FROM " + tableName + " WHERE " + primaryKey + " = (?)";
+    	String sql;
+    	boolean delAll = (primaryKey == "" && value == "");
+    	if (delAll) {
+    		sql = "DELETE FROM " + tableName;
+    	} else {
+            sql = "DELETE FROM " + tableName + " WHERE " + primaryKey + " = (?)";
+    	}
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the comparing value
-            pstmt.setString(1, value);
+        	if (!delAll) {
+                pstmt.setString(1, value);
+        	}
             // execute the delete statement
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -259,7 +267,15 @@ public class DatabaseHandler {
             userDetails.put("UserType", rs.getString("UserType"));
             userDetails.put("Email", rs.getString("Email"));
             userDetails.put("OrganizationID", rs.getString("OrganizationID"));
+            userDetails.put("ClientProfile", rs.getString("ClientProfile"));
+            userDetails.put("CommunityConnectionsServiceStream", rs.getString("CommunityConnectionsServiceStream"));
             userDetails.put("EmploymentServiceStream", rs.getString("EmploymentServiceStream"));
+            userDetails.put("InformationAndOrientationServiceStream", rs.getString("InformationAndOrientationServiceStream"));
+            userDetails.put("LanguageTrainingClientEnrol", rs.getString("LanguageTrainingClientEnrol"));
+            userDetails.put("LanguageTrainingClientExit", rs.getString("LanguageTrainingClientExit"));
+            userDetails.put("LanguageTrainingCourseSetup", rs.getString("LanguageTrainingCourseSetup"));
+            userDetails.put("NeedsAssesmentAndReferralsService", rs.getString("NeedsAssesmentAndReferralsService"));
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
