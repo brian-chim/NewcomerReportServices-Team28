@@ -59,6 +59,30 @@
             <version>11</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/jfree/jfreechart -->
+        <dependency>
+            <groupId>jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.13</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/jfree/jcommon -->
+        <dependency>
+            <groupId>jfree</groupId>
+            <artifactId>jcommon</artifactId>
+            <version>1.0.16</version>
+        </dependency>
+
+
+
+
         <!-- dependency for file IO https://search.maven.org/classic/#artifactdetails%7Ccommons-io%7Ccommons-io%7C20030203.000550%7Cjar-->
         <dependency>
             <groupId>commons-io</groupId>

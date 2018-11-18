@@ -19,11 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -92,22 +88,26 @@ public class TabSummaryReport extends Tab {
                     	for (Node checkbox : fp.getChildren()) {
                     		if (checkbox instanceof CheckBox) {
                     			if (((CheckBox)checkbox).isSelected()) {
-                    				if (handlingStream.equals(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getName()) ) {
+                    				if (handlingStream.equals(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getUiName()) ) {
                     					// get the text from the checkbox, then get the enum, then get the db name from enum
                     					ReportCols.add(EmploymentStreamColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
-                    					tableName = DatabaseServiceStreams.EMPLOYMENTSERVICESTREAMTABLENAME.getName();
-                    				} else if (handlingStream.equals(DatabaseServiceStreams.NEEDSASSESSMENT.getName()) ) {
+                    					tableName = DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getDbName();
+                    				} else if (handlingStream.equals(DatabaseServiceStreams.NEEDSASSESSMENT.getUiName()) ) {
                     					ReportCols.add(NeedsAssessmentsColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
-                    					tableName = DatabaseServiceStreams.NEEDSASSESSMENTTABLENAME.getName();
+                    					tableName = DatabaseServiceStreams.NEEDSASSESSMENT.getDbName();
                     				}
                     				// add else ifs as streams are supported
                     			}
                     		}
                     	}
                     	// call db handler with cols and table
-                    	String report = ReportGenerator.generateSummaryReport(tableName, ReportCols);
+                    	String report = ReportGenerator.generateSummaryReport(tableName, ReportCols, ReportDirectory.SUMMARYREPORT.getName());
                     	// write report to summary report location
-                    	WriteReport.toTxt(report, ReportDirectory.SUMMARYREPORT.getName());
+                    	WriteReport.toTxt(report, ReportDirectory.SUMMARYREPORT.getName() + "report.txt");
+						Alert alert = new Alert(Alert.AlertType.INFORMATION);
+						alert.setHeaderText("Reports have been successfully generated!");
+						alert.setContentText("The reports can be found at " + ReportDirectory.SUMMARYREPORT.getName());
+						alert.showAndWait();
                     }
                 });
 	    // cap the horizontal area of the checkboxes
@@ -153,14 +153,14 @@ public class TabSummaryReport extends Tab {
 		for (EmploymentStreamColumnQueries query : EmploymentStreamColumnQueries.values()) {
 			employmentStreamQueries.add(query.getUiName());
 		}
-		queries.put(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getName(), employmentStreamQueries);
+		queries.put(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getUiName(), employmentStreamQueries);
 		
 		// add NARS Stream
 		ArrayList<String> narsStreamQueries = new ArrayList<String>();
 		for (NeedsAssessmentsColumnQueries query : NeedsAssessmentsColumnQueries.values()) {
 			narsStreamQueries.add(query.getUiName());
 		}
-		queries.put(DatabaseServiceStreams.NEEDSASSESSMENT.getName(), narsStreamQueries);
+		queries.put(DatabaseServiceStreams.NEEDSASSESSMENT.getUiName(), narsStreamQueries);
 		return queries;
 		
 		// add streams as desired from above template

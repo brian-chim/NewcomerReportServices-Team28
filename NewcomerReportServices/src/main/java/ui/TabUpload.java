@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import application.util.FileParser;
+import application.util.DatabaseServiceStreams;
 import application.util.SafeUploader;
-import application.database.DatabaseHandler;
 import application.users.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.poi.POIXMLException;
 
 public class TabUpload extends Tab {
 	
@@ -53,7 +51,8 @@ public class TabUpload extends Tab {
         HBox serviceDropdownSelectorRow = new HBox();
         serviceDropdownSelectorRow.setMinWidth(700);
         serviceDropdownSelectorRow.setAlignment(Pos.CENTER);
-        serviceDropdownSelectorRow.getChildren().addAll(getServiceStreamDropdown());
+        ComboBox<String> serviceStream = getServiceStreamDropdown(user);
+        serviceDropdownSelectorRow.getChildren().addAll(serviceStream);
         
         // a text area displaying selected file path
         final TextArea filePath = new TextArea();
@@ -98,15 +97,18 @@ public class TabUpload extends Tab {
                 }
             });
         this.setText("Upload Files");
-        
+ 
         uploadButton.setOnAction(
         	new EventHandler<ActionEvent>() {
         		@Override
                 public void handle(final ActionEvent e) {
+        			// get the service stream value
+        			DatabaseServiceStreams streamEnum = DatabaseServiceStreams.fromUiName(serviceStream.getValue());
         			String[] paths = filePath.getText().split(";");
+        			ArrayList<Integer> conflicts = new ArrayList<>();
         			for (String path : paths) {
                         try {
-                            ArrayList<Integer> conflicts = SafeUploader.safeUpload("EmploymentServiceStream", path);
+                            conflicts = SafeUploader.safeUpload(streamEnum.getDbName(), path, streamEnum.getSheetName());
                             if(!conflicts.isEmpty()) {
                             	
                         		Alert alert = new Alert(AlertType.ERROR);	        		 
@@ -116,21 +118,40 @@ public class TabUpload extends Tab {
             	        		
             	        		alert.showAndWait();
                             }
-                        } catch (POIXMLException error) {
+                        } catch (Exception error) {
+                        	Alert alert = new Alert(AlertType.ERROR);	        		 
+        	        		alert.setTitle("Retrieval Error");
+        	        		alert.setHeaderText("There was an issue retrieving the file(s)");
+        	        		alert.setContentText("Please ensure file(s) are selected and try again.");
+        	        		alert.showAndWait();
                             error.printStackTrace();
+                            return;
                         }
         			}
+        			
+    				Alert alert = new Alert(AlertType.CONFIRMATION);	        		 
+	        		alert.setTitle("Complete");
+	        		alert.setHeaderText("The upload has finished");
+	        		alert.setContentText("There were " + conflicts.size() + " rows with errors!");
+	        		alert.showAndWait();
+        			
         		}
         		
         	}
         );
 	}
 	// dropdown for service streams
-	private ComboBox<String> getServiceStreamDropdown() {
+	private ComboBox<String> getServiceStreamDropdown(User user) {
 		ComboBox<String> serviceStream;
-		ArrayList<String> services = DatabaseHandler.getServiceStreams();
-		ObservableList<String> typeOptions = FXCollections.observableArrayList(services);
-				
+		ArrayList<String> services = new ArrayList<String>();
+		HashMap<DatabaseServiceStreams, Boolean> userStreams = user.getServiceStreams();
+		for (DatabaseServiceStreams stream : userStreams.keySet()) {
+			if (userStreams.get(stream)) {
+				services.add(stream.getUiName());
+			}
+		}
+
+		ObservableList<String> typeOptions = FXCollections.observableArrayList(services);		
 		serviceStream = new ComboBox<String>(typeOptions);
 		serviceStream.setPromptText("Select a service stream");
 		return serviceStream;

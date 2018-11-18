@@ -1,0 +1,22 @@
+Summary Report of Frequencies of EmploymentServiceStream
+SERVICELANGUAGE:
+
+English: 3
+
+French: 4
+
+Spanish: 1
+
+PREFLANGUAGE:
+
+English: 8
+
+REFERREDBY:
+
+Community centre / library: 5
+
+School: 2
+
+Friend
+: 1
+
