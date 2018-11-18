@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import application.util.DatabaseServiceStreams;
 import application.util.FileParser;
+import application.util.InvalidValueException;
 import application.util.SafeUploader;
 import application.database.DatabaseHandler;
 import application.users.User;
@@ -17,6 +19,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Alert.AlertType;
@@ -103,10 +106,26 @@ public class TabUpload extends Tab {
         	new EventHandler<ActionEvent>() {
         		@Override
                 public void handle(final ActionEvent e) {
+        			String serviceStream = ((ComboBoxBase<String>) serviceDropdownSelectorRow.getChildren().get(0)).getValue();
+        			if (serviceStream == null) {
+                		Alert alert = new Alert(AlertType.ERROR);	        		 
+    	        		alert.setTitle("Upload Error");
+    	        		alert.setHeaderText("Missing Service Stream");
+    	        		alert.setContentText("Please select a serviced stream from the dropdown!");
+    	        		
+    	        		alert.showAndWait();
+    	        		return;
+        			}
         			String[] paths = filePath.getText().split(";");
         			for (String path : paths) {
                         try {
-                            ArrayList<Integer> conflicts = SafeUploader.safeUpload("EmploymentServiceStream", path);
+                            ArrayList<Integer> conflicts = new ArrayList<>();
+							try {
+								conflicts = SafeUploader.safeUpload("EmploymentServiceStream", path);
+							} catch (InvalidValueException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
                             if(!conflicts.isEmpty()) {
                             	
                         		Alert alert = new Alert(AlertType.ERROR);	        		 

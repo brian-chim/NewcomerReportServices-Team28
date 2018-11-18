@@ -18,7 +18,7 @@ public class SafeUploader {
 	 * @param path
 	 * @return a list of conflicting rows. Empty list indicates that all rows are successfully inserted
 	 */
-	public static ArrayList<Integer> safeUpload(String tableName, String path){
+	public static ArrayList<Integer> safeUpload(String tableName, String path) throws InvalidValueException {
 		
 		ArrayList<Integer> conflicts = new ArrayList<>();
 		
@@ -31,6 +31,16 @@ public class SafeUploader {
 			String id = row.get("client_validation_id");
 			select.put("client_validation_id", id);
 			if (DatabaseHandler.selectRows(tableName, select, null, null).isEmpty()) {
+				for (String field : row.keySet()) {
+					if(field.endsWith("dt") && row.get(field) != "") {
+						System.out.println("formatting date");
+						row.put(field, Formatter.formatDate(row.get(field)));
+					}
+					if(field.equals("postal_cd") && row.get(field) != "") {
+						System.out.println("formatting postal");
+						row.put(field, Formatter.formatPostalCode(row.get(field)));
+					}
+				}
 				DatabaseHandler.insert(tableName, row);
 			} else {
 				conflicts.add(i+headerOffset);
