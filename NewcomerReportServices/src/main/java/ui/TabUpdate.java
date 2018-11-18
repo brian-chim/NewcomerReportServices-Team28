@@ -8,6 +8,8 @@ import application.database.DatabaseHandler;
 import application.users.User;
 import application.util.DatabaseServiceStreams;
 import application.util.FileParser;
+import application.util.InvalidValueException;
+import application.util.SafeUploader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -104,58 +106,49 @@ public class TabUpdate extends Tab {
         	new EventHandler<ActionEvent>() {
         		@Override
                 public void handle(final ActionEvent e) {
+           			if (serviceStream.getValue() == null) {
+                		Alert alert = new Alert(AlertType.ERROR);	        		 
+    	        		alert.setTitle("Upload Error");
+    	        		alert.setHeaderText("Missing Service Stream");
+    	        		alert.setContentText("Please select a serviced stream from the dropdown!");
+    	        		
+    	        		alert.showAndWait();
+    	        		return;
+        			}
+        			// get the service stream value
         			DatabaseServiceStreams streamEnum = DatabaseServiceStreams.fromUiName(serviceStream.getValue());
         			String[] paths = filePath.getText().split(";");
         			for (String path : paths) {
                         try {
-                            ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(path, streamEnum.getSheetName());
-                            Integer index = 1;
-                            for (HashMap<String, String> entry : data) {
-                            	if(noMergeConflicts(streamEnum.getDbName(), entry)) {
-                            		DatabaseHandler.insert(streamEnum.getDbName(), entry);
-                            	}
-                            	// send error alert informing user there is a conflict with the row
-                            	else {
-                            		Alert alert = new Alert(AlertType.ERROR);	        		 
-                	        		alert.setTitle("Error alert");
-                	        		alert.setHeaderText("Format Error");
-                	        		alert.setContentText("There are merge conflicts with the file in row: " + index + ", please ensure the data is 100% accurate. If so, please update through the upload tab.");
-                	        		
-                	        		alert.showAndWait();
-                            	}
-                                index++;
-                            }
-                        }
-                        // if there is an error -- should be fileNotFoundException, alert user
-                        catch (Exception error) {
-                            
-                            Alert alert = new Alert(AlertType.ERROR);	        		 
+                        	SafeUploader.safeUpdate(streamEnum.getDbName(), path, streamEnum.getSheetName());
+                        } catch (InvalidValueException ex) {
+                        	Alert alert = new Alert(AlertType.ERROR);	        		 
+        	        		alert.setTitle("Invalid Field Value");
+        	        		alert.setHeaderText("There are invalid field values in the file");
+        	        		alert.setContentText(ex.getMessage());
+        	        		alert.showAndWait();
+                            return;
+                        	
+                        } catch (Exception error) {
+                        	Alert alert = new Alert(AlertType.ERROR);	        		 
         	        		alert.setTitle("Retrieval Error");
         	        		alert.setHeaderText("There was an issue retrieving the file(s)");
         	        		alert.setContentText("Please ensure file(s) are selected and try again.");
-        	        		
         	        		alert.showAndWait();
+                            error.printStackTrace();
+                            return;
                         }
         			}
+    				Alert alert = new Alert(AlertType.CONFIRMATION);	        		 
+	        		alert.setTitle("Complete");
+	        		alert.setHeaderText("The upload has finished");
+	        		alert.showAndWait();
         		}
         		
         	}
         );
 	}
 	
-	/**
-	 * checks for merge conflicts the given row.
-	 * 
-	 * NOTE: when being properly implemented, might need to change the params
-	 * 
-	 * @param stream - service stream being updated
-	 * @param values - values being added
-	 * @return - true if no conflict, false otherwise
-	 */
-	private boolean noMergeConflicts(String stream, HashMap<String, String> values) {
-		// TODO: implement properly
-		return false;
-	}
 	
 	// dropdown for service streams
 	private ComboBox<String> getServiceStreamDropdown(User user) {

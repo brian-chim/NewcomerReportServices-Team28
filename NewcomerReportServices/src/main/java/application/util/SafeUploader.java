@@ -16,9 +16,10 @@ public class SafeUploader {
 	 * @param path
 	 * @param sheetName
 	 * @return a list of conflicting rows. Empty list indicates that all rows are successfully inserted
+	 * @throws InvalidValueException 
 	 */
 
-	public static ArrayList<Integer> safeUpload(String tableName, String path, String sheetName){
+	public static ArrayList<Integer> safeUpload(String tableName, String path, String sheetName) throws InvalidValueException{
 		
 		ArrayList<Integer> conflicts = new ArrayList<>();
 		
@@ -37,8 +38,7 @@ public class SafeUploader {
 						try {
 							row.put(field, Formatter.formatDate(row.get(field)));
 						} catch (InvalidValueException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
 						}
 					}
 					if(field.equals("postal_cd") && row.get(field) != "") {
@@ -46,8 +46,7 @@ public class SafeUploader {
 						try {
 							row.put(field, Formatter.formatPostalCode(row.get(field)));
 						} catch (InvalidValueException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
 						}
 					}
 				}
@@ -58,6 +57,34 @@ public class SafeUploader {
 		}		
 		return conflicts;
 				
+	}
+	
+	public static boolean safeUpdate(String tableName, String path, String sheetName) throws InvalidValueException {
+		ArrayList<HashMap<String, String>> data = FileParser.readSpreadsheet(path, sheetName);
+		
+		for (int i=0; i< data.size(); i++) {
+			HashMap<String, String> row = data.get(i);
+			for (String field : row.keySet()) {
+				if(field.endsWith("dt") && row.get(field) != "") {
+					System.out.println("formatting date");
+					try {
+						row.put(field, Formatter.formatDate(row.get(field)));
+					} catch (InvalidValueException e) {
+						throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
+					}
+				}
+				if(field.equals("postal_cd") && row.get(field) != "") {
+					System.out.println("formatting postal");
+					try {
+						row.put(field, Formatter.formatPostalCode(row.get(field)));
+					} catch (InvalidValueException e) {
+						throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
+					}
+				}
+			}
+			DatabaseHandler.insert(tableName, row);
+		}		
+		return true;
 	}
 
 }

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import application.util.DatabaseServiceStreams;
-
+import application.util.InvalidValueException;
 import application.util.SafeUploader;
 import application.users.User;
 import javafx.collections.FXCollections;
@@ -104,15 +104,15 @@ public class TabUpload extends Tab {
         	new EventHandler<ActionEvent>() {
         		@Override
                 public void handle(final ActionEvent e) {
-        			//String serviceStream = ((ComboBoxBase<String>) serviceDropdownSelectorRow.getChildren().get(0)).getValue();
-        			if (serviceStream == null) {
+        			if (serviceStream.getValue() == null) {
                 		Alert alert = new Alert(AlertType.ERROR);	        		 
     	        		alert.setTitle("Upload Error");
     	        		alert.setHeaderText("Missing Service Stream");
     	        		alert.setContentText("Please select a serviced stream from the dropdown!");
     	        		
     	        		alert.showAndWait();
-    	        		return;}
+    	        		return;
+        			}
         			// get the service stream value
         			DatabaseServiceStreams streamEnum = DatabaseServiceStreams.fromUiName(serviceStream.getValue());
         			String[] paths = filePath.getText().split(";");
@@ -120,8 +120,7 @@ public class TabUpload extends Tab {
         			for (String path : paths) {
                         try {
                             conflicts = SafeUploader.safeUpload(streamEnum.getDbName(), path, streamEnum.getSheetName());
-                            if(!conflicts.isEmpty()) {
-                            	
+                            if(!conflicts.isEmpty()) {                      	
                         		Alert alert = new Alert(AlertType.ERROR);	        		 
             	        		alert.setTitle("Upload Error");
             	        		alert.setHeaderText("Conflicting Record");
@@ -129,6 +128,14 @@ public class TabUpload extends Tab {
             	        		
             	        		alert.showAndWait();
                             }
+                        } catch (InvalidValueException ex) {
+                        	Alert alert = new Alert(AlertType.ERROR);	        		 
+        	        		alert.setTitle("Invalid Field Value");
+        	        		alert.setHeaderText("There are invalid field values in the file");
+        	        		alert.setContentText(ex.getMessage());
+        	        		alert.showAndWait();
+                            return;
+                        	
                         } catch (Exception error) {
                         	Alert alert = new Alert(AlertType.ERROR);	        		 
         	        		alert.setTitle("Retrieval Error");

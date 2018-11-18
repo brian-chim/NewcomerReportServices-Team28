@@ -14,7 +14,7 @@ public class Formatter {
 			input = input.toUpperCase();
 			return input.substring(0, 3) + " " + input.substring(3, input.length());
 		} else {
-			throw new InvalidValueException(input);
+			throw new InvalidValueException();
 		}
 	}
 	
@@ -29,7 +29,7 @@ public class Formatter {
 		
 		// invalid / unsupported string input
 		if(input.length() != 10) {
-			throw new InvalidValueException(input);
+			throw new InvalidValueException();
 		}
 		
 		int first;
@@ -45,7 +45,7 @@ public class Formatter {
 			
 			//if both mm and dd above 12, throw error
 			if(first > 12 && second > 12) {
-				throw new InvalidValueException(input);
+				throw new InvalidValueException();
 			}
 			// if YYYY-DD-MM, fix
 			else if(first > 12) {
@@ -63,7 +63,7 @@ public class Formatter {
 			
 			//if both mm and dd above 12, throw error
 			if(first > 12 && second > 12) {
-				throw new InvalidValueException(input);
+				throw new InvalidValueException();
 			}
 			// if DD-MM-YYYY, fix
 			else if(first > 12) {
@@ -73,7 +73,7 @@ public class Formatter {
 			return input.substring(6 ,10) + "-" + input.substring(0, 2) + "-" + input.substring(3, 5);
 		}
 		else {
-			throw new InvalidValueException(input);
+			throw new InvalidValueException();
 		}
 	}
 
@@ -94,7 +94,7 @@ public class Formatter {
 		if(input.matches("\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d")) {
 			return "(" + input.substring(0, 3) + ") " + input.substring(3, 6) + "-" + input.substring(6, input.length());
 		} else {
-			throw new InvalidValueException(input);
+			throw new InvalidValueException();
 		}
 	}
 	
