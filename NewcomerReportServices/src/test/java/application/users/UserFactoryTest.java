@@ -7,19 +7,18 @@ import java.util.HashMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import application.database.DatabaseHandler;
-import application.database.UserNotFoundException;
+import application.util.DatabaseServiceStreams;
 
 public class UserFactoryTest {
 
-	private final HashMap<ServiceStreams, Boolean> serviceStreams = new HashMap<ServiceStreams, Boolean>();
+	private final HashMap<DatabaseServiceStreams, Boolean> serviceStreams = new HashMap<DatabaseServiceStreams, Boolean>();
 	private HashMap<String, String> userDetails = createUserDetails();
 	private UserFactory userFactory = new UserFactory();
 	
 	@Test
 	@DisplayName("Create Admin using UserFactory")
 	void testCreateAdmin() {
-		userDetails.put("UserType", "ADMIN");
+		userDetails.put("UserType", "Admin");
 		userDetails.put("EmploymentServiceStream", "FALSE");
 		User factGen = userFactory.getUser(userDetails);
 		User userGen = new AdminUser(1, "username", "password", 1, "ADMIN", serviceStreams);
@@ -29,10 +28,10 @@ public class UserFactoryTest {
 	@Test
 	@DisplayName("Create Agency user using UserFactory")
 	void testCreateAgencyUser() {
-		userDetails.put("UserType", "AGENCY");
+		userDetails.put("UserType", "Agency");
 		userDetails.put("EmploymentServiceStream", "TRUE");
 		User factGen = userFactory.getUser(userDetails);
-		serviceStreams.put(ServiceStreams.EMPLOYMENTSERVICES, (Boolean) true);
+		serviceStreams.put(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES, (Boolean) true);
 		User userGen = new AgencyUser(1, "username", "password", 1, "AGENCY", serviceStreams);
 		assertTrue(factGen.equals(userGen));
 	}
@@ -40,7 +39,7 @@ public class UserFactoryTest {
 	@Test
 	@DisplayName("Create Staff user using UserFactory")
 	void testCreateStaffUser() {
-		userDetails.put("UserType", "TEQLIP STAFF");
+		userDetails.put("UserType", "TEQLIP Staff");
 		userDetails.put("EmploymentServiceStream", "FALSE");
 		User factGen = userFactory.getUser(userDetails);
 		User userGen = new StaffUser(1, "username", "password", 1, "STAFF", serviceStreams);

@@ -7,18 +7,18 @@ import application.database.DatabaseHandler;
 
 public class SafeUploader {
 	
-	private static int headerOffset = 4;
-	private static String sheetName = "Employment";
-	
+	private static int headerOffset = 4;	
 	
 	/**
 	 * Checks if conflict in client_validation_id exists in database for the parsed rows in excel specified by path, if not
 	 * insert the row into specified table; otherwise, return the conflicting rows in the file
 	 * @param tableName
 	 * @param path
+	 * @param sheetName
 	 * @return a list of conflicting rows. Empty list indicates that all rows are successfully inserted
 	 */
-	public static ArrayList<Integer> safeUpload(String tableName, String path) throws InvalidValueException {
+
+	public static ArrayList<Integer> safeUpload(String tableName, String path, String sheetName){
 		
 		ArrayList<Integer> conflicts = new ArrayList<>();
 		
@@ -34,11 +34,21 @@ public class SafeUploader {
 				for (String field : row.keySet()) {
 					if(field.endsWith("dt") && row.get(field) != "") {
 						System.out.println("formatting date");
-						row.put(field, Formatter.formatDate(row.get(field)));
+						try {
+							row.put(field, Formatter.formatDate(row.get(field)));
+						} catch (InvalidValueException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 					if(field.equals("postal_cd") && row.get(field) != "") {
 						System.out.println("formatting postal");
-						row.put(field, Formatter.formatPostalCode(row.get(field)));
+						try {
+							row.put(field, Formatter.formatPostalCode(row.get(field)));
+						} catch (InvalidValueException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 				DatabaseHandler.insert(tableName, row);

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import application.database.DatabaseHandler;
 import application.users.User;
+import application.users.UserTypes;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -120,7 +121,7 @@ public class TabSetUserAccess extends Tab {
 		ArrayList<HashMap<String, String>> raw = DatabaseHandler.selectCols("Users", new ArrayList<String>(
 				Arrays.asList("ID", "UserType", "Username", "Email")));
 		for(HashMap<String, String> user : raw) {
-			if(!user.get("UserType").equals("ADMIN")) {
+			if(!user.get("UserType").equals(UserTypes.ADMIN.getUiName())) {
 				tableData.add(user);
 			}
 		}

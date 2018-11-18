@@ -68,12 +68,14 @@ public class DatabaseHandlerTest {
 		ArrayList<String> services = DatabaseHandler.getServiceStreams();
 		ArrayList<String> streams = new ArrayList<String>(
 				Arrays.asList(
-						"Language Training Services",
 						"Information & Orientation Services",
 						"Community Connections Services",
 						"Employment Related Services",
 						"Needs Assessment & Referral Service (NARS)",
-		    	        "Client Profile Bulk"
+		    	        "Client Profile Bulk",
+						"Language Training Client Enrolment Services",
+						"Language Training Client Exit Services",
+						"Language Training Course Setup Services"
 		    	        )
 				);
 		assertEquals(services, streams);
