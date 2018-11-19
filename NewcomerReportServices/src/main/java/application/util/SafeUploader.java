@@ -33,22 +33,18 @@ public class SafeUploader {
 			select.put("client_validation_id", id);
 			if (DatabaseHandler.selectRows(tableName, select, null, null).isEmpty()) {
 				for (String field : row.keySet()) {
-					if(field.endsWith("dt") && row.get(field) != "") {
-						System.out.println("formatting date");
-						try {
+					try {
+						if(field.endsWith("dt") && row.get(field) != "") {
 							row.put(field, Formatter.formatDate(row.get(field)));
-						} catch (InvalidValueException e) {
-							throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
-						}
-					}
-					if(field.equals("postal_cd") && row.get(field) != "") {
-						System.out.println("formatting postal");
-						try {
+						} else if(field.equals("postal_cd") && row.get(field) != "") {
 							row.put(field, Formatter.formatPostalCode(row.get(field)));
-						} catch (InvalidValueException e) {
-							throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
+						} else if(field.equals("phone_no") && row.get(field) != "") {
+							row.put(field, Formatter.formatPhoneNumber(row.get(field)));
 						}
+					} catch (InvalidValueException e) {
+						throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
 					}
+					
 				}
 				DatabaseHandler.insert(tableName, row);
 			} else {
@@ -65,22 +61,18 @@ public class SafeUploader {
 		for (int i=0; i< data.size(); i++) {
 			HashMap<String, String> row = data.get(i);
 			for (String field : row.keySet()) {
-				if(field.endsWith("dt") && row.get(field) != "") {
-					System.out.println("formatting date");
-					try {
+				try {
+					if(field.endsWith("dt") && row.get(field) != "") {
 						row.put(field, Formatter.formatDate(row.get(field)));
-					} catch (InvalidValueException e) {
-						throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
-					}
-				}
-				if(field.equals("postal_cd") && row.get(field) != "") {
-					System.out.println("formatting postal");
-					try {
+					} else if(field.equals("postal_cd") && row.get(field) != "") {
 						row.put(field, Formatter.formatPostalCode(row.get(field)));
-					} catch (InvalidValueException e) {
-						throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
+					} else if(field.equals("phone_no") && row.get(field) != "") {
+						row.put(field, Formatter.formatPhoneNumber(row.get(field)));
 					}
+				} catch (InvalidValueException e) {
+					throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
 				}
+				
 			}
 			DatabaseHandler.insert(tableName, row);
 		}		

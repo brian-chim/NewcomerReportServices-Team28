@@ -108,7 +108,7 @@ public class TabUpload extends Tab {
                 		Alert alert = new Alert(AlertType.ERROR);	        		 
     	        		alert.setTitle("Upload Error");
     	        		alert.setHeaderText("Missing Service Stream");
-    	        		alert.setContentText("Please select a serviced stream from the dropdown!");
+    	        		alert.setContentText("Please select a service stream from the dropdown!");
     	        		
     	        		alert.showAndWait();
     	        		return;
