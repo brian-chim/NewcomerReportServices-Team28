@@ -1,11 +1,17 @@
 package ui;
 
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Side;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import application.users.User;
 import application.users.UserPermissions;
@@ -46,9 +52,40 @@ public class TabFactory {
 				  }
 				  pane.getTabs().add(tab);
 			  }
-			  pane.setSide(Side.LEFT);
 		  }
+		  pane.getTabs().add(createLogOutTab(stage, pane));
+		  pane.setSide(Side.LEFT);
 		  return pane;
+	}
+	
+	private static Tab createLogOutTab(Stage stage, TabPane pane) {
+		Tab tab = new Tab("Log out");
+		tab.setClosable(false);
+		tab.setOnSelectionChanged(new EventHandler<Event>() {
+
+			@Override
+			public void handle(Event e) {
+				if(tab.isSelected()) {
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("Log out");
+					String s = "Are you sure to log out?";
+					alert.setContentText(s);
+
+					Optional<ButtonType> result = alert.showAndWait();
+
+					if (result.get() == ButtonType.OK) {
+			        	  Stage newStage = new Stage();
+			        	  new Login().start(newStage);
+			        	  stage.close();
+					}
+					if (result.get() == ButtonType.CANCEL) {
+						// return to the Home tab
+						pane.getSelectionModel().select(0);
+					}
+				}
+			}
+		});
+		return tab;
 	}
 
 }
