@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import application.database.DatabaseHandler;
 import application.users.User;
+import application.util.CommunityConnectionsColumnQueries;
 import application.util.DatabaseServiceStreams;
 import application.util.EmploymentStreamColumnQueries;
 import application.util.NeedsAssessmentsColumnQueries;
@@ -95,6 +96,9 @@ public class TabSummaryReport extends Tab {
                     				} else if (handlingStream.equals(DatabaseServiceStreams.NEEDSASSESSMENT.getUiName()) ) {
                     					ReportCols.add(NeedsAssessmentsColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
                     					tableName = DatabaseServiceStreams.NEEDSASSESSMENT.getDbName();
+                    				} else if (handlingStream.equals(DatabaseServiceStreams.COMMUNITYCONN.getUiName()) ) {
+                    					ReportCols.add(CommunityConnectionsColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
+                    					tableName = DatabaseServiceStreams.COMMUNITYCONN.getDbName();
                     				}
                     				// add else ifs as streams are supported
                     			}
@@ -161,9 +165,15 @@ public class TabSummaryReport extends Tab {
 			narsStreamQueries.add(query.getUiName());
 		}
 		queries.put(DatabaseServiceStreams.NEEDSASSESSMENT.getUiName(), narsStreamQueries);
-		return queries;
 		
+		ArrayList<String> commConnStreamQueries = new ArrayList<String>();
+		for (CommunityConnectionsColumnQueries query : CommunityConnectionsColumnQueries.values()) {
+			commConnStreamQueries.add(query.getUiName());
+		}
+		queries.put(DatabaseServiceStreams.COMMUNITYCONN.getUiName(), commConnStreamQueries);
 		// add streams as desired from above template
+		return queries;
+
 	}
 	
 }

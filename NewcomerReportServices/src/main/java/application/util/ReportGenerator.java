@@ -48,7 +48,15 @@ public class ReportGenerator {
                     }
                 }
                 // formulate the string out of the hashmaps
-                String title = EmploymentStreamColumnQueries.fromDbName(key).toString();
+                String title = "";
+                if(streamName.equals(DatabaseServiceStreams.EMPLOYMENTRELATEDSERVICES.getDbName())) {
+                	title = EmploymentStreamColumnQueries.fromDbName(key).toString();
+                } else if (streamName.equals(DatabaseServiceStreams.NEEDSASSESSMENT.getDbName())) {
+                	title = NeedsAssessmentsColumnQueries.fromDbName(key).toString();
+                } else if (streamName.equals(DatabaseServiceStreams.COMMUNITYCONN.getDbName())) {
+                	title = CommunityConnectionsColumnQueries.fromDbName(key).toString();
+                }
+                
                 result += "\n" + title +  ":" + "\n";
                 String tempResult = "";
                 for (String value : frequencyResult.keySet()) {
