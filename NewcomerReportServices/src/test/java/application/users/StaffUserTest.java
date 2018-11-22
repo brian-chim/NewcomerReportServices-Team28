@@ -24,7 +24,6 @@ public class StaffUserTest {
 			permissions.put(UserPermissions.values()[i], (Boolean) false);
 		}
 		permissions.replace(UserPermissions.GENERATESUMMARYREPORT, (Boolean) true);
-		permissions.replace(UserPermissions.GENERATETRENDREPORT, (Boolean) true);
 
 		assertEquals(testStaffUser.getPermissions(), permissions);
 	}

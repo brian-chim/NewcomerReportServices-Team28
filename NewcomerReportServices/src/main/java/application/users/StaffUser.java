@@ -10,6 +10,5 @@ public class StaffUser extends User {
 		super(userId, username, password, orgId, orgType, serviceStreams);
 		// add permissions to the staff user
 		this.getPermissions().replace(UserPermissions.GENERATESUMMARYREPORT, (Boolean) true);
-		this.getPermissions().replace(UserPermissions.GENERATETRENDREPORT, (Boolean) true);
 	}
 }

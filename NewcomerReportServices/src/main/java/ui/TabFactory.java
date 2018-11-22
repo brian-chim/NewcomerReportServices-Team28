@@ -38,9 +38,6 @@ public class TabFactory {
 				  	case GENERATESUMMARYREPORT:
 				  		tab = new TabSummaryReport(user, stage);
 				  		break;
-				  	case GENERATETRENDREPORT:
-				  		tab = new TabTrendReport(user, stage);
-				  		break;
 				  	case SETUSERACCESS:
 				  		tab = new TabSetUserAccess(user, stage);
 				  		break;

@@ -128,14 +128,14 @@ public class TabSummaryReport extends Tab {
 	    serviceStream.setAlignment(Pos.CENTER);
 		root.getChildren().add(serviceStream);
 		// align the checkbox flowpane to the center and add it
-		fp.setAlignment(Pos.CENTER);
+		fp.setAlignment(Pos.CENTER_LEFT);
 		root.getChildren().add(fp);
 		// add the generate report button
 		root.getChildren().add(genReport);
 		// center everything inside the content
 		root.setAlignment(Pos.CENTER);
-		// set the spacing between nodes as 5
-		root.setSpacing(5);
+		// set the spacing between nodes as 30
+		root.setSpacing(30);
 		this.setContent(root);
 	}
 
