@@ -115,6 +115,7 @@ public class FileParser {
                 Cell cell = cellIterator.next();
                 //cell = row.getCell(cell.getColumnIndex());
                 String column = formatter.formatCellValue(sheet.getRow(columnHiddenNameIndex).getCell(cell.getColumnIndex()));
+                column = column.replace("[", "_").replace("]", "_");
                 // add each cell as columnName: value to the hashmap
                 map.put(column, formatter.formatCellValue(cell));
 
