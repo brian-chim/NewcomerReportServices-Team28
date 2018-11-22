@@ -228,8 +228,8 @@ public class Signup extends Application {
 	    GridPane.setHalignment(submitButton, HPos.CENTER);
 	    GridPane.setHalignment(headerLabel, HPos.CENTER);
 	    // javafx css has no margin setting, so set it in code
-	    GridPane.setMargin(submitButton, new Insets(20, 0,20,0));
-	    GridPane.setMargin(headerLabel, new Insets(20, 20,20,20));
+	    GridPane.setMargin(submitButton, new Insets(0, 0,50,0));
+	    GridPane.setMargin(headerLabel, new Insets(50, 20,20,20));
 	    
 	    // define ID for nodes which require CSS formatting
 	    serviceLabel.getStyleClass().add("agency-only");
