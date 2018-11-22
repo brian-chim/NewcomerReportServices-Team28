@@ -55,6 +55,8 @@ public class ReportGenerator {
                 	title = NeedsAssessmentsColumnQueries.fromDbName(key).toString();
                 } else if (streamName.equals(DatabaseServiceStreams.COMMUNITYCONN.getDbName())) {
                 	title = CommunityConnectionsColumnQueries.fromDbName(key).toString();
+                } else if (streamName.equals(DatabaseServiceStreams.INFOANDORIENTATION.getDbName())) {
+                    title = InfoOrientationColumnQueries.fromDbName(key).toString();
                 }
                 
                 result += "\n" + title +  ":" + "\n";
@@ -64,8 +66,8 @@ public class ReportGenerator {
                     tempResult += "\n" + value + ": " + frequencyResult.get(value) + "\n";
                 }
                 // generate a pie chart and bar graph for this column
-                writeChartToPDF(generatePieChart(frequencyResult, streamName), 500, 400, path + title + "-PieChart.pdf", tempResult, "Summary Graph of " + title);
-                writeChartToPDF(generateBarChart(frequencyResult, streamName), 500, 400, path + title + "-BarChart.pdf", tempResult, "Summary Graph of " + title);
+                writeChartToPDF(generatePieChart(frequencyResult, streamName), 500, 400, path + streamName + title + "-PieChart.pdf", tempResult, "Summary Graph of " + title);
+                writeChartToPDF(generateBarChart(frequencyResult, streamName), 500, 400, path + streamName + title + "-BarChart.pdf", tempResult, "Summary Graph of " + title);
                 columnResults.add(frequencyResult);
             }
         }
