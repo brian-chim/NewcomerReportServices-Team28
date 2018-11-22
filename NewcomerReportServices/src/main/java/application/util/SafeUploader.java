@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import application.database.DatabaseHandler;
+import application.database.DatabaseHandler.ConditionOP;
 
 public class SafeUploader {
 	
@@ -19,7 +20,7 @@ public class SafeUploader {
 	 * @throws InvalidValueException 
 	 */
 
-	public static ArrayList<Integer> safeUpload(String tableName, String path, String sheetName) throws InvalidValueException{
+	public static ArrayList<Integer> safeUpload(String tableName, String path, String sheetName) throws InvalidValueException, NoClientException, ClientAlreadyExistsException {
 		
 		ArrayList<Integer> conflicts = new ArrayList<>();
 		
@@ -27,10 +28,50 @@ public class SafeUploader {
 		
 		HashMap<String, String> select = new HashMap<>();
 		
+		System.out.println("num rows: " + data.size());
+		
 		for (int i=0; i< data.size(); i++) {
 			HashMap<String, String> row = data.get(i);
+			
 			String id = row.get("client_validation_id");
 			select.put("client_validation_id", id);
+			
+			ArrayList<HashMap<String, String>> clientInfo = new ArrayList<>();
+			// retrieve client information by id, to be later used for comparisons
+
+			HashMap<String, String> where = new HashMap<>();
+			where.put("client_validation_id", id);
+			clientInfo = DatabaseHandler.selectRows(DatabaseServiceStreams.fromUiName("Client Profile Bulk").getDbName(), where, null, ConditionOP.AND);
+
+			
+			// throw error if trying to upload information for a client that does not exist
+			if((clientInfo.size() == 0) && !tableName.equals(DatabaseServiceStreams.fromUiName("Client Profile Bulk").getDbName())) {
+				System.out.println(DatabaseServiceStreams.fromUiName("Client Profile Bulk").getDbName());
+				throw new NoClientException("The client with the specified ID does not exist");
+			}
+			
+			// if trying to upload a new client
+			if(tableName.equals(DatabaseServiceStreams.fromUiName("Client Profile Bulk").getDbName())) {
+				// check that their address doesn't already exist
+				HashMap<String, String> whereFields = new HashMap<>();
+				if(row.get("street_no") != null) {whereFields.put("street_no", row.get("street_no"));};
+				if(row.get("street_nme") != null) {whereFields.put("street_nme", row.get("street_nme"));};
+				if(row.get("street_type_id") != null) {whereFields.put("street_type_id", row.get("street_type_id"));};
+				if(row.get("street_direction_id") != null) {whereFields.put("street_direction_id", row.get("street_direction_id"));};
+				if(row.get("unit_txt") != null) {whereFields.put("unit_txt", row.get("unit_txt"));};
+				if(row.get("city_txt") != null) {whereFields.put("city_txt", row.get("city_txt"));};
+				if(row.get("province_id") != null) {whereFields.put("province_id", row.get("province_id"));};
+				
+				ArrayList<HashMap<String, String>> clientsByAddress = DatabaseHandler.selectRows(tableName, whereFields, null, ConditionOP.AND);
+				System.out.println("row");
+				System.out.println(row);
+				if(clientsByAddress.size() != 0 && whereFields.size() != 0) {
+					System.out.println(clientsByAddress);
+					throw new ClientAlreadyExistsException("A client already exists with the samne address");
+				}
+			}
+			
+			
 			if (DatabaseHandler.selectRows(tableName, select, null, null).isEmpty()) {
 				for (String field : row.keySet()) {
 					try {
@@ -41,12 +82,25 @@ public class SafeUploader {
 						} else if(field.equals("phone_no") && row.get(field) != "") {
 							row.put(field, Formatter.formatPhoneNumber(row.get(field)));
 						}
+						// if trying to upload new client, need to check no other client may exist with same info but diff ID
+						else if(field.equals("email_txt") && row.get(field) != "") {
+							// check if a client exists with same email already
+							HashMap<String, String> whereEmail = new HashMap<>();
+							whereEmail.put("email_txt", row.get(field));
+							
+							ArrayList<HashMap<String, String>> clientsByEmail = DatabaseHandler.selectRows(tableName, whereEmail, null, ConditionOP.AND);
+							
+							if(clientsByEmail.size() != 0) {
+								throw new ClientAlreadyExistsException("");
+							}
+						}
 					} catch (InvalidValueException e) {
 						throw new InvalidValueException("row: " + String.valueOf(i+headerOffset) + " field: " + field);
 					}
 					
 				}
 				DatabaseHandler.insert(tableName, row);
+
 			} else {
 				conflicts.add(i+headerOffset);
 			}
