@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import application.util.ClientAlreadyExistsException;
 import application.util.DatabaseServiceStreams;
 import application.util.InvalidValueException;
+import application.util.NoClientException;
 import application.util.SafeUploader;
 import application.users.User;
 import javafx.collections.FXCollections;
@@ -128,7 +130,26 @@ public class TabUpload extends Tab {
             	        		
             	        		alert.showAndWait();
                             }
-                        } catch (InvalidValueException ex) {
+                        }
+                        catch (ClientAlreadyExistsException ex) {
+                        	Alert alert = new Alert(AlertType.ERROR);	        		 
+        	        		alert.setTitle("Duplicate Client");
+        	        		alert.setHeaderText("Duplicate Client");
+        	        		alert.setContentText(ex.getMessage());
+        	        		alert.showAndWait();
+                            return;
+                        	
+                        }
+                        catch (NoClientException ex) {
+                        	Alert alert = new Alert(AlertType.ERROR);	        		 
+        	        		alert.setTitle("No Client");
+        	        		alert.setHeaderText("Error retrieveing client");
+        	        		alert.setContentText(ex.getMessage());
+        	        		alert.showAndWait();
+                            return;
+                        	
+                        }
+                        catch (InvalidValueException ex) {
                         	Alert alert = new Alert(AlertType.ERROR);	        		 
         	        		alert.setTitle("Invalid Field Value");
         	        		alert.setHeaderText("There are invalid field values in the file");

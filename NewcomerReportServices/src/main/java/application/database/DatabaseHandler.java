@@ -2,6 +2,7 @@ package application.database;
 import application.database.UserNotFoundException;
 import application.users.*;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.sql.Connection;
@@ -73,7 +74,15 @@ public class DatabaseHandler {
         	// Iterating over keys and populate statement with values
         	index = 1;
         	for (String key : values.keySet()) {
-        	    pstmt.setString(index, values.get(key));
+        		// email needs to be wrapped in '' otherwise throws SQLITE error 
+        		if(key == "email_txt") {
+        			String val = "'" + values.get(key) + "'";
+        			pstmt.setString(index, val);
+        		}
+        		else {
+        			pstmt.setString(index, values.get(key));
+        		}
+        	    
         	    index++;
         	}
             pstmt.executeUpdate();
@@ -167,8 +176,18 @@ public class DatabaseHandler {
     	}
     	
     	String delimeter = " " + op + " ";
-    		 
-    	String whereClause = where.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining(delimeter));  	
+    	
+    	// email needs to be wrapped in '' otherwise throws SQLITE error 
+    	String whereClause = where.entrySet().stream().map(
+    				e -> e.getKey() + "=" + (
+    						e.getKey().equals("email_txt") || 
+    						e.getKey().equals("street_direction_id") ||
+    						e.getKey().equals("province_id") ||
+    						e.getKey().equals("city_txt") || 
+    						e.getKey().equals("street_type_id") ||
+    						e.getKey().equals("street_nme")
+    						? "'" + e.getValue() + "'": e.getValue())
+    			).collect(Collectors.joining(delimeter));  	
     	String sql = "SELECT " + cols + " FROM " + tableName + " WHERE " + whereClause;
     	
     	ArrayList<HashMap<String, String>> result = new ArrayList<>();
