@@ -5,13 +5,7 @@ import java.util.HashMap;
 
 import application.database.DatabaseHandler;
 import application.users.User;
-import application.util.CommunityConnectionsColumnQueries;
-import application.util.DatabaseServiceStreams;
-import application.util.EmploymentStreamColumnQueries;
-import application.util.NeedsAssessmentsColumnQueries;
-import application.util.ReportDirectory;
-import application.util.ReportGenerator;
-import application.util.WriteReport;
+import application.util.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -99,7 +93,11 @@ public class TabSummaryReport extends Tab {
                     				} else if (handlingStream.equals(DatabaseServiceStreams.COMMUNITYCONN.getUiName()) ) {
                     					ReportCols.add(CommunityConnectionsColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
                     					tableName = DatabaseServiceStreams.COMMUNITYCONN.getDbName();
-                    				}
+                    				} else if (handlingStream.equals(DatabaseServiceStreams.INFOANDORIENTATION.getUiName()) ) {
+										ReportCols.add(InfoOrientationColumnQueries.fromUiName(((CheckBox)checkbox).getText()).getDbName());
+										tableName = DatabaseServiceStreams.INFOANDORIENTATION.getDbName();
+									}
+
                     				// add else ifs as streams are supported
                     			}
                     		}
@@ -171,6 +169,14 @@ public class TabSummaryReport extends Tab {
 			commConnStreamQueries.add(query.getUiName());
 		}
 		queries.put(DatabaseServiceStreams.COMMUNITYCONN.getUiName(), commConnStreamQueries);
+
+		// add Orientation stream
+		ArrayList<String> orientationStreamQueries = new ArrayList<String>();
+		for (InfoOrientationColumnQueries query : InfoOrientationColumnQueries.values()) {
+			orientationStreamQueries.add(query.getUiName());
+		}
+		queries.put(DatabaseServiceStreams.INFOANDORIENTATION.getUiName(), orientationStreamQueries);
+
 		// add streams as desired from above template
 		return queries;
 
