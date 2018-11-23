@@ -118,7 +118,6 @@ public class DatabaseHandlerTest {
 		resRow1.put("Test1", "a");
 		HashMap<String, String> resRow2 = new HashMap<>();
 		resRow2.put("Test1", "d");
-		System.out.println(res);
 		
 		assertEquals(resRow1, res.get(0));
 		assertEquals(resRow2, res.get(1));

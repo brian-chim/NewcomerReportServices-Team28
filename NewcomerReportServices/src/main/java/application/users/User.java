@@ -7,17 +7,17 @@ import java.util.Map.Entry;
 
 import application.util.DatabaseServiceStreams;
 
-public class User implements UserInterface {
+public class User {
 
-	private int userId;
-	private String username;
+	public int userId;
+	public String username;
 	private String password;
-	private int orgId;
+	public int orgId;
 	// ADMIN, AGENCY, or STAFF
-	private String orgType;
+	public String orgType;
 	// what the user has access to do
-	private HashMap<UserPermissions, Boolean> permissions = new HashMap<UserPermissions, Boolean>();
-	private HashMap<DatabaseServiceStreams, Boolean> serviceStreams = new HashMap<DatabaseServiceStreams, Boolean>();
+	public HashMap<UserPermissions, Boolean> permissions = new HashMap<UserPermissions, Boolean>();
+	public HashMap<DatabaseServiceStreams, Boolean> serviceStreams = new HashMap<DatabaseServiceStreams, Boolean>();
 	
 	public User(int userId, String username, String password, int orgId, String orgType, HashMap<DatabaseServiceStreams, Boolean> serviceStreams) {
 		this.userId = userId;
@@ -42,66 +42,14 @@ public class User implements UserInterface {
 		}
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void setOrgId(int orgId) {
-		this.orgId = orgId;
-	}
-
-	public void setOrgType(String orgType) {
-		this.orgType = orgType;
-	}
-
-	public void setServiceStream(DatabaseServiceStreams stream, Boolean available) {
-		this.serviceStreams.replace(stream, available);
-	}
-
-	public int getUserId() {
-		return this.userId;
-	}
-
-	public String getUsername() {
-		return this.username;
-	}
-
-	public String getPassword() {
-		return this.password;
-	}
-
-	public int getOrgId() {
-		return this.orgId;
-	}
-
-	public String getOrgType() {
-		return this.orgType;
-	}
-
-	public HashMap<UserPermissions, Boolean> getPermissions() {
-		return this.permissions;
-	}
-
-	public HashMap<DatabaseServiceStreams, Boolean> getServiceStreams() {
-		return this.serviceStreams;
-	}
-	
 	public boolean equals(User user) {
-		boolean userIdEqual = (this.getUserId() == user.getUserId());
-		boolean usernameEqual = (this.getUsername().equals(user.getUsername()));
-		boolean passwordEqual = (this.getPassword().equals(user.getPassword()));
-		boolean orgIdEqual = (this.getOrgId() == user.getOrgId());
-		boolean orgTypeEqual = (this.getOrgType().equals(user.getOrgType()));
-		boolean permissionsEqual = this.getPermissions().equals(user.getPermissions());
-		boolean serviceStreamsEqual = this.getServiceStreams().equals(user.getServiceStreams());
+		boolean userIdEqual = (this.userId == user.userId);
+		boolean usernameEqual = (this.username.equals(user.username));
+		boolean passwordEqual = (this.password.equals(user.password));
+		boolean orgIdEqual = (this.orgId == user.orgId);
+		boolean orgTypeEqual = (this.orgType.equals(user.orgType));
+		boolean permissionsEqual = this.permissions.equals(user.permissions);
+		boolean serviceStreamsEqual = this.serviceStreams.equals(user.serviceStreams);
 		return userIdEqual && usernameEqual && passwordEqual && orgIdEqual && orgTypeEqual && permissionsEqual && serviceStreamsEqual;
 	}
 }

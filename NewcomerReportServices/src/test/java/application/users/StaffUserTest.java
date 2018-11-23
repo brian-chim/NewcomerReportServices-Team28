@@ -25,7 +25,7 @@ public class StaffUserTest {
 		}
 		permissions.replace(UserPermissions.GENERATESUMMARYREPORT, (Boolean) true);
 
-		assertEquals(testStaffUser.getPermissions(), permissions);
+		assertEquals(testStaffUser.permissions, permissions);
 	}
 
 }

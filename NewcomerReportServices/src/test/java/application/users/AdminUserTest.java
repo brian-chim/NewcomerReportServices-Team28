@@ -27,7 +27,7 @@ public class AdminUserTest {
 //		permissions.replace(UserPermissions.GENERATETRENDREPORT, (Boolean) true);
 		permissions.replace(UserPermissions.SETUSERACCESS, (Boolean) true);
 		permissions.replace(UserPermissions.SETORGANIZATIONACCESS, (Boolean) true);
-		assertEquals(testAdminUser.getPermissions(), permissions);
+		assertEquals(testAdminUser.permissions, permissions);
 	}
 
 }
