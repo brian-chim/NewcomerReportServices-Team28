@@ -154,7 +154,7 @@ public class TabUpdate extends Tab {
 	private ComboBox<String> getServiceStreamDropdown(User user) {
 		ComboBox<String> serviceStream;
 		ArrayList<String> services = new ArrayList<String>();
-		HashMap<DatabaseServiceStreams, Boolean> userStreams = user.getServiceStreams();
+		HashMap<DatabaseServiceStreams, Boolean> userStreams = user.serviceStreams;
 		for (DatabaseServiceStreams stream : userStreams.keySet()) {
 			if (userStreams.get(stream)) {
 				services.add(stream.getUiName());

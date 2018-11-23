@@ -104,11 +104,7 @@ public class Formatter {
 	 * @return true iff email is correctly formatted
 	 */
 	public static boolean checkValidEmail(String email) {
-		if(email.matches("[A-Za-z0-9]+@([A-Za-z]+\\.)+[A-Za-z]+")) {
-			return true;
-		} else {
-			return false;
-		}
+		return email.matches("[A-Za-z0-9]+@([A-Za-z]+\\.)+[A-Za-z]+");
 	}
 
 }

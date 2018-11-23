@@ -23,7 +23,7 @@ public class TabFactory {
 		  // add a home tab that will be present for all kinds of users
 		  pane.getTabs().add(new TabHome(user));
 		  // get the permissions of the user
-		  HashMap<UserPermissions, Boolean> permissions = user.getPermissions();
+		  HashMap<UserPermissions, Boolean> permissions = user.permissions;
 		  // add a tab for each permission
 		  for (UserPermissions userPermission : permissions.keySet()) {
 			  if (permissions.get(userPermission)) {

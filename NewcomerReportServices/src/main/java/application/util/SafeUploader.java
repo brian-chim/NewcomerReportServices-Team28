@@ -28,8 +28,6 @@ public class SafeUploader {
 		
 		HashMap<String, String> select = new HashMap<>();
 		
-		System.out.println("num rows: " + data.size());
-		
 		for (int i=0; i< data.size(); i++) {
 			HashMap<String, String> row = data.get(i);
 			
@@ -63,10 +61,7 @@ public class SafeUploader {
 				if(row.get("province_id") != null) {whereFields.put("province_id", row.get("province_id"));};
 				
 				ArrayList<HashMap<String, String>> clientsByAddress = DatabaseHandler.selectRows(tableName, whereFields, null, ConditionOP.AND);
-				System.out.println("row");
-				System.out.println(row);
 				if(clientsByAddress.size() != 0 && whereFields.size() != 0) {
-					System.out.println(clientsByAddress);
 					throw new ClientAlreadyExistsException("A client already exists with the samne address");
 				}
 			}

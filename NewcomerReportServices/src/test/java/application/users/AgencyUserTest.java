@@ -25,7 +25,7 @@ public class AgencyUserTest {
 		}
 		permissions.replace(UserPermissions.UPLOADFILES, (Boolean) true);
 		permissions.replace(UserPermissions.UPDATEFILES, (Boolean) true);
-		assertEquals(testAgencyUser.getPermissions(), permissions);
+		assertEquals(testAgencyUser.permissions, permissions);
 	}
 
 	private static HashMap<DatabaseServiceStreams, Boolean> createTestHashMap() {

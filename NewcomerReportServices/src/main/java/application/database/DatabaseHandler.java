@@ -65,7 +65,6 @@ public class DatabaseHandler {
 
         // combine sql query
         sql += valuesSQL + placeholderSQL;
-        System.out.println(sql);
 
     	// connect to db and perfom the query
         try (Connection conn = connect();
@@ -191,7 +190,6 @@ public class DatabaseHandler {
     	String sql = "SELECT " + cols + " FROM " + tableName + " WHERE " + whereClause;
     	
     	ArrayList<HashMap<String, String>> result = new ArrayList<>();
-    	System.out.println(sql);
     	
         try (Connection conn = connect();
                 PreparedStatement pstmt  = conn.prepareStatement(sql)){

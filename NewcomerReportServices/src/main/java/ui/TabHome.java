@@ -39,7 +39,7 @@ public class TabHome extends Tab {
 	}
 	
 	private GridPane setGridText(User user) {
-		Text welcomeText = new Text("Welcome " + user.getUsername() + "!");
+		Text welcomeText = new Text("Welcome " + user.username + "!");
 		welcomeText.setId("welcome");
 		Text info = new Text("The Newcomer's Report Service is an application "
 				+ "designed to centralize the information between different "
