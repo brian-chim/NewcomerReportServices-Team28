@@ -3,6 +3,7 @@ package application.util;
 import application.database.DatabaseHandler;
 import com.itextpdf.awt.DefaultFontMapper;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
@@ -15,6 +16,7 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +36,8 @@ public class ReportGenerator {
         ArrayList<HashMap<String, String>> columnListResult = DatabaseHandler.selectCols(streamName, columnList);
         ArrayList<HashMap<String, Integer>> columnResults = new ArrayList<>();
         ArrayList<String> columnTitles = new ArrayList<>();
+        ArrayList<ArrayList<Object>> pieCharts = new ArrayList<>();
+        ArrayList<ArrayList<Object>> barCharts = new ArrayList<>();
         if (columnListResult.size() >= 1) {
             HashMap<String, String> columnMap = columnListResult.get(0);
             for (String key : columnMap.keySet()) {
@@ -66,11 +70,22 @@ public class ReportGenerator {
                     tempResult += "\n" + value + ": " + frequencyResult.get(value) + "\n";
                 }
                 // generate a pie chart and bar graph for this column
-                writeChartToPDF(generatePieChart(frequencyResult, streamName), 500, 400, path + streamName + title + "-PieChart.pdf", tempResult, "Summary Graph of " + title);
-                writeChartToPDF(generateBarChart(frequencyResult, streamName), 500, 400, path + streamName + title + "-BarChart.pdf", tempResult, "Summary Graph of " + title);
+                ArrayList<Object> currentBarChart = new ArrayList<>();
+                ArrayList<Object> currentPieChart = new ArrayList<>();
+                currentBarChart.add(tempResult);
+                currentBarChart.add(title);
+                currentBarChart.add(generateBarChart(frequencyResult, streamName));
+                currentPieChart.add(tempResult);
+                currentPieChart.add(title);
+                currentPieChart.add(generatePieChart(frequencyResult, streamName));
+                pieCharts.add(currentPieChart);
+                barCharts.add(currentBarChart);
                 columnResults.add(frequencyResult);
             }
         }
+        writeChartToPDF(pieCharts, 500, 400, path + streamName + "-PieCharts.pdf");
+        writeChartToPDF(barCharts, 500, 400, path + streamName + "-BarCharts.pdf");
+
         return result;
 
     }
@@ -118,35 +133,46 @@ public class ReportGenerator {
     /**
      * Appends a chart along with the table to a pdf file.
      * Followed the tutorial from: http://www.vogella.com/tutorials/JavaPDF/article.html
-     * @param chart JFreeChart that can be any type of chart (bar graph, pie, etc.)
+     * @param charts Arraylist of ArrayList that contains the following data: String tableData, String title, JFreeChart. JFreeChart can be any type of chart (bar graph, pie, etc.)
      * @param width the width of the chart in px
      * @param height the height of the chart in px
      * @param fileName the filename tha you wish to create
      */
-    private static void writeChartToPDF(JFreeChart chart, int width, int height, String fileName, String tableData, String title) {
+    private static void writeChartToPDF(ArrayList<ArrayList<Object>> charts, int width, int height, String fileName) {
         PdfWriter writer = null;
 
         Document document = new Document();
-
         try {
             writer = PdfWriter.getInstance(document, new FileOutputStream(
                     fileName));
-            document.open();
-            PdfContentByte contentByte = writer.getDirectContent();
-            PdfTemplate template = contentByte.createTemplate(width, height);
-            Graphics2D graphics2d = template.createGraphics(width, height,
-                    new DefaultFontMapper());
-            Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, width,
-                    height);
-
-            chart.draw(graphics2d, rectangle2d);
-            document.add(new Paragraph(title));
-            document.add(new Paragraph(tableData));
-            graphics2d.dispose();
-            contentByte.addTemplate(template, 0, 0);
-
-        } catch (Exception e) {
+        } catch (DocumentException e) {
             e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        document.open();
+
+        for (ArrayList<Object> chartInfo : charts) {
+            String tableData = (String) chartInfo.get(0);
+            String title = (String) chartInfo.get(1);
+            JFreeChart chart = (JFreeChart) chartInfo.get(2);
+            try {
+                PdfContentByte contentByte = writer.getDirectContent();
+                PdfTemplate template = contentByte.createTemplate(width, height);
+                Graphics2D graphics2d = template.createGraphics(width, height,
+                        new DefaultFontMapper());
+                Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, width,
+                        height);
+
+                chart.draw(graphics2d, rectangle2d);
+                document.add(new Paragraph(title));
+                document.add(new Paragraph(tableData));
+                graphics2d.dispose();
+                contentByte.addTemplate(template, 0, 0);
+                document.newPage();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         document.close();
     }
