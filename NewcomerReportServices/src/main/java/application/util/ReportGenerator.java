@@ -124,7 +124,7 @@ public class ReportGenerator {
     /**
      * Appends a chart along with the table to a pdf file.
      * Followed the tutorial from: http://www.vogella.com/tutorials/JavaPDF/article.html
-     * @param charts Arraylist of ArrayList that contains the following data: String tableData, String title, JFreeChart. JFreeChart can be any type of chart (bar graph, pie, etc.)
+     * @param charts Arraylist of ReportPage objects that contains the following data: String tableData, String title, JFreeChart chart. JFreeChart can be any type of chart (bar graph, pie, etc.)
      * @param width the width of the chart in px
      * @param height the height of the chart in px
      * @param fileName the filename tha you wish to create
