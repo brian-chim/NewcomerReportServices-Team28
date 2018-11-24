@@ -52,14 +52,13 @@ public class SafeUploader {
 			if(tableName.equals(DatabaseServiceStreams.fromUiName("Client Profile Bulk").getDbName())) {
 				// check that their address doesn't already exist
 				HashMap<String, String> whereFields = new HashMap<>();
-				if(row.get("street_no") != null) {whereFields.put("street_no", row.get("street_no"));};
-				if(row.get("street_nme") != null) {whereFields.put("street_nme", row.get("street_nme"));};
-				if(row.get("street_type_id") != null) {whereFields.put("street_type_id", row.get("street_type_id"));};
-				if(row.get("street_direction_id") != null) {whereFields.put("street_direction_id", row.get("street_direction_id"));};
-				if(row.get("unit_txt") != null) {whereFields.put("unit_txt", row.get("unit_txt"));};
-				if(row.get("city_txt") != null) {whereFields.put("city_txt", row.get("city_txt"));};
-				if(row.get("province_id") != null) {whereFields.put("province_id", row.get("province_id"));};
+				ArrayList<String> addressCols = ClientInfoColumnQueries.getClientAddressCols();
 				
+				for (String col : addressCols) {
+		            if(row.get(col) != null) {
+		            	whereFields.put(col, row.get(col));
+		            }
+		        }
 				ArrayList<HashMap<String, String>> clientsByAddress = DatabaseHandler.selectRows(tableName, whereFields, null, ConditionOP.AND);
 				if(clientsByAddress.size() != 0 && whereFields.size() != 0) {
 					throw new ClientAlreadyExistsException("A client already exists with the samne address");

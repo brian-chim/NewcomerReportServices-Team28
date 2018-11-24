@@ -1,6 +1,9 @@
 package application.database;
 import application.database.UserNotFoundException;
 import application.users.*;
+import application.util.ClientInfoColumnQueries;
+import application.util.QueryStringCols;
+
 import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -177,15 +180,12 @@ public class DatabaseHandler {
     	String delimeter = " " + op + " ";
     	
     	// email needs to be wrapped in '' otherwise throws SQLITE error 
+    	
+    	ArrayList<String> queryStringcols = QueryStringCols.getStringCols();
+    	
     	String whereClause = where.entrySet().stream().map(
     				e -> e.getKey() + "=" + (
-    						e.getKey().equals("email_txt") || 
-    						e.getKey().equals("street_direction_id") ||
-    						e.getKey().equals("province_id") ||
-    						e.getKey().equals("city_txt") || 
-    						e.getKey().equals("street_type_id") ||
-    						e.getKey().equals("street_nme")
-    						? "'" + e.getValue() + "'": e.getValue())
+    						queryStringcols.contains(e.getKey()) ? "'" + e.getValue() + "'": e.getValue())
     			).collect(Collectors.joining(delimeter));  	
     	String sql = "SELECT " + cols + " FROM " + tableName + " WHERE " + whereClause;
     	
