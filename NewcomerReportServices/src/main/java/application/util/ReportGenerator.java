@@ -35,9 +35,8 @@ public class ReportGenerator {
         // get the list of columns from the db
         ArrayList<HashMap<String, String>> columnListResult = DatabaseHandler.selectCols(streamName, columnList);
         ArrayList<HashMap<String, Integer>> columnResults = new ArrayList<>();
-        ArrayList<String> columnTitles = new ArrayList<>();
-        ArrayList<ArrayList<Object>> pieCharts = new ArrayList<>();
-        ArrayList<ArrayList<Object>> barCharts = new ArrayList<>();
+        ArrayList<ReportPage> pieCharts = new ArrayList<>();
+        ArrayList<ReportPage> barCharts = new ArrayList<>();
         if (columnListResult.size() >= 1) {
             HashMap<String, String> columnMap = columnListResult.get(0);
             for (String key : columnMap.keySet()) {
@@ -62,7 +61,7 @@ public class ReportGenerator {
                 } else if (streamName.equals(DatabaseServiceStreams.INFOANDORIENTATION.getDbName())) {
                     title = InfoOrientationColumnQueries.fromDbName(key).toString();
                 }
-                
+
                 result += "\n" + title +  ":" + "\n";
                 String tempResult = "";
                 for (String value : frequencyResult.keySet()) {
@@ -70,16 +69,8 @@ public class ReportGenerator {
                     tempResult += "\n" + value + ": " + frequencyResult.get(value) + "\n";
                 }
                 // generate a pie chart and bar graph for this column
-                ArrayList<Object> currentBarChart = new ArrayList<>();
-                ArrayList<Object> currentPieChart = new ArrayList<>();
-                currentBarChart.add(tempResult);
-                currentBarChart.add(title);
-                currentBarChart.add(generateBarChart(frequencyResult, streamName));
-                currentPieChart.add(tempResult);
-                currentPieChart.add(title);
-                currentPieChart.add(generatePieChart(frequencyResult, streamName));
-                pieCharts.add(currentPieChart);
-                barCharts.add(currentBarChart);
+                pieCharts.add(new ReportPage(generatePieChart(frequencyResult, streamName), title, tempResult));
+                barCharts.add(new ReportPage(generateBarChart(frequencyResult, streamName), title, tempResult));
                 columnResults.add(frequencyResult);
             }
         }
@@ -133,12 +124,12 @@ public class ReportGenerator {
     /**
      * Appends a chart along with the table to a pdf file.
      * Followed the tutorial from: http://www.vogella.com/tutorials/JavaPDF/article.html
-     * @param charts Arraylist of ArrayList that contains the following data: String tableData, String title, JFreeChart. JFreeChart can be any type of chart (bar graph, pie, etc.)
+     * @param charts Arraylist of ReportPage objects that contains the following data: String tableData, String title, JFreeChart chart. JFreeChart can be any type of chart (bar graph, pie, etc.)
      * @param width the width of the chart in px
      * @param height the height of the chart in px
      * @param fileName the filename tha you wish to create
      */
-    private static void writeChartToPDF(ArrayList<ArrayList<Object>> charts, int width, int height, String fileName) {
+    private static void writeChartToPDF(ArrayList<ReportPage> charts, int width, int height, String fileName) {
         PdfWriter writer = null;
 
         Document document = new Document();
@@ -152,10 +143,7 @@ public class ReportGenerator {
         }
         document.open();
 
-        for (ArrayList<Object> chartInfo : charts) {
-            String tableData = (String) chartInfo.get(0);
-            String title = (String) chartInfo.get(1);
-            JFreeChart chart = (JFreeChart) chartInfo.get(2);
+        for (ReportPage page : charts) {
             try {
                 PdfContentByte contentByte = writer.getDirectContent();
                 PdfTemplate template = contentByte.createTemplate(width, height);
@@ -164,9 +152,9 @@ public class ReportGenerator {
                 Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, width,
                         height);
 
-                chart.draw(graphics2d, rectangle2d);
-                document.add(new Paragraph(title));
-                document.add(new Paragraph(tableData));
+                page.chart.draw(graphics2d, rectangle2d);
+                document.add(new Paragraph(page.title));
+                document.add(new Paragraph(page.chartData));
                 graphics2d.dispose();
                 contentByte.addTemplate(template, 0, 0);
                 document.newPage();
