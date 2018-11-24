@@ -114,15 +114,16 @@ public class SafeUploader {
 		for (String field : row.keySet()) {
 			try {
 				String fieldValue = row.get(field);
-				if(field.endsWith(dateCell) && fieldValue != "") {
+				Boolean nonEmptyValue = (fieldValue != "");
+				if(field.endsWith(dateCell) && nonEmptyValue) {
 					row.put(field, Formatter.formatDate(fieldValue));
-				} else if(field.equals(postalCodeCell) && fieldValue != "") {
+				} else if(field.equals(postalCodeCell) && nonEmptyValue) {
 					row.put(field, Formatter.formatPostalCode(fieldValue));
-				} else if(field.equals(phoneCell) && fieldValue != "") {
+				} else if(field.equals(phoneCell) && nonEmptyValue) {
 					row.put(field, Formatter.formatPhoneNumber(fieldValue));
 				}
 				// if trying to upload new client, need to check no other client may exist with same info but diff ID
-				else if(field.equals(emailCell) && fieldValue != "") {
+				else if(field.equals(emailCell) && nonEmptyValue) {
 					// check if a client exists with same email already
 					HashMap<String, String> whereEmail = new HashMap<>();
 					whereEmail.put(emailCell, fieldValue);
