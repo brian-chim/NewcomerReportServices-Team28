@@ -10,6 +10,12 @@ import application.database.DatabaseHandler.ConditionOP;
 
 public class SafeUploader {
 	
+	private final static String dateCell = "dt";
+	private final static String postalCodeCell = "postal_cd";
+	private final static String	phoneCell = "phone_no";
+	private final static String emailCell = "email_txt";
+	
+	
 	private static int headerOffset = 4;
 	private static List<String> identifiers = Arrays.asList(
 			"street_no",
@@ -19,6 +25,7 @@ public class SafeUploader {
 			"unit_txt",
 			"city_txt",
 			"province_id");
+	private static String clientProfile = DatabaseServiceStreams.fromUiName("Client Profile Bulk").getDbName();
 	
 	/**
 	 * Checks if conflict in client_validation_id exists in database for the parsed rows in excel specified by path, if not
@@ -57,7 +64,7 @@ public class SafeUploader {
 	 * @param tableName
 	 * @param path
 	 * @param sheetName
-	 * @return
+	 * @return true if the update is successful
 	 * @throws InvalidValueException
 	 * @throws ClientAlreadyExistsException
 	 */
@@ -78,17 +85,16 @@ public class SafeUploader {
 		// retrieve client information by id, to be later used for comparisons
 		HashMap<String, String> where = new HashMap<>();
 		where.put("client_validation_id", id);
-		clientInfo = DatabaseHandler.selectRows(DatabaseServiceStreams.fromUiName("Client Profile Bulk").getDbName(), where, null, ConditionOP.AND);
+		clientInfo = DatabaseHandler.selectRows(clientProfile, where, null, ConditionOP.AND);
 
 		
 		// throw error if trying to upload information for a client that does not exist
-		if((clientInfo.size() == 0) && !tableName.equals(DatabaseServiceStreams.fromUiName("Client Profile Bulk").getDbName())) {
-			System.out.println(DatabaseServiceStreams.fromUiName("Client Profile Bulk").getDbName());
+		if((clientInfo.size() == 0) && !tableName.equals(clientProfile)) {
 			throw new NoClientException("The client with the specified ID does not exist");
 		}
 		
 		// if trying to upload a new client
-		if(tableName.equals(DatabaseServiceStreams.fromUiName("Client Profile Bulk").getDbName())) {
+		if(tableName.equals(clientProfile)) {
 			// check that their address doesn't already exist
 			HashMap<String, String> whereFields = new HashMap<>();
 			for(String identityField : identifiers) {
@@ -107,23 +113,24 @@ public class SafeUploader {
 	private static HashMap<String, String> autoFormat(HashMap<String, String> row, int rowNum, String tableName) throws InvalidValueException, ClientAlreadyExistsException {
 		for (String field : row.keySet()) {
 			try {
-				if(field.endsWith("dt") && row.get(field) != "") {
-					row.put(field, Formatter.formatDate(row.get(field)));
-				} else if(field.equals("postal_cd") && row.get(field) != "") {
-					row.put(field, Formatter.formatPostalCode(row.get(field)));
-				} else if(field.equals("phone_no") && row.get(field) != "") {
-					row.put(field, Formatter.formatPhoneNumber(row.get(field)));
+				String fieldValue = row.get(field);
+				if(field.endsWith(dateCell) && fieldValue != "") {
+					row.put(field, Formatter.formatDate(fieldValue));
+				} else if(field.equals(postalCodeCell) && fieldValue != "") {
+					row.put(field, Formatter.formatPostalCode(fieldValue));
+				} else if(field.equals(phoneCell) && fieldValue != "") {
+					row.put(field, Formatter.formatPhoneNumber(fieldValue));
 				}
 				// if trying to upload new client, need to check no other client may exist with same info but diff ID
-				else if(field.equals("email_txt") && row.get(field) != "") {
+				else if(field.equals(emailCell) && fieldValue != "") {
 					// check if a client exists with same email already
 					HashMap<String, String> whereEmail = new HashMap<>();
-					whereEmail.put("email_txt", row.get(field));
+					whereEmail.put(emailCell, fieldValue);
 					
 					ArrayList<HashMap<String, String>> clientsByEmail = DatabaseHandler.selectRows(tableName, whereEmail, null, ConditionOP.AND);
 					
 					if(clientsByEmail.size() != 0) {
-						throw new ClientAlreadyExistsException("");
+						throw new ClientAlreadyExistsException("Client Already Exists");
 					}
 				}
 			} catch (InvalidValueException e) {
