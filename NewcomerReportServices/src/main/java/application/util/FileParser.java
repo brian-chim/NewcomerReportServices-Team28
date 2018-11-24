@@ -24,7 +24,7 @@ public class FileParser {
      * Reads and parses an excel spreadsheet of the extension .xslx
      * @param filePath the path of the file
      * @param sheetName the name of the sheet to parse
-     * @return an ArrayList with a hashmap for each row of the sheet
+     * @return an ArrayList with a hashmap for each row of the sheet, mapping columnName to value
      */
     public static ArrayList<HashMap<String, String>> readSpreadsheet(String filePath, String sheetName) {
         FileInputStream file = null;
