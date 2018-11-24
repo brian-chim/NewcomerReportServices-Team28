@@ -1,4 +1,4 @@
-# Team JavaBean (28)
+# Team JavaBean (28) [![Build Status](https://travis-ci.com/CSCC01/Team28.svg?token=fq3Wk2j1spZMFDVV8KGd&branch=master)](https://travis-ci.com/CSCC01/Team28)
 
 Welcome to Team 28's CSCC01 Group project.
 
