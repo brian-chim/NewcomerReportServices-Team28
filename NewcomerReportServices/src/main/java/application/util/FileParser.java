@@ -19,9 +19,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class FileParser {
     private static int columnHiddenNameIndex = 1;
-    private static int columnValueIndex = 3;
 
-
+    /**
+     * Reads and parses an excel spreadsheet of the extension .xslx
+     * @param filePath the path of the file
+     * @param sheetName the name of the sheet to parse
+     * @return an ArrayList with a hashmap for each row of the sheet, mapping columnName to value
+     */
     public static ArrayList<HashMap<String, String>> readSpreadsheet(String filePath, String sheetName) {
         FileInputStream file = null;
 
@@ -40,23 +44,10 @@ public class FileParser {
             e.printStackTrace();
         }
 
-        return readSpreadsheet(filePath, workbook.getSheetIndex(sheetName));
+        return readFile(filePath, workbook.getSheetIndex(sheetName));
     }
 
-    public static ArrayList<HashMap<String, String>> readSpreadsheet(FileInputStream file, String sheetName) {
-        XSSFWorkbook workbook = null;
-
-        // Get the workbook instance for XLS file
-        try {
-            workbook = new XSSFWorkbook(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return readSpreadsheet(file, workbook.getSheetIndex(sheetName));
-    }
-
-    public static ArrayList<HashMap<String, String>> readSpreadsheet(String filePath, int index) {
+    private static ArrayList<HashMap<String, String>> readFile(String filePath, int index) {
         FileInputStream file = null;
 
         // Open the file
@@ -66,10 +57,10 @@ public class FileParser {
             e.printStackTrace();
         }
 
-        return readSpreadsheet(file, index);
+        return readWorkbook(file, index);
     }
 
-    public static ArrayList<HashMap<String, String>> readSpreadsheet(FileInputStream file, int index) {
+    private static ArrayList<HashMap<String, String>> readWorkbook(FileInputStream file, int index) {
         XSSFWorkbook workbook = null;
 
         // Get the workbook instance for XLS file
@@ -89,10 +80,10 @@ public class FileParser {
             e.printStackTrace();
         }
 
-        return readSpreadsheet(sheet);
+        return readData(sheet);
     }
 
-    private static ArrayList<HashMap<String, String>> readSpreadsheet(XSSFSheet sheet) {
+    private static ArrayList<HashMap<String, String>> readData(XSSFSheet sheet) {
         ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
         DataFormatter formatter = new DataFormatter();
         // Use an iterator to go through the rows
