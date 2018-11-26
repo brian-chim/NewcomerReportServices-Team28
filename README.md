@@ -2,6 +2,10 @@
 
 Welcome to Team 28's CSCC01 Group project.
 
+A video of our demo can be found at: https://www.youtube.com/watch?v=_rxiDKTua7A&fbclid=IwAR1omUi16ZiyvdYSsbo0t4spZyHOb0KQ_qs4wKXj9NR80SrNjUVbpKP5mHc
+
+Please watch in at least 720p for clarity.
+
 ## Application
 
 ### Structure
