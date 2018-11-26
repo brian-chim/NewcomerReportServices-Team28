@@ -19,12 +19,12 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -32,7 +32,8 @@ public class TabUpload extends Tab {
 	
 	 TabUpload(User user, final Stage stage) {
 		this.setClosable(false);
-
+		
+		final Text notification = new Text("Please upload Client Profile sheets before uploading to other service streams.\nThe uploading may take up to 20 seconds to finish.");
 		final FileChooser fileChooser = new FileChooser();
         final Button openButton = new Button("Upload a single file");
         final Button openMultipleButton = new Button("Upload multiple files");
@@ -66,7 +67,7 @@ public class TabUpload extends Tab {
 
         
         // everything put together
-        vbox.getChildren().addAll(buttonRow, serviceDropdownSelectorRow, filePath, uploadButton);
+        vbox.getChildren().addAll(notification, buttonRow, serviceDropdownSelectorRow, filePath, uploadButton);
         this.setContent(vbox);
         
         // from the oracle file chooser docs
@@ -188,6 +189,9 @@ public class TabUpload extends Tab {
 			if (userStreams.get(stream)) {
 				services.add(stream.getUiName());
 			}
+		}
+		if(! services.contains(DatabaseServiceStreams.CLIENTPROFILEBULK.getUiName())) {
+			services.add(DatabaseServiceStreams.CLIENTPROFILEBULK.getUiName());
 		}
 
 		ObservableList<String> typeOptions = FXCollections.observableArrayList(services);		

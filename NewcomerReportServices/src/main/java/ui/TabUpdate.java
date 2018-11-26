@@ -23,6 +23,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -31,7 +32,8 @@ public class TabUpdate extends Tab {
 	TabUpdate(User user, final Stage stage) {
 		this.setClosable(false);
 		this.setText("Update Files");
-
+		
+		final Text notification = new Text("Please go under Upload File tab to upload Client Profile sheets before updating to other service streams.\nThe uploading may take up to 20 seconds to finish.");
 		final FileChooser fileChooser = new FileChooser();
         final Button openButton = new Button("Upload a single file");
         final Button openMultipleButton = new Button("Upload multiple files");
@@ -67,7 +69,7 @@ public class TabUpdate extends Tab {
 
         
         // everything put together
-        vbox.getChildren().addAll(buttonRow, serviceDropdownSelectorRow, filePath, updateButton);
+        vbox.getChildren().addAll(notification, buttonRow, serviceDropdownSelectorRow, filePath, updateButton);
         this.setContent(vbox);
         
         // from the oracle file chooser docs
@@ -159,6 +161,9 @@ public class TabUpdate extends Tab {
 			if (userStreams.get(stream)) {
 				services.add(stream.getUiName());
 			}
+		}
+		if(! services.contains(DatabaseServiceStreams.CLIENTPROFILEBULK.getUiName())) {
+			services.add(DatabaseServiceStreams.CLIENTPROFILEBULK.getUiName());
 		}
 		ObservableList<String> typeOptions = FXCollections.observableArrayList(services);
 				
