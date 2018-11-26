@@ -25,6 +25,12 @@ To compile the application, execute `mvn compile` within the `NewcomerReportServ
 
 To run the application, run the `Main` class located in `NewcomerReportServices/src/main/java/ui`. Currently, this has been tested to work when running through Eclipse and IntelliJ.
 
+You can also run our latest jar file `NewcomerReportServices-1.0-SNAPSHOT.jar` inside of the `NewcomerReportServices` directory using the command `java -jar NewcomerReportService-1.0-SNAPSHOT.jar` on Windows (and the corresponding command on your OS).
+
+You can build your own jar file through running the command `mvn clean package` within the `NewcomerReportServices` directory. Your jar file will be located within the target folder.
+
+**_Note:_** You must move the jar file to the NewcomerReportServices directory before you can execute the jar. This is because of needing the sqlite database.
+
 **_System Requirements:_** To run the application, it is required that you have a JDK version of 10 of less.
 
 **_Note:_** There is currently a JavaFx bug that prevents the application from running properly on the latest MAC OS, the fix is in-progress by the team working on Javafx.
